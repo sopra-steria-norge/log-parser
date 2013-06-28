@@ -14,7 +14,8 @@ import java.util.regex.Pattern;
  * @author nutgaard
  */
 public class Parser {
-     private static Pattern objectPattern = Pattern.compile("(?:([^=\\[\\]\\s,]*?)=)?([^,\\s]+?)(?:\\[(.*?)\\](?!\\])|\\{(.*?)\\}(?!\\}))");
+
+    private static Pattern objectPattern = Pattern.compile("(?:([^=\\[\\]\\s,]*?)=)?([^,\\s]+?)(?:\\[(.*?)\\](?!\\])|\\{(.*?)\\}(?!\\}))");
     private static Pattern keyValuePattern = Pattern.compile("([^,\\[\\]=]+?)=([^,\\[\\]]+)");
 
     public Map<String, String> parse(String logline) {
@@ -27,12 +28,11 @@ public class Parser {
         Matcher objectMatcher = objectPattern.matcher(obj);
         while (objectMatcher.find()) {
             String inner = objectMatcher.group(3) != null ? objectMatcher.group(3) : objectMatcher.group(4);
+            String key = objectMatcher.group(1) != null ? objectMatcher.group(1) : objectMatcher.group(2);
             if (objectMatcher.group(1) != null) {
                 properties.put(base + objectMatcher.group(1), objectMatcher.group(2));
-                appendToProperties(properties, base + objectMatcher.group(1) + ".", inner);
-            } else {
-                appendToProperties(properties, base + objectMatcher.group(2) + ".", inner);
             }
+            appendToProperties(properties, base + key + ".", inner);
         }
         Matcher keyValueMatcher = keyValuePattern.matcher(objectMatcher.replaceAll(""));
         while (keyValueMatcher.find()) {

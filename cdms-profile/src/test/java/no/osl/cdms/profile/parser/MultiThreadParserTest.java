@@ -16,9 +16,9 @@ import static org.junit.Assert.*;
  *
  * @author nutgaard
  */
-public class ParserTest {
+public class MultiThreadParserTest {
     
-    public ParserTest() {
+    public MultiThreadParserTest() {
     }
     
     @BeforeClass
