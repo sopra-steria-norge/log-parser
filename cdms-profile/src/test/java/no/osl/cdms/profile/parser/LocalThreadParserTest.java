@@ -5,10 +5,6 @@
 package no.osl.cdms.profile.parser;
 
 import java.util.Map;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -17,24 +13,8 @@ import static org.junit.Assert.*;
  * @author nutgaard
  */
 public class LocalThreadParserTest {
-    
+
     public LocalThreadParserTest() {
-    }
-    
-    @BeforeClass
-    public static void setUpClass() {
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
-    
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
     }
 
     /**
@@ -43,12 +23,21 @@ public class LocalThreadParserTest {
     @Test
     public void testParse() {
         System.out.println("parse");
-        String logline = "";
+        String logline = "ObjName[key1=value1,key2=ObjName2[key1=value1,key2=value2,key3=ObjName3[key1=value1]]]";
         Parser instance = new Parser();
-        Map expResult = null;
         Map result = instance.parse(logline);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        
+        String[][] validate = new String[][]{
+            {"ObjName.key1","value1"},
+            {"ObjName.key2","ObjName2"},
+            {"ObjName.key2.key1","value1"},
+            {"ObjName.key2.key2","value2"},
+            {"ObjName.key2.key3","ObjName3"},
+            {"ObjName.key2.key3.key1","value1"}
+        };
+        for (String[] entry : validate){
+            assertEquals(entry[1], result.get(entry[0]));
+        }
+        assertEquals(validate.length, result.size());
     }
 }
