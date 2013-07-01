@@ -24,7 +24,7 @@ public class MockParserTest {
     public void localMockLogLine() {
         System.out.println("localMockLogLine");
         String logline = "ObjName[key1=value1,key2=ObjName2[key1=value1,key2=value2,key3=ObjName3[key1=value1]]]";
-        Map result = LogLineRegexParser.parse(logline);
+        Map result = new LogLineRegexParser().parse(logline);
 
         String[][] validate = new String[][]{
             {"ObjName.key1", "value1"},
@@ -49,7 +49,7 @@ public class MockParserTest {
         String obj4 = "NESTED{Inner[key1=value1,key2=value2]}";
         String logline = "MultiObj[" + obj1 + obj2 + obj3 + obj4 + "]";
         System.out.println(logline);
-        Map result = LogLineRegexParser.parse(logline);
+        Map result = new LogLineRegexParser().parse(logline);
 
         String[][] validate = new String[][]{
             {"MultiObj.Simple.key1", "value1"},
@@ -74,9 +74,9 @@ public class MockParserTest {
         String obj3 = "MULTI{key1=value1;key2=value2,key3=value3},";
         String obj4 = "NESTED{Inner[key1=value1,key2=value2]}";
         String logline = "MultiObj[" + obj1 + obj2 + obj3 + obj4 + "]";
-        Map result = LogLineRegexParser.parse(logline);
+        Map result = new LogLineRegexParser().parse(logline);
         String logline2 = "ObjName[key1=value1,key2=ObjName2[key1=value1,key2=value2,key3=ObjName3[key1=value1]]]";
-        result = LogLineRegexParser.parse(result, logline2);
+        result = new LogLineRegexParser().parse(result, logline2);
 
         String[][] validate = new String[][]{
             {"ObjName.key1", "value1"},
@@ -104,7 +104,7 @@ public class MockParserTest {
         System.out.println("emptyStringTest");
         String logline = "";
         try {
-            Map result = LogLineRegexParser.parse(logline);
+            Map result = new LogLineRegexParser().parse(logline);
             assertEquals(0, result.size());
         } catch (Exception e) {
             e.printStackTrace();
@@ -117,7 +117,7 @@ public class MockParserTest {
         System.out.println("nullStringTest");
         String logline = null;
         try {
-            Map result = LogLineRegexParser.parse(logline);
+            Map result = new LogLineRegexParser().parse(logline);
             assertEquals(0, result.size());
         } catch (Exception e) {
             e.printStackTrace();
@@ -130,7 +130,7 @@ public class MockParserTest {
         Map m = null;
         String logline = "Test[key=val]";
         try {
-            Map r = LogLineRegexParser.parse(m, logline);
+            Map r = new LogLineRegexParser().parse(m, logline);
         }catch (Exception e) {
             e.printStackTrace();
             fail("null-map should not cause an exception");

@@ -1,46 +1,43 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package no.osl.cdms.profile.parser;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import no.osl.cdms.profile.interfaces.Parser;
+import org.springframework.stereotype.Component;
 
-/**
- *
- * @author nutgaard
- */
-public class LogLineRegexParser {
+@Component
+public class LogLineRegexParser implements Parser {
 
     private static Pattern objPatt = Pattern.compile("(?:([^=\\[\\]\\}\\{\\s,]*?)=)?([^,\\s]+?)(?:@.+?)?(?:\\[(.*?)\\]|\\{(.*?)\\})(?![\\]\\}])");
     private static Pattern kvPatt = Pattern.compile("([^,;\\[\\]=]+?)[=;]([^,;\\[\\]]+)");
 
-    public static Map<String, String> parse(String logline) {
+    @Override
+    public Map<String, String> parse(String text) {
         HashMap<String, String> properties = new HashMap<String, String>();
-        return parse(properties, logline);
+        return parse(properties, text);
     }
 
-    public static Map<String, String> parse(Map<String, String> properties, String logline) {
-        if (properties == null){
-            return parse(logline);
+    @Override
+    public Map<String, String> parse(Map<String, String> properties, String text) {
+        if (properties == null) {
+            return parse(text);
         }
-        appendToProperties(properties, "", logline);
+        appendToProperties(properties, "", text);
         return properties;
     }
 
-    private static void appendToProperties(Map<String, String> properties, String base, String obj) {
-        String remaining = findObjects(properties, base, obj);
+    private void appendToProperties(Map<String, String> properties, String base, String text) {
+        String remaining = findObjects(properties, base, text);
         findKeyValuePairs(properties, base, remaining);
     }
 
-    private static String findObjects(Map<String, String> properties, String base, String obj) {
-        if (obj == null) {
+    private String findObjects(Map<String, String> properties, String base, String text) {
+        if (text == null) {
             return "";
         }
-        Matcher objMatch = objPatt.matcher(obj);
+        Matcher objMatch = objPatt.matcher(text);
         while (objMatch.find()) {
             String inner = objMatch.group(3) != null ? objMatch.group(3) : objMatch.group(4);
             String key = objMatch.group(1) != null ? objMatch.group(1) : objMatch.group(2);
@@ -52,8 +49,8 @@ public class LogLineRegexParser {
         return objMatch.replaceAll("");
     }
 
-    private static void findKeyValuePairs(Map<String, String> properties, String base, String obj) {
-        Matcher kvMatch = kvPatt.matcher(obj);
+    private void findKeyValuePairs(Map<String, String> properties, String base, String text) {
+        Matcher kvMatch = kvPatt.matcher(text);
         while (kvMatch.find()) {
             for (int i = 0; i <= kvMatch.groupCount(); i++) {
                 properties.put(base + kvMatch.group(1), kvMatch.group(2));
