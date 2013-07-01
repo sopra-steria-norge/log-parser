@@ -18,22 +18,25 @@ public class LogLineRegexParser {
     private static Pattern objPatt = Pattern.compile("(?:([^=\\[\\]\\}\\{\\s,]*?)=)?([^,\\s]+?)(?:@.+?)?(?:\\[(.*?)\\]|\\{(.*?)\\})(?![\\]\\}])");
     private static Pattern kvPatt = Pattern.compile("([^,;\\[\\]=]+?)[=;]([^,;\\[\\]]+)");
 
-    public Map<String, String> parse(String logline) {
+    public static Map<String, String> parse(String logline) {
         HashMap<String, String> properties = new HashMap<String, String>();
         return parse(properties, logline);
     }
 
-    public Map<String, String> parse(Map<String, String> properties, String logline) {
+    public static Map<String, String> parse(Map<String, String> properties, String logline) {
         appendToProperties(properties, "", logline);
         return properties;
     }
 
-    private void appendToProperties(Map<String, String> properties, String base, String obj) {
+    private static void appendToProperties(Map<String, String> properties, String base, String obj) {
         String remaining = findObjects(properties, base, obj);
         findKeyValuePairs(properties, base, remaining);
     }
 
-    private String findObjects(Map<String, String> properties, String base, String obj) {
+    private static String findObjects(Map<String, String> properties, String base, String obj) {
+        if (obj == null) {
+            return "";
+        }
         Matcher objMatch = objPatt.matcher(obj);
         while (objMatch.find()) {
             String inner = objMatch.group(3) != null ? objMatch.group(3) : objMatch.group(4);
@@ -46,7 +49,7 @@ public class LogLineRegexParser {
         return objMatch.replaceAll("");
     }
 
-    private void findKeyValuePairs(Map<String, String> properties, String base, String obj) {
+    private static void findKeyValuePairs(Map<String, String> properties, String base, String obj) {
         Matcher kvMatch = kvPatt.matcher(obj);
         while (kvMatch.find()) {
             for (int i = 0; i <= kvMatch.groupCount(); i++) {
