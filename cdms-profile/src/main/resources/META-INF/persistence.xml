@@ -15,6 +15,7 @@
         <class>no.osl.cdms.profile.log.LocalThreadContextEntity</class>
         <class>no.osl.cdms.profile.log.LogEntryEntity</class>
         <class>no.osl.cdms.profile.log.MultiThreadContextEntity</class>
+        <class>no.osl.cdms.profile.log.TimeMeasurementEntity</class>
         <class>no.osl.cdms.profile.log.TotalEntity</class>
         <class>no.osl.cdms.profile.log.WaitEntity</class>
 
@@ -42,6 +43,7 @@
         <class>no.osl.cdms.profile.log.LocalThreadContextEntity</class>
         <class>no.osl.cdms.profile.log.LogEntryEntity</class>
         <class>no.osl.cdms.profile.log.MultiThreadContextEntity</class>
+        <class>no.osl.cdms.profile.log.TimeMeasurementEntity</class>
         <class>no.osl.cdms.profile.log.TotalEntity</class>
         <class>no.osl.cdms.profile.log.WaitEntity</class>
 
