@@ -24,7 +24,12 @@ public class LogLineRegexParser {
         return properties;
     }
 
-    private void appendToProperties(HashMap<String, String> properties, String base, String obj) {
+    private void appendToProperties(Map<String, String> properties, String base, String obj) {
+        String remaining = findObjects(properties, base, obj);
+        findKeyValuePairs(properties, base, remaining);
+    }
+
+    private String findObjects(Map<String, String> properties, String base, String obj) {
         Matcher objMatch = objPatt.matcher(obj);
         while (objMatch.find()) {
             String inner = objMatch.group(3) != null ? objMatch.group(3) : objMatch.group(4);
@@ -34,7 +39,11 @@ public class LogLineRegexParser {
             }
             appendToProperties(properties, base + key + ".", inner);
         }
-        Matcher kvMatch = kvPatt.matcher(objMatch.replaceAll(""));
+        return objMatch.replaceAll("");
+    }
+
+    private void findKeyValuePairs(Map<String, String> properties, String base, String obj) {
+        Matcher kvMatch = kvPatt.matcher(obj);
         while (kvMatch.find()) {
             for (int i = 0; i <= kvMatch.groupCount(); i++) {
                 properties.put(base + kvMatch.group(1), kvMatch.group(2));
