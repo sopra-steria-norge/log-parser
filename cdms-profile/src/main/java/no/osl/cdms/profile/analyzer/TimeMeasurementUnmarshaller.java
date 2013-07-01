@@ -4,8 +4,6 @@
  */
 package no.osl.cdms.profile.analyzer;
 
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -13,6 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import no.osl.cdms.profile.models.TimeMeasurement;
+import no.osl.cdms.profile.utilities.GuavaHelpers;
 
 /**
  *
@@ -34,37 +33,11 @@ public class TimeMeasurementUnmarshaller {
             return list;
         } else {
             for (Map<String, String> map : data) {
-                Map<String, String> durations = Maps.filterEntries(map, isDuration());
-                Iterable<TimeMeasurement> tms = Iterables.transform(durations.entrySet(), getConverter(map));
+                Map<String, String> durations = Maps.filterEntries(map, GuavaHelpers.isDuration());
+                Iterable<TimeMeasurement> tms = Iterables.transform(durations.entrySet(), GuavaHelpers.getConverter(map));
                 list.addAll(Lists.newArrayList(tms));
             }
             return list;
         }
-    }
-
-    private Predicate<Map.Entry<String, String>> isDuration() {
-        return new Predicate<Map.Entry<String, String>>() {
-            @Override
-            public boolean apply(Map.Entry<String, String> input) {
-                return input.getKey().endsWith("duration") && !input.getValue().equalsIgnoreCase("null");
-            }
-        };
-    }
-
-    private Function<Map.Entry<String, String>, TimeMeasurement> getConverter(final Map<String, String> properties) {
-        return new Function<Map.Entry<String, String>, TimeMeasurement>() {
-            @Override
-            public TimeMeasurement apply(Map.Entry<String, String> input) {
-                String name, time;
-                if (input.getKey().startsWith("LocalThreadContext")) {
-                    name = properties.get("LocalThreadContext.id");
-                    time = input.getValue();
-                } else {
-                    name = input.getKey().split("\\.")[2];
-                    time = input.getValue();
-                }
-                return TimeMeasurement.create(name, time);
-            }
-        };
     }
 }
