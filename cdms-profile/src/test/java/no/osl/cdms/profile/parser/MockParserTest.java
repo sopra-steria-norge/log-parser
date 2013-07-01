@@ -124,4 +124,16 @@ public class MockParserTest {
             fail("null-string should not cause an exception");
         }
     }
+    @Test
+    public void nullMapTest() {
+        System.out.println("nullmapTest");
+        Map m = null;
+        String logline = "Test[key=val]";
+        try {
+            Map r = LogLineRegexParser.parse(m, logline);
+        }catch (Exception e) {
+            e.printStackTrace();
+            fail("null-map should not cause an exception");
+        }
+    }
 }

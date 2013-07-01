@@ -24,6 +24,9 @@ public class LogLineRegexParser {
     }
 
     public static Map<String, String> parse(Map<String, String> properties, String logline) {
+        if (properties == null){
+            return parse(logline);
+        }
         appendToProperties(properties, "", logline);
         return properties;
     }
