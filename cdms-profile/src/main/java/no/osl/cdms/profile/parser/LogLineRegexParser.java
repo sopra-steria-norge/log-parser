@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
  */
 public class LogLineRegexParser {
 
-    private static Pattern objPatt = Pattern.compile("(?:([^=\\[\\]\\}\\{\\s,]*?)=)?([^,\\s]+?)(?:\\[(.*?)\\]|\\{(.*?)\\})(?![\\]\\}])");
+    private static Pattern objPatt = Pattern.compile("(?:([^=\\[\\]\\}\\{\\s,]*?)=)?([^,\\s]+?)(?:@.+?)?(?:\\[(.*?)\\]|\\{(.*?)\\})(?![\\]\\}])");
     private static Pattern kvPatt = Pattern.compile("([^,;\\[\\]=]+?)[=;]([^,;\\[\\]]+)");
 
     public Map<String, String> parse(String logline) {
