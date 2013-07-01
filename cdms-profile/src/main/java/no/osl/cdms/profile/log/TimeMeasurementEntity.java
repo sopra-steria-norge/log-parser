@@ -11,6 +11,7 @@ public class TimeMeasurementEntity {
     protected String duration;
 
     @Column(name = "TM_ID")
+    @Id
     @GeneratedValue( strategy = GenerationType.IDENTITY )
     private long timeMeasurementId;
 
