@@ -13,10 +13,10 @@ import java.util.regex.Pattern;
  *
  * @author nutgaard
  */
-public class Parser {
+public class LogLineRegexParser {
 
-    private static Pattern objPatt = Pattern.compile("(?:([^=\\[\\]\\s,]*?)=)?([^,\\s]+?)(?:\\[(.*?)\\](?!\\])|\\{(.*?)\\}(?!\\}))");
-    private static Pattern kvPatt = Pattern.compile("([^,\\[\\]=]+?)=([^,\\[\\]]+)");
+    private static Pattern objPatt = Pattern.compile("(?:([^=\\[\\]\\}\\{\\s,]*?)=)?([^,\\s]+?)(?:\\[(.*?)\\]|\\{(.*?)\\})(?![\\]\\}])");
+    private static Pattern kvPatt = Pattern.compile("([^,;\\[\\]=]+?)[=;]([^,;\\[\\]]+)");
 
     public Map<String, String> parse(String logline) {
         HashMap<String, String> properties = new HashMap<String, String>();
