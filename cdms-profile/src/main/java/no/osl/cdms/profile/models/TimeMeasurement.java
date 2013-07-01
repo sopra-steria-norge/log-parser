@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package no.osl.cdms.profile.analyzer;
+package no.osl.cdms.profile.models;
 
 import org.joda.time.convert.ConverterManager;
 import org.joda.time.convert.DurationConverter;
@@ -23,8 +23,8 @@ public class TimeMeasurement implements Comparable<TimeMeasurement> {
         WAIT1,
         UPDATEMESSAGE
     }
-    final Type name;
-    final double time;
+    public final Type name;
+    public final double time;
 
     public TimeMeasurement(Type name, double time) {
         this.name = name;

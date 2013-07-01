@@ -4,6 +4,8 @@
  */
 package no.osl.cdms.profile.analyzer;
 
+import no.osl.cdms.profile.models.TimeMeasurement;
+import no.osl.cdms.profile.interfaces.DataAnalyzer;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;

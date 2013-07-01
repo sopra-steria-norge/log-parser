@@ -4,6 +4,8 @@
  */
 package no.osl.cdms.profile.analyzer;
 
+import no.osl.cdms.profile.models.TimeMeasurement;
+import no.osl.cdms.profile.interfaces.DataAnalyzer;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import java.util.ArrayList;
