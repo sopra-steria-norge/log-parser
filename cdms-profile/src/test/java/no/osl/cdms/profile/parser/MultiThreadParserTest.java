@@ -26,7 +26,7 @@ public class MultiThreadParserTest {
      * Test of parse method, of class Parser.
      */
     @Test
-    public void testParse() {
+    public void multiMockLogLine() {
         System.out.println("parse");
         String obj1 = "Simple{key1=value1},";
         String obj2 = "Hard{componded.name.on:key=1231A..SD},";

@@ -21,7 +21,7 @@ public class LocalThreadParserTest {
      * Test of parse method, of class Parser.
      */
     @Test
-    public void testParse() {
+    public void localMockLogLine() {
         System.out.println("parse");
         String logline = "ObjName[key1=value1,key2=ObjName2[key1=value1,key2=value2,key3=ObjName3[key1=value1]]]";
         LogLineRegexParser instance = new LogLineRegexParser();
