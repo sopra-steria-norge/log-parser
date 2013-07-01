@@ -20,6 +20,10 @@ public class LogLineRegexParser {
 
     public Map<String, String> parse(String logline) {
         HashMap<String, String> properties = new HashMap<String, String>();
+        return parse(properties, logline);
+    }
+
+    public Map<String, String> parse(Map<String, String> properties, String logline) {
         appendToProperties(properties, "", logline);
         return properties;
     }
