@@ -24,7 +24,7 @@ public class LocalThreadParserTest {
     public void testParse() {
         System.out.println("parse");
         String logline = "ObjName[key1=value1,key2=ObjName2[key1=value1,key2=value2,key3=ObjName3[key1=value1]]]";
-        Parser instance = new Parser();
+        LogLineRegexParser instance = new LogLineRegexParser();
         Map result = instance.parse(logline);
         
         String[][] validate = new String[][]{
