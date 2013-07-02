@@ -15,7 +15,6 @@
     <name>cdms-profile</name>
     <url>http://maven.apache.org</url>
 
-
     <dependencies>
 
         <dependency>
@@ -67,11 +66,35 @@
             <artifactId>camel-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>commons-dbcp</groupId>
+            <artifactId>commons-dbcp</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.servicemix.bundles</groupId>
+            <artifactId>org.apache.servicemix.bundles.cglib-2.1_3</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>ojdbc6</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.sf.ehcache</groupId>
+            <artifactId>ehcache-openjpa</artifactId>
+        </dependency>
 
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>org.springframework.orm</artifactId>
+            <scope>compile</scope>
+        </dependency>
         <dependency>
             <groupId>org.apache.openjpa</groupId>
             <artifactId>openjpa</artifactId>
         </dependency>
+
         <dependency>
             <groupId>com.googlecode.guava-osgi</groupId>
             <artifactId>guava-osgi</artifactId>
