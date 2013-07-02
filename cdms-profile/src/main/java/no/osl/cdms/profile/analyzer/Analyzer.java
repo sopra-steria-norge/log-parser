@@ -28,7 +28,7 @@ public class Analyzer implements DataAnalyzer {
     private void delegate(final List<TimeMeasurementImpl> times) {
         for (TimeMeasurementImpl tm : times) {
             map.put("total", tm);
-            map.put(tm.name, tm);
+            map.put(tm.getName(), tm);
         }
         for (String key : map.keySet()) {
             Collections.sort(new ArrayList(map.get(key)));
@@ -40,7 +40,7 @@ public class Analyzer implements DataAnalyzer {
         int counter = 0;
         double sum = 0;
         for (TimeMeasurementImpl tm : map.get(id)) {
-            sum += tm.time;
+            sum += tm.getTime();
             counter++;
         }
         if (counter == 0) {
@@ -54,7 +54,7 @@ public class Analyzer implements DataAnalyzer {
         double mean = average(id);
         double stddevSum = 0;
         for (TimeMeasurementImpl tm : map.get(id)) {
-            stddevSum += Math.pow(tm.time - mean, 2);
+            stddevSum += Math.pow(tm.getTime() - mean, 2);
         }
         stddevSum /= map.get(id).size();
         return Math.sqrt(stddevSum);
@@ -65,10 +65,10 @@ public class Analyzer implements DataAnalyzer {
         List<TimeMeasurementImpl> tms = new ArrayList<TimeMeasurementImpl>(map.get(id));
         double ind = k / 100.0 * tms.size();
         if (ind == (int) ind) {
-            return (tms.get((int) ind).time + tms.get((int) (ind - 1)).time) / 2;
+            return (tms.get((int) ind).getTime() + tms.get((int) (ind - 1)).getTime()) / 2;
         } else {
             ind = Math.round(ind);
-            return tms.get((int) (ind - 1)).time;
+            return tms.get((int) (ind - 1)).getTime();
         }
     }
 
@@ -76,11 +76,11 @@ public class Analyzer implements DataAnalyzer {
     public double[] buckets(String id, int NOFBuckets) {
         List<TimeMeasurementImpl> tms = new ArrayList<TimeMeasurementImpl>(map.get(id));
         double[] out = new double[NOFBuckets];
-        double min = tms.get(0).time;
-        double bucketSize = (tms.get(tms.size()-1).time-min)/(NOFBuckets-1);
+        double min = tms.get(0).getTime();
+        double bucketSize = (tms.get(tms.size()-1).getTime()-min)/(NOFBuckets-1);
         
         for (TimeMeasurementImpl tm : tms) {
-            out[(int)((tm.time-min)/bucketSize)]++;
+            out[(int)((tm.getTime()-min)/bucketSize)]++;
         }
         return out;
     }

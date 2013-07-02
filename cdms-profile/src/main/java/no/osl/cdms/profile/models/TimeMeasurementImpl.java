@@ -11,8 +11,8 @@ import no.osl.cdms.profile.interfaces.TimeMeasurement;
  * @author nutgaard
  */
 public class TimeMeasurementImpl implements TimeMeasurement {
-    public final String name;
-    public final double time;
+    private final String name;
+    private final double time;
 
     public TimeMeasurementImpl(String name, double time) {
         this.name = name;
