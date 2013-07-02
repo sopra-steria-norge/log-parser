@@ -10,8 +10,10 @@ import com.google.common.collect.Maps;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import no.osl.cdms.profile.interfaces.TimeMeasurement;
+import java.util.Set;
 import no.osl.cdms.profile.analyzer.TimeMeasurementImpl;
+import no.osl.cdms.profile.interfaces.TimeMeasurement;
+import no.osl.cdms.profile.log.TimeMeasurementEntity;
 import no.osl.cdms.profile.utilities.GuavaHelpers;
 import org.joda.time.convert.ConverterManager;
 import org.joda.time.convert.DurationConverter;
@@ -56,5 +58,17 @@ public class TimeMeasurementFactory {
             }
             return list;
         }
+    }
+
+    public static TimeMeasurement create(TimeMeasurementEntity tme) {
+        return create(tme.getMeasured().getClassName() + "." + tme.getMeasured().getMethod(), tme.getDuration());
+    }
+
+    public static List<TimeMeasurement> create(Set<TimeMeasurementEntity> tmes) {
+        List<TimeMeasurement> tms = Lists.newLinkedList();
+        for (TimeMeasurementEntity tme : tmes) {
+            tms.add(create(tme));
+        }
+        return tms;
     }
 }

@@ -114,7 +114,7 @@ public class TimeMeasurementFactoryTest {
     @Test
     public void testUnmarshall_Data_null() {
         System.out.println("testUnmarshall_Data_null");        
-        List<TimeMeasurement> result = TimeMeasurementFactory.create(null);
+        List<TimeMeasurement> result = TimeMeasurementFactory.create((List<Map<String, String>>)null);
         assertEquals(0, result.size());
     }
 }
