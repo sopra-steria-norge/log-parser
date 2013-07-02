@@ -34,7 +34,6 @@ public class TimeMeasurement implements Comparable<TimeMeasurement> {
     public static TimeMeasurement create(String name, String time) {
         try {
             DurationConverter converter = ConverterManager.getInstance().getDurationConverter(time);
-            System.out.println("converter: "+converter);
             return new TimeMeasurement(name, converter.getDurationMillis(time));
         } catch (IllegalArgumentException ile) {
             try {

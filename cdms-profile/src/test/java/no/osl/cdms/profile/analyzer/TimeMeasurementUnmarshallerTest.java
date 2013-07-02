@@ -4,6 +4,8 @@
  */
 package no.osl.cdms.profile.analyzer;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import java.util.List;
 import java.util.Map;
 import no.osl.cdms.profile.models.TimeMeasurement;
@@ -45,28 +47,30 @@ public class TimeMeasurementUnmarshallerTest {
     @Test
     public void testUnmarshall_List() {
         System.out.println("unmarshall");
-//        List<Map<String, String>> data = null;
-//        TimeMeasurementUnmarshaller instance = new TimeMeasurementUnmarshaller();
-//        List expResult = null;
-//        List result = instance.unmarshall(data);
-//        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of unmarshall method, of class TimeMeasurementUnmarshaller.
-     */
-    @Test
-    public void testUnmarshall_List_List() {
-        System.out.println("unmarshall");
-//        List<TimeMeasurement> list = null;
-//        List<Map<String, String>> data = null;
-//        TimeMeasurementUnmarshaller instance = new TimeMeasurementUnmarshaller();
-//        List expResult = null;
-//        List result = instance.unmarshall(list, data);
-//        assertEquals(expResult, result);
-//         TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
+        //Build testing data
+        List<Map<String, String>> data = Lists.newLinkedList();
+        Map<String, String> map1 = Maps.newLinkedHashMap();
+        map1.put("LocalThreadContext.id", "myID");
+        map1.put("LocalThreadContext.duration", "PT1.15S");
+        map1.put("LocalThreadContext.random", "null");
+        data.add(map1);
+        Map<String, String> map2 = Maps.newLinkedHashMap();
+        map2.put("Something.Total.duration", "PT1.15S");
+        map2.put("Something.Wait.duration", "PT1.15S");
+        map2.put("Something.Lap.Class.method:duration", "PT2.151S");
+        data.add(map2);
+        
+        TimeMeasurementUnmarshaller instance = new TimeMeasurementUnmarshaller();
+        TimeMeasurement[] expResult = new TimeMeasurement[]{
+           TimeMeasurement.create("myID", "PT1.15S"),
+           TimeMeasurement.create("Total","PT1.15S"),
+           TimeMeasurement.create("Wait","PT1.15S"),
+           TimeMeasurement.create("Class.method","PT2.151S")
+        };
+        
+        List<TimeMeasurement> result = instance.unmarshall(data);
+        for (int i = 0; i < expResult.length; i++) {
+            assertEquals(expResult[i], result.get(i));
+        }
     }
 }
