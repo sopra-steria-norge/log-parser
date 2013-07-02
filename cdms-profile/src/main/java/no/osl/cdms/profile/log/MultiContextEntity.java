@@ -7,12 +7,13 @@ import java.util.List;
  * User: apalfi
  */
 @Entity
-@Table(name = "MULTICONTEXT_MEASUREMENT")
-public class MultiContextMeasurementEntity {
+@Table(name = "CDM_PROFILE_MULTICONTEXT")
+public class MultiContextEntity {
 
-    @Column(name = "MULTICONTEXT_MEASUREMENT_ID")
+    @Column(name = "MULTICONTEXT_ID")
+    @SequenceGenerator(name = "MULTICONTEXT_SEQ_GEN", sequenceName = "MULTICONTEXT_SEQ")
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MULTICONTEXT_SEQ_GEN")
     private int id;
 
     @Column(name = "START")
@@ -21,20 +22,22 @@ public class MultiContextMeasurementEntity {
     @Column(name = "END")
     private String end;
 
-    @OneToMany(mappedBy = "multiContextMeasurement", targetEntity = TimeMeasurementEntity.class, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "multiContext", targetEntity = TimeMeasurementEntity.class,
+            fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<TimeMeasurementEntity> timeMeasurements;
 
-    public MultiContextMeasurementEntity() {
+    public MultiContextEntity() {
 
     }
 
-    public MultiContextMeasurementEntity(int id, String start, String end) {
+    public MultiContextEntity(String start, String end, List<TimeMeasurementEntity> timeMeasurements) {
         this.id = id;
         this.start = start;
         this.end = end;
+        this.timeMeasurements = timeMeasurements;
     }
 
-    public MultiContextMeasurementEntity(int id, String start, String end, List<TimeMeasurementEntity> timeMeasurements) {
+    public MultiContextEntity(int id, String start, String end, List<TimeMeasurementEntity> timeMeasurements) {
         this.id = id;
         this.start = start;
         this.end = end;
