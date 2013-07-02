@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package no.osl.cdms.profile.models;
+package no.osl.cdms.profile.analyzer;
 
 import no.osl.cdms.profile.interfaces.TimeMeasurement;
 
