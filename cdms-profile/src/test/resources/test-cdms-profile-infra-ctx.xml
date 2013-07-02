@@ -4,7 +4,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-        <property name="persistenceUnitName" value="cdmsPersistenceUnitTest"/>
+        <property name="persistenceUnitName" value="cdmsProfilePersistenceUnitTest"/>
         <property name="dataSource" ref="cdmsDataSource"/>
         <property name="jpaVendorAdapter" ref="jpaAdapterOracle" />
     </bean>

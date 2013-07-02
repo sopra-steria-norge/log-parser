@@ -6,12 +6,13 @@ import javax.persistence.*;
  * User: apalfi
  */
 @Entity
-@Table(name = "TIMEMEASUREMENT")
+@Table(name = "CDM_PROFILE_TIMEMEASUREMENT")
 public class TimeMeasurementEntity {
 
     @Column(name = "TIMEMEASUREMENT_ID")
+    @SequenceGenerator(name = "TIMEMEASUREMENT_SEQ_GEN", sequenceName = "TIMEMEASUREMENT_SEQ")
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "TIMEMEASUREMENT_SEQ_GEN")
     private int id;
 
     @ManyToOne
@@ -19,8 +20,8 @@ public class TimeMeasurementEntity {
     private MeasuredEntity measured;
 
     @ManyToOne
-    @JoinColumn(name = "MULTICONTEXT_MEASUREMENT_ID")
-    private MultiContextMeasurementEntity multiContextMeasurement;
+    @JoinColumn(name = "MULTICONTEXT_ID")
+    private MultiContextEntity multiContext;
 
     @Column(name = "TIMESTAMP")
     private String timestamp;
@@ -32,11 +33,19 @@ public class TimeMeasurementEntity {
 
     }
 
-    public TimeMeasurementEntity(int id, MeasuredEntity me, MultiContextMeasurementEntity mcme, String timestamp,
+    public TimeMeasurementEntity(int id, MeasuredEntity me, MultiContextEntity mcme, String timestamp,
                                  String duration) {
         this.id = id;
         this.measured = me;
-        this.multiContextMeasurement = mcme;
+        this.multiContext = mcme;
+        this.timestamp = timestamp;
+        this.duration = duration;
+    }
+
+    public TimeMeasurementEntity(MeasuredEntity me, MultiContextEntity mcme, String timestamp,
+                                 String duration) {
+        this.measured = me;
+        this.multiContext = mcme;
         this.timestamp = timestamp;
         this.duration = duration;
     }
@@ -57,12 +66,12 @@ public class TimeMeasurementEntity {
         this.measured = measured;
     }
 
-    public MultiContextMeasurementEntity getMultiContextMeasurement() {
-        return multiContextMeasurement;
+    public MultiContextEntity getMultiContext() {
+        return multiContext;
     }
 
-    public void setMultiContextMeasurement(MultiContextMeasurementEntity multiContextMeasurement) {
-        this.multiContextMeasurement = multiContextMeasurement;
+    public void setMultiContext(MultiContextEntity multiContextMeasurement) {
+        this.multiContext = multiContextMeasurement;
     }
 
     public String getTimestamp() {

@@ -1,18 +1,20 @@
 package no.osl.cdms.profile.log;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * User: apalfi
  */
 @Entity
-@Table(name = "MEASURED")
+@Table(name = "CDM_PROFILE_MEASURED")
 public class MeasuredEntity {
 
     @Column(name = "MEASURED_ID")
+    @SequenceGenerator(name = "MEASURED_SEQ_GEN", sequenceName = "MEASURED_SEQ")
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MEASURED_SEQ_GEN")
     private int id;
 
     @Column(name = "NAME")
@@ -24,18 +26,19 @@ public class MeasuredEntity {
     @Column(name = "METHOD")
     private String method;
 
-    @OneToMany(mappedBy = "measured", targetEntity = TimeMeasurementEntity.class, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "measured", targetEntity = TimeMeasurementEntity.class, fetch = FetchType.EAGER,
+            cascade = CascadeType.ALL)
     private List<TimeMeasurementEntity> timeMeasurements;
 
     public MeasuredEntity() {
 
     }
 
-    public MeasuredEntity(int id, String name, String className, String method) {
-        this.id = id;
+    public MeasuredEntity(String name, String className, String method, List<TimeMeasurementEntity> timeMeasurements) {
         this.name = name;
         this.className = className;
         this.method = method;
+        this.timeMeasurements = timeMeasurements;
     }
 
     public MeasuredEntity(int id, String name, String className, String method,
