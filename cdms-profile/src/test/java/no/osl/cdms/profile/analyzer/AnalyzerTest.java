@@ -4,11 +4,12 @@
  */
 package no.osl.cdms.profile.analyzer;
 
-import no.osl.cdms.profile.models.TimeMeasurementImpl;
 import no.osl.cdms.profile.interfaces.DataAnalyzer;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import no.osl.cdms.profile.factories.TimeMeasurementFactory;
+import no.osl.cdms.profile.interfaces.TimeMeasurement;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,19 +22,21 @@ import static org.junit.Assert.*;
 public class AnalyzerTest {
 
     public final double[] data = {43, 54, 56, 61, 62, 66, 68, 69, 69, 70, 71, 72, 77, 78, 79, 85, 87, 88, 89, 93, 95, 96, 98, 99, 99};
-    private List<TimeMeasurementImpl> tms;
+    private List<TimeMeasurement> tms;
     private DataAnalyzer analyzer;
+    private String id = "WAIT0";
 
     public AnalyzerTest() {
     }
 
     @Before
     public void setUp() {
-        tms = new LinkedList<TimeMeasurementImpl>();
+        tms = new LinkedList<TimeMeasurement>();
         for (double d : data) {
-            tms.add(new TimeMeasurementImpl("WAIT0", d));
+            tms.add(TimeMeasurementFactory.create("WAIT0", d));
         }
-        this.analyzer =new Analyzer(tms);
+        tms.add(TimeMeasurementFactory.create("WAIT1231", 9999));//Indirect test of delegate
+        this.analyzer = new Analyzer(tms);
     }
 
     @After
@@ -41,11 +44,23 @@ public class AnalyzerTest {
         tms.clear();
         tms = null;
     }
-
+    
+    @Test
+    public void setupNull() {
+        System.out.println("AnalyzerSetup::null");
+        Analyzer a = new Analyzer(null);
+        assertEquals(0, a.average("total"), 0);
+        assertEquals(0, a.stddev("total"), 0);
+        assertEquals(0, a.percentile("total", 50), 0);
+        int[] buckets = a.buckets("total", 10);
+        for (int i : buckets){
+            assertEquals(0, i, 0);
+        }
+    }
+    
     @Test
     public void testSorted() {
         System.out.println("sorted");
-        String id = "total";
         double expResult = 76.96;
         double result = analyzer.average(id);
         assertEquals(expResult, result, 0.0);
@@ -57,10 +72,17 @@ public class AnalyzerTest {
     @Test
     public void testAverage() {
         System.out.println("average");
-        String id = "total";
         double expResult = 76.96;
         double result = analyzer.average(id);
         assertEquals(expResult, result, 0.0);
+    }
+
+    @Test
+    public void testAverage_null() {
+        System.out.println("average_null");
+        String id = "not";
+        double expResult = 0;
+        assertEquals(expResult, analyzer.average(id), 0.0);
     }
 
     /**
@@ -69,10 +91,18 @@ public class AnalyzerTest {
     @Test
     public void testStddev() {
         System.out.println("stddev");
-        String id = "total";
         double expResult = 15.27214;
         double result = analyzer.stddev(id);
         assertEquals(expResult, result, 0.00001);
+    }
+
+    @Test
+    public void testStddev_null() {
+        System.out.println("stddev_null");
+        String id = "not";
+        double expResult = 0;
+        double result = analyzer.stddev(id);
+        assertEquals(expResult, result, 0);
     }
 
     /**
@@ -81,23 +111,40 @@ public class AnalyzerTest {
     @Test
     public void testPercentile() {
         System.out.println("percentile 20");
-        String id = "total";
         int k = 20;
         double expResult = 64.0;
+        double result = analyzer.percentile(id, k);
+        assertEquals(expResult, result, 0.0);
+    }
+
+    @Test
+    public void testPercentile_null() {
+        System.out.println("percentile 20_null");
+        String id = "not";
+        int k = 20;
+        double expResult = 0;
+        double result = analyzer.percentile(id, k);
+        assertEquals(expResult, result, 0.0);
+    }
+
+    @Test
+    public void testPercentileIndex() {
+        System.out.println("percentile 90");
+        int k = 90;
+        double expResult = 98.0;
         double result = analyzer.percentile(id, k);
         assertEquals(expResult, result, 0.0);
 
     }
 
     @Test
-    public void testPercentileIndex() {
-        System.out.println("percentile 90");
-        String id = "total";
+    public void testPercentileIndex_null() {
+        System.out.println("percentile 90_null");
+        String id = "not";
         int k = 90;
-        double expResult = 98.0;
+        double expResult = 0;
         double result = analyzer.percentile(id, k);
         assertEquals(expResult, result, 0.0);
-
     }
 
     /**
@@ -106,10 +153,21 @@ public class AnalyzerTest {
     @Test
     public void testBuckets() {
         System.out.println("buckets");
-        String id = "total";
         int NOFBuckets = 5;
-        double[] expResult = {3, 7, 5, 8, 2};
-        double[] result = analyzer.buckets(id, NOFBuckets);
+        int[] expResult = {3, 7, 5, 8, 2};
+        int[] result = analyzer.buckets(id, NOFBuckets);
+        System.out.println(Arrays.toString(result));
+        for (int ind = 0; ind < expResult.length; ind++) {
+            assertEquals(expResult[ind], result[ind], 0.00001);
+        }
+    }
+    @Test
+    public void testBuckets_null() {
+        System.out.println("buckets_null");
+        String id = "not";
+        int NOFBuckets = 5;
+        int[] expResult = {0, 0, 0, 0, 0};
+        int[] result = analyzer.buckets(id, NOFBuckets);
         System.out.println(Arrays.toString(result));
         for (int ind = 0; ind < expResult.length; ind++) {
             assertEquals(expResult[ind], result[ind], 0.00001);
