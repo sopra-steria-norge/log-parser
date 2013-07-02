@@ -51,18 +51,18 @@ public class GuavaHelpersTest {
         Map<String, String> map = Maps.newLinkedHashMap();
         map.put("key", "value");
         map.put("key.duration", "value");
-        map.put("key:duration", "value");
         map.put("key.something.something.duration", "val");
         map.put("", "value");
+        map.put("keys.duration", "null");
         map.put(null, "value");
         map.put("", null);
         map.put(null, null);
-        boolean[] expResult = {false, true, true, true, false, false, false, false};
-
+        boolean[] expResult = {false, true, true, false, false, false, false, false};
         Set<Map.Entry<String, String>> entries = map.entrySet();
         int i = 0;
         for (Entry<String, String> entry : entries) {
-            assertEquals(expResult[i++], GuavaHelpers.isDuration().apply(entry));
+            System.out.println("Key: " + entry.getKey() + " Value: " + entry.getValue());
+            assertEquals("Testing " + i, expResult[i++], GuavaHelpers.isDuration().apply(entry));
         }
     }
 
@@ -174,6 +174,17 @@ public class GuavaHelpersTest {
             } finally {
                 expResultCounter++;
             }
+        }
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testGetConverterLocalMissingId() {
+        System.out.println("testGetConverterLocalMissingId");
+        Map<String, String> map = Maps.newLinkedHashMap();
+        map.put("LocalThreadContext.duration", "15.0");
+        Function<Map.Entry<String, String>, TimeMeasurement> functor = GuavaHelpers.getConverter(map);
+        for (Entry<String, String> e : map.entrySet()) {
+            functor.apply(e);
         }
     }
 }
