@@ -21,6 +21,8 @@ import static org.junit.Assert.*;
  * @author nutgaard
  */
 public class TimeMeasurementUnmarshallerTest {
+    List<Map<String, String>> data;
+    TimeMeasurement[] expResult;
     
     public TimeMeasurementUnmarshallerTest() {
     }
@@ -35,20 +37,7 @@ public class TimeMeasurementUnmarshallerTest {
     
     @Before
     public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
-    }
-
-    /**
-     * Test of unmarshall method, of class TimeMeasurementUnmarshaller.
-     */
-    @Test
-    public void testUnmarshall_List() {
-        System.out.println("unmarshall");
-        //Build testing data
-        List<Map<String, String>> data = Lists.newLinkedList();
+        data = Lists.newLinkedList();
         Map<String, String> map1 = Maps.newLinkedHashMap();
         map1.put("LocalThreadContext.id", "myID");
         map1.put("LocalThreadContext.duration", "PT1.15S");
@@ -60,17 +49,53 @@ public class TimeMeasurementUnmarshallerTest {
         map2.put("Something.Lap.Class.method:duration", "PT2.151S");
         data.add(map2);
         
-        TimeMeasurementUnmarshaller instance = new TimeMeasurementUnmarshaller();
-        TimeMeasurement[] expResult = new TimeMeasurement[]{
+        expResult = new TimeMeasurement[]{
            TimeMeasurement.create("myID", "PT1.15S"),
            TimeMeasurement.create("Total","PT1.15S"),
            TimeMeasurement.create("Wait","PT1.15S"),
            TimeMeasurement.create("Class.method","PT2.151S")
         };
+    }
+    
+    @After
+    public void tearDown() {
+        data.clear();
+        data = null;
+        expResult = null;
+    }
+
+    /**
+     * Test of unmarshall method, of class TimeMeasurementUnmarshaller.
+     */
+    @Test
+    public void testUnmarshall_List() {
+        System.out.println("unmarshall");
+        //Build testing data
+        
+        TimeMeasurementUnmarshaller instance = new TimeMeasurementUnmarshaller();
         
         List<TimeMeasurement> result = instance.unmarshall(data);
         for (int i = 0; i < expResult.length; i++) {
             assertEquals(expResult[i], result.get(i));
         }
     }
+    @Test
+    public void testUnmarshall_List_null(){
+        System.out.println("testUnmarshall_List_null");
+        TimeMeasurementUnmarshaller instance = new TimeMeasurementUnmarshaller();
+        
+        List<TimeMeasurement> result = instance.unmarshall(null, data);
+        for (int i = 0; i < expResult.length; i++) {
+            assertEquals(expResult[i], result.get(i));
+        }
+    }
+    @Test
+    public void testUnmarshall_Data_null() {
+        System.out.println("testUnmarshall_Data_null");
+        TimeMeasurementUnmarshaller instance = new TimeMeasurementUnmarshaller();
+        
+        List<TimeMeasurement> result = instance.unmarshall(null);
+        assertEquals(0, result.size());
+    }
+    
 }

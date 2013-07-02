@@ -12,17 +12,6 @@ import org.joda.time.convert.DurationConverter;
  * @author nutgaard
  */
 public class TimeMeasurement implements Comparable<TimeMeasurement> {
-
-    public enum Type {
-
-        ICWMESSAGE,
-        FLIGHTSERVICE,
-        WAIT0,
-        FLIGHTLEG,
-        MILESTONE,
-        WAIT1,
-        UPDATEMESSAGE
-    }
     public final String name;
     public final double time;
 
