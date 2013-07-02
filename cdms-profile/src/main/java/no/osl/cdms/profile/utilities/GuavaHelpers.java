@@ -7,7 +7,8 @@ package no.osl.cdms.profile.utilities;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import java.util.Map;
-import no.osl.cdms.profile.models.TimeMeasurement;
+import no.osl.cdms.profile.factories.TimeMeasurementFactory;
+import no.osl.cdms.profile.interfaces.TimeMeasurement;
 
 /**
  *
@@ -33,7 +34,7 @@ public class GuavaHelpers {
             public TimeMeasurement apply(Map.Entry<String, String> input) {
                 String name = parseKey(input.getKey(), properties);
                 String time = input.getValue();
-                return TimeMeasurement.create(name, time);
+                return TimeMeasurementFactory.create(name, time);
             }
         };
     }

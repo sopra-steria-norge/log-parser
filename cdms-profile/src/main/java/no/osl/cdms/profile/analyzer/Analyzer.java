@@ -4,7 +4,7 @@
  */
 package no.osl.cdms.profile.analyzer;
 
-import no.osl.cdms.profile.models.TimeMeasurement;
+import no.osl.cdms.profile.models.TimeMeasurementImpl;
 import no.osl.cdms.profile.interfaces.DataAnalyzer;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
@@ -18,15 +18,15 @@ import java.util.List;
  */
 public class Analyzer implements DataAnalyzer {
 
-    private Multimap<String, TimeMeasurement> map;
+    private Multimap<String, TimeMeasurementImpl> map;
 
-    public Analyzer(final List<TimeMeasurement> times) {
+    public Analyzer(final List<TimeMeasurementImpl> times) {
         this.map = ArrayListMultimap.create();
         delegate(times);
     }
 
-    private void delegate(final List<TimeMeasurement> times) {
-        for (TimeMeasurement tm : times) {
+    private void delegate(final List<TimeMeasurementImpl> times) {
+        for (TimeMeasurementImpl tm : times) {
             map.put("total", tm);
             map.put(tm.name, tm);
         }
@@ -39,7 +39,7 @@ public class Analyzer implements DataAnalyzer {
     public double average(String id) {
         int counter = 0;
         double sum = 0;
-        for (TimeMeasurement tm : map.get(id)) {
+        for (TimeMeasurementImpl tm : map.get(id)) {
             sum += tm.time;
             counter++;
         }
@@ -53,7 +53,7 @@ public class Analyzer implements DataAnalyzer {
     public double stddev(String id) {
         double mean = average(id);
         double stddevSum = 0;
-        for (TimeMeasurement tm : map.get(id)) {
+        for (TimeMeasurementImpl tm : map.get(id)) {
             stddevSum += Math.pow(tm.time - mean, 2);
         }
         stddevSum /= map.get(id).size();
@@ -62,7 +62,7 @@ public class Analyzer implements DataAnalyzer {
 
     @Override
     public double percentile(String id, int k) {
-        List<TimeMeasurement> tms = new ArrayList<TimeMeasurement>(map.get(id));
+        List<TimeMeasurementImpl> tms = new ArrayList<TimeMeasurementImpl>(map.get(id));
         double ind = k / 100.0 * tms.size();
         if (ind == (int) ind) {
             return (tms.get((int) ind).time + tms.get((int) (ind - 1)).time) / 2;
@@ -74,12 +74,12 @@ public class Analyzer implements DataAnalyzer {
 
     @Override
     public double[] buckets(String id, int NOFBuckets) {
-        List<TimeMeasurement> tms = new ArrayList<TimeMeasurement>(map.get(id));
+        List<TimeMeasurementImpl> tms = new ArrayList<TimeMeasurementImpl>(map.get(id));
         double[] out = new double[NOFBuckets];
         double min = tms.get(0).time;
         double bucketSize = (tms.get(tms.size()-1).time-min)/(NOFBuckets-1);
         
-        for (TimeMeasurement tm : tms) {
+        for (TimeMeasurementImpl tm : tms) {
             out[(int)((tm.time-min)/bucketSize)]++;
         }
         return out;

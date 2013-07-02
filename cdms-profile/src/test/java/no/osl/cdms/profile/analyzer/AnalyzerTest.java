@@ -4,7 +4,7 @@
  */
 package no.osl.cdms.profile.analyzer;
 
-import no.osl.cdms.profile.models.TimeMeasurement;
+import no.osl.cdms.profile.models.TimeMeasurementImpl;
 import no.osl.cdms.profile.interfaces.DataAnalyzer;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -21,7 +21,7 @@ import static org.junit.Assert.*;
 public class AnalyzerTest {
 
     public final double[] data = {43, 54, 56, 61, 62, 66, 68, 69, 69, 70, 71, 72, 77, 78, 79, 85, 87, 88, 89, 93, 95, 96, 98, 99, 99};
-    private List<TimeMeasurement> tms;
+    private List<TimeMeasurementImpl> tms;
     private DataAnalyzer analyzer;
 
     public AnalyzerTest() {
@@ -29,9 +29,9 @@ public class AnalyzerTest {
 
     @Before
     public void setUp() {
-        tms = new LinkedList<TimeMeasurement>();
+        tms = new LinkedList<TimeMeasurementImpl>();
         for (double d : data) {
-            tms.add(new TimeMeasurement("WAIT0", d));
+            tms.add(new TimeMeasurementImpl("WAIT0", d));
         }
         this.analyzer =new Analyzer(tms);
     }

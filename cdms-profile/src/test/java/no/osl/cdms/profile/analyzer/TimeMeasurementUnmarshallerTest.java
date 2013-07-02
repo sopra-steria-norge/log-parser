@@ -8,7 +8,8 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import java.util.List;
 import java.util.Map;
-import no.osl.cdms.profile.models.TimeMeasurement;
+import no.osl.cdms.profile.factories.TimeMeasurementFactory;
+import no.osl.cdms.profile.interfaces.TimeMeasurement;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -50,10 +51,10 @@ public class TimeMeasurementUnmarshallerTest {
         data.add(map2);
         
         expResult = new TimeMeasurement[]{
-           TimeMeasurement.create("myID", "PT1.15S"),
-           TimeMeasurement.create("Total","PT1.15S"),
-           TimeMeasurement.create("Wait","PT1.15S"),
-           TimeMeasurement.create("Class.method","PT2.151S")
+           TimeMeasurementFactory.create("myID", "PT1.15S"),
+           TimeMeasurementFactory.create("Total","PT1.15S"),
+           TimeMeasurementFactory.create("Wait","PT1.15S"),
+           TimeMeasurementFactory.create("Class.method","PT2.151S")
         };
     }
     

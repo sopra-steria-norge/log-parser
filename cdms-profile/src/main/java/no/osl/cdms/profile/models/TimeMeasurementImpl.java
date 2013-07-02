@@ -4,6 +4,7 @@
  */
 package no.osl.cdms.profile.models;
 
+import no.osl.cdms.profile.interfaces.TimeMeasurement;
 import org.joda.time.convert.ConverterManager;
 import org.joda.time.convert.DurationConverter;
 
@@ -11,31 +12,28 @@ import org.joda.time.convert.DurationConverter;
  *
  * @author nutgaard
  */
-public class TimeMeasurement implements Comparable<TimeMeasurement> {
+public class TimeMeasurementImpl implements TimeMeasurement {
     public final String name;
     public final double time;
 
-    public TimeMeasurement(String name, double time) {
+    public TimeMeasurementImpl(String name, double time) {
         this.name = name;
         this.time = time;
     }
-
-    public static TimeMeasurement create(String name, String time) {
-        try {
-            DurationConverter converter = ConverterManager.getInstance().getDurationConverter(time);
-            return new TimeMeasurement(name, converter.getDurationMillis(time));
-        } catch (IllegalArgumentException ile) {
-            try {
-                return new TimeMeasurement(name, Double.parseDouble(time));
-            } catch (NumberFormatException nfe) {
-                throw new IllegalArgumentException("Could not unmarshall timestamp \""+time+"\" into TimeMeasurement");
-            }
-        }
+    
+    @Override
+    public String getName() {
+        return name;
     }
+    
+    @Override
+    public double getTime() {
+        return time;
+    }    
 
     @Override
     public int compareTo(TimeMeasurement o) {
-        return (int) Math.signum(this.time - o.time);
+        return (int) Math.signum(this.getTime() - o.getTime());
     }
 
     @Override
@@ -46,7 +44,7 @@ public class TimeMeasurement implements Comparable<TimeMeasurement> {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final TimeMeasurement other = (TimeMeasurement) obj;
+        final TimeMeasurementImpl other = (TimeMeasurementImpl) obj;
         if ((this.name == null) ? (other.name != null) : !this.name.equals(other.name)) {
             return false;
         }

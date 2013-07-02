@@ -9,7 +9,8 @@ import com.google.common.collect.Maps;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import no.osl.cdms.profile.models.TimeMeasurement;
+import no.osl.cdms.profile.factories.TimeMeasurementFactory;
+import no.osl.cdms.profile.interfaces.TimeMeasurement;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -77,7 +78,7 @@ public class GuavaHelpersTest {
         map.put("LocalThreadContext.id", "myID");
         Function<Map.Entry<String, String>, TimeMeasurement> functor = GuavaHelpers.getConverter(map);
         TimeMeasurement result = null;
-        TimeMeasurement expResult = TimeMeasurement.create("myID", "PT0.015S");
+        TimeMeasurement expResult = TimeMeasurementFactory.create("myID", "PT0.015S");
         for (Entry<String, String> e : map.entrySet()) {
             if (e.getKey().endsWith("duration")) {
                 result = functor.apply(e);
@@ -94,7 +95,7 @@ public class GuavaHelpersTest {
         map.put("LocalThreadContext.id", "myID");
         Function<Map.Entry<String, String>, TimeMeasurement> functor = GuavaHelpers.getConverter(map);
         TimeMeasurement result = null;
-        TimeMeasurement expResult = TimeMeasurement.create("myID", "PT0.015S");
+        TimeMeasurement expResult = TimeMeasurementFactory.create("myID", "PT0.015S");
         for (Entry<String, String> e : map.entrySet()) {
             if (e.getKey().endsWith("duration")) {
                 result = functor.apply(e);
@@ -111,7 +112,7 @@ public class GuavaHelpersTest {
         map.put("LocalThreadContext.id", "myID");
         Function<Map.Entry<String, String>, TimeMeasurement> functor = GuavaHelpers.getConverter(map);
         TimeMeasurement result = null;
-        TimeMeasurement expResult = TimeMeasurement.create("myID", "PT0.015S");
+        TimeMeasurement expResult = TimeMeasurementFactory.create("myID", "PT0.015S");
         for (Entry<String, String> e : map.entrySet()) {
             if (e.getKey().endsWith("duration")) {
                 result = functor.apply(e);
@@ -130,10 +131,10 @@ public class GuavaHelpersTest {
         Function<Map.Entry<String, String>, TimeMeasurement> functor = GuavaHelpers.getConverter(map);
 
         TimeMeasurement[] expResult = new TimeMeasurement[]{
-            TimeMeasurement.create("Total", "PT0.015S"),
-            TimeMeasurement.create("Wait", "PT47.061S"),
-            TimeMeasurement.create("Class.method", "PT0.015S"),
-            TimeMeasurement.create("Class.function", "PT0.005S")
+            TimeMeasurementFactory.create("Total", "PT0.015S"),
+            TimeMeasurementFactory.create("Wait", "PT47.061S"),
+            TimeMeasurementFactory.create("Class.method", "PT0.015S"),
+            TimeMeasurementFactory.create("Class.function", "PT0.005S")
         };
         int expResultCounter = 0;
         for (Entry<String, String> e : map.entrySet()) {

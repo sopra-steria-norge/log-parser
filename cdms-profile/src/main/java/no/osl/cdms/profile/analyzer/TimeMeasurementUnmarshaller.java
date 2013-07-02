@@ -10,7 +10,8 @@ import com.google.common.collect.Maps;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import no.osl.cdms.profile.models.TimeMeasurement;
+import no.osl.cdms.profile.interfaces.TimeMeasurement;
+import no.osl.cdms.profile.models.TimeMeasurementImpl;
 import no.osl.cdms.profile.utilities.GuavaHelpers;
 
 /**

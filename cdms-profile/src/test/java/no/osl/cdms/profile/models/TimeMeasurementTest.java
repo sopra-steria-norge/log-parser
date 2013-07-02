@@ -4,10 +4,8 @@
  */
 package no.osl.cdms.profile.models;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
+import no.osl.cdms.profile.factories.TimeMeasurementFactory;
+import no.osl.cdms.profile.interfaces.TimeMeasurement;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -24,8 +22,8 @@ public class TimeMeasurementTest {
         System.out.println("TimeMeasurement::create");
         String name = "test";
         String time = "PT2.123S";
-        TimeMeasurement expResult = new TimeMeasurement(name, 2123);
-        TimeMeasurement result = TimeMeasurement.create(name, time);
+        TimeMeasurement expResult = new TimeMeasurementImpl(name, 2123);
+        TimeMeasurement result = TimeMeasurementFactory.create(name, time);
         assertEquals(expResult, result);
     }
     @Test
@@ -34,8 +32,8 @@ public class TimeMeasurementTest {
         String name = "test";
         String time = "PT2.123S";
         double exp = 2123;
-        TimeMeasurement result = TimeMeasurement.create(name, time);
-        assertEquals(exp, result.time, 0);
+        TimeMeasurement result = TimeMeasurementFactory.create(name, time);
+        assertEquals(exp, result.getTime(), 0);
     }
     @Test
     public void testCreate_time_parse_double_fallback() {
@@ -43,15 +41,15 @@ public class TimeMeasurementTest {
         String name = "test";
         String time = "2123";
         double exp = 2123;
-        TimeMeasurement result = TimeMeasurement.create(name, time);
-        assertEquals(exp, result.time, 0);
+        TimeMeasurement result = TimeMeasurementFactory.create(name, time);
+        assertEquals(exp, result.getTime(), 0);
     }
     @Test(expected = IllegalArgumentException.class)
     public void testCreate_time_error() {
         System.out.println("TimeMeasurement::create");
         String name = "test";
         String time = "2iasd1231asd";
-        TimeMeasurement result = TimeMeasurement.create(name, time);
+        TimeMeasurement result = TimeMeasurementFactory.create(name, time);
     }
     /**
      * Test of compareTo method, of class TimeMeasurement.
@@ -59,11 +57,11 @@ public class TimeMeasurementTest {
     @Test
     public void testCompareTo() {
         System.out.println("TimeMeasurement::compareTo");
-        TimeMeasurement o = TimeMeasurement.create("Test", "1123");
-        TimeMeasurement o2 = TimeMeasurement.create("Test", "PT1.123S");
-        TimeMeasurement o3 = new TimeMeasurement("Test", 1123);
-        TimeMeasurement small = new TimeMeasurement("Test", 11);
-        TimeMeasurement big = new TimeMeasurement("Test", 9999);
+        TimeMeasurement o = TimeMeasurementFactory.create("Test", "1123");
+        TimeMeasurement o2 = TimeMeasurementFactory.create("Test", "PT1.123S");
+        TimeMeasurement o3 = new TimeMeasurementImpl("Test", 1123);
+        TimeMeasurement small = new TimeMeasurementImpl("Test", 11);
+        TimeMeasurement big = new TimeMeasurementImpl("Test", 9999);
         int expResult = 0;
         int result = o.compareTo(o2);
         assertEquals(expResult, result);
@@ -85,14 +83,14 @@ public class TimeMeasurementTest {
     @Test
     public void testEquals() {
         System.out.println("TimeMeasurement::equals");
-        TimeMeasurement instance = TimeMeasurement.create("test", "PT0.123S");
-        TimeMeasurement instance2 = TimeMeasurement.create(null, "PT0.123S");
-        TimeMeasurement ok = new TimeMeasurement("test", 123);
-        TimeMeasurement ok2 = TimeMeasurement.create("test", "123");
-        TimeMeasurement wrongname = TimeMeasurement.create("test2", "PT0.123S");
-        TimeMeasurement wrongtime = TimeMeasurement.create("test", "PT0.124S");
-        TimeMeasurement nullname = new TimeMeasurement(null, 123);
-        TimeMeasurement big = new TimeMeasurement(null, 1234564464);
+        TimeMeasurement instance = TimeMeasurementFactory.create("test", "PT0.123S");
+        TimeMeasurement instance2 = TimeMeasurementFactory.create(null, "PT0.123S");
+        TimeMeasurement ok = new TimeMeasurementImpl("test", 123);
+        TimeMeasurement ok2 = TimeMeasurementFactory.create("test", "123");
+        TimeMeasurement wrongname = TimeMeasurementFactory.create("test2", "PT0.123S");
+        TimeMeasurement wrongtime = TimeMeasurementFactory.create("test", "PT0.124S");
+        TimeMeasurement nullname = new TimeMeasurementImpl(null, 123);
+        TimeMeasurement big = new TimeMeasurementImpl(null, 1234564464);
         
         
         assertTrue(instance.equals(instance));
