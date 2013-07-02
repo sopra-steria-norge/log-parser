@@ -15,6 +15,98 @@
     <name>cdms-profile</name>
     <url>http://maven.apache.org</url>
 
+    <build>
+        <defaultGoal>install</defaultGoal>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>sql-maven-plugin</artifactId>
+                <version>1.5</version>
+
+                <dependencies>
+                    <dependency>
+                        <groupId>com.oracle</groupId>
+                        <artifactId>ojdbc6</artifactId>
+                        <version>${oracle.jdbc.version}</version>
+                    </dependency>
+                </dependencies>
+
+                <configuration>
+                    <driver>oracle.jdbc.driver.OracleDriver</driver>
+                    <url>${env.TOPS_DB_CONNECTION_URL}</url>
+                    <username>${env.TOPS_DB_USERNAME}</username>
+                    <password>${env.TOPS_DB_PASSWORD}</password>
+                </configuration>
+
+                <executions>
+                    <execution>
+                        <id>drop-db</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>execute</goal>
+                        </goals>
+                        <configuration>
+                            <autocommit>true</autocommit>
+                            <srcFiles>
+                                <srcFile>src/main/resources/sql/drop_profile_schema.sql</srcFile>
+                            </srcFiles>
+                            <onError>continue</onError>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>create-db</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>execute</goal>
+                        </goals>
+                        <configuration>
+                            <autocommit>true</autocommit>
+                            <srcFiles>
+                                <srcFile>src/main/resources/sql/create_profile_schema.sql</srcFile>
+                            </srcFiles>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.openjpa</groupId>
+                <artifactId>openjpa-maven-plugin</artifactId>
+                <configuration>
+                    <includes>
+                        <!-- Keep this list sorted -->
+                        **/*MeasuredEntity.class,
+                        **/*MultiContextEntity.class,
+                        **/*TimeMeasurementEntity.class,
+                    </includes>
+                    <addDefaultConstructor>true</addDefaultConstructor>
+                    <enforcePropertyRestrictions>true</enforcePropertyRestrictions>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>enhancer</id>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>enhance</goal>
+                        </goals>
+                    </execution>
+                </executions>
+
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.openjpa</groupId>
+                        <artifactId>openjpa</artifactId>
+                        <version>${openjpa.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                        <version>${commons-logging.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+    </build>
+
 
     <dependencies>
 
