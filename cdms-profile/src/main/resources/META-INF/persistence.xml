@@ -11,13 +11,9 @@
         <jta-data-source>osgi:service/javax.sql.DataSource/(osgi.jndi.service.name=jdbc/cdms)</jta-data-source>
 
         <!-- Keep this list sorted -->
-        <class>no.osl.cdms.profile.log.LapEntity</class>
-        <class>no.osl.cdms.profile.log.LocalThreadContextEntity</class>
-        <class>no.osl.cdms.profile.log.LogEntryEntity</class>
-        <class>no.osl.cdms.profile.log.MultiThreadContextEntity</class>
+        <class>no.osl.cdms.profile.log.MeasuredEntity</class>
+        <class>no.osl.cdms.profile.log.MultiContextMeasurementEntity</class>
         <class>no.osl.cdms.profile.log.TimeMeasurementEntity</class>
-        <class>no.osl.cdms.profile.log.TotalEntity</class>
-        <class>no.osl.cdms.profile.log.WaitEntity</class>
 
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
 
@@ -39,13 +35,9 @@
     <persistence-unit name="cdmsPersistenceUnitTest" transaction-type="RESOURCE_LOCAL">
         <provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider>
 
-        <class>no.osl.cdms.profile.log.LapEntity</class>
-        <class>no.osl.cdms.profile.log.LocalThreadContextEntity</class>
-        <class>no.osl.cdms.profile.log.LogEntryEntity</class>
-        <class>no.osl.cdms.profile.log.MultiThreadContextEntity</class>
+        <class>no.osl.cdms.profile.log.MeasuredEntity</class>
+        <class>no.osl.cdms.profile.log.MultiContextMeasurementEntity</class>
         <class>no.osl.cdms.profile.log.TimeMeasurementEntity</class>
-        <class>no.osl.cdms.profile.log.TotalEntity</class>
-        <class>no.osl.cdms.profile.log.WaitEntity</class>
 
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
 
