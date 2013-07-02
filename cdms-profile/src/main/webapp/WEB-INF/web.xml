@@ -1,0 +1,37 @@
+<web-app>
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener
+        </listener-class>
+    </listener>
+
+    <context-param>
+        <param-name>contextClass</param-name>
+        <param-value>org.springframework.osgi.web.context.support.OsgiBundleXmlWebApplicationContext
+        </param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>org.eclipse.jetty.servlet.SessionIdPathParameterName</param-name>
+        <param-value>none</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>
+            /META-INF/spring/cdms-web-ctx.xml
+        </param-value>
+    </context-param>
+
+    <servlet>
+        <servlet-name>GrapService</servlet-name>
+        <servlet-class>no.osl.cdms.profile.web.GraphWebservice</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Graph</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+</web-app>
