@@ -31,7 +31,7 @@ public class AnalyzerTest {
     public void setUp() {
         tms = new LinkedList<TimeMeasurement>();
         for (double d : data) {
-            tms.add(new TimeMeasurement(TimeMeasurement.Type.WAIT0, d));
+            tms.add(new TimeMeasurement("WAIT0", d));
         }
         this.analyzer =new Analyzer(tms);
     }

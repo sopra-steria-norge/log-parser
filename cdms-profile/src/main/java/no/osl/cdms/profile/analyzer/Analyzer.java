@@ -28,7 +28,7 @@ public class Analyzer implements DataAnalyzer {
     private void delegate(final List<TimeMeasurement> times) {
         for (TimeMeasurement tm : times) {
             map.put("total", tm);
-            map.put(tm.name.name(), tm);
+            map.put(tm.name, tm);
         }
         for (String key : map.keySet()) {
             Collections.sort(new ArrayList(map.get(key)));
