@@ -2,6 +2,7 @@
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>
+
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener
         </listener-class>
@@ -21,17 +22,17 @@
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>
-            /META-INF/spring/cdms-web-ctx.xml
+            /META-INF/spring/cdms-profile-ctx.xml
         </param-value>
     </context-param>
 
     <servlet>
-        <servlet-name>GrapService</servlet-name>
-        <servlet-class>no.osl.cdms.profile.web.GraphWebservice</servlet-class>
+        <servlet-name>Rest</servlet-name>
+        <servlet-class>org.apache.cxf.transport.servlet.CXFServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>
-        <servlet-name>Graph</servlet-name>
-        <url-pattern>/</url-pattern>
+        <servlet-name>Rest</servlet-name>
+        <url-pattern>/rest/*</url-pattern>
     </servlet-mapping>
 </web-app>

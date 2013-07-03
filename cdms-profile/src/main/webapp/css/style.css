@@ -16,10 +16,19 @@ content{
 	overflow:visible;
 }
 
-#graph {
+.rickshaw_legend{
+	font-size: 14px;
 
+}
+
+.rickshaw_legend .action{
+	font-size: 16px;
+}
+
+#graph {
 	display: inline-block;
 }
+
 #y_axis {
 	position: relative;
 	top: 0;
