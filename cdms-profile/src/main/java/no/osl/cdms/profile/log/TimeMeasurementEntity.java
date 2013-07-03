@@ -1,5 +1,7 @@
 package no.osl.cdms.profile.log;
 
+import no.osl.cdms.profile.api.TimeMeasurement;
+
 import javax.persistence.*;
 
 /**
@@ -7,7 +9,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "CDM_PROFILE_TIMEMEASUREMENT")
-public class TimeMeasurementEntity {
+public class TimeMeasurementEntity implements TimeMeasurement{
 
     @Column(name = "TIMEMEASUREMENT_ID")
     @SequenceGenerator(name = "TIMEMEASUREMENT_SEQ_GEN", sequenceName = "TIMEMEASUREMENT_SEQ")
@@ -31,15 +33,6 @@ public class TimeMeasurementEntity {
 
     public TimeMeasurementEntity() {
 
-    }
-
-    public TimeMeasurementEntity(int id, MeasuredEntity me, MultiContextEntity mcme, String timestamp,
-                                 String duration) {
-        this.id = id;
-        this.measured = me;
-        this.multiContext = mcme;
-        this.timestamp = timestamp;
-        this.duration = duration;
     }
 
     public TimeMeasurementEntity(MeasuredEntity me, MultiContextEntity mcme, String timestamp,
