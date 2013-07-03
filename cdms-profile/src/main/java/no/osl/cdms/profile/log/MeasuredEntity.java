@@ -1,5 +1,7 @@
 package no.osl.cdms.profile.log;
 
+import no.osl.cdms.profile.api.Measured;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +11,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "CDM_PROFILE_MEASURED")
-public class MeasuredEntity {
+public class MeasuredEntity implements Measured{
 
     @Column(name = "MEASURED_ID")
     @SequenceGenerator(name = "MEASURED_SEQ_GEN", sequenceName = "MEASURED_SEQ")
