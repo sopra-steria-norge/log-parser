@@ -4,10 +4,13 @@
  */
 package no.osl.cdms.profile.interfaces;
 
+import org.springframework.stereotype.Component;
+
 /**
  *
  * @author nutgaard
  */
+@Component
 public interface DataAnalyzer {
     public double average(String id);
     public double stddev(String id);

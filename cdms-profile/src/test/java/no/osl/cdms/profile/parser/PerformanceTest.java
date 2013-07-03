@@ -15,7 +15,7 @@ import org.junit.Test;
  * @author nutgaard
  */
 public class PerformanceTest {
-    private long prev;
+    private Long prev;
 
     private List<String> lines;
 
@@ -40,18 +40,20 @@ public class PerformanceTest {
         prev = System.currentTimeMillis();
         for (String l : lines) {
             parser.parse(l);
-            modDebug(i++, prev);
+            if (modDebug(i++, prev))prev = System.currentTimeMillis();
+            
         }
         timestamp(startParse);
     }
     private void timestamp(long start) {
         System.out.println("Time "+(System.currentTimeMillis()-start)+"ms");
     }
-    private void modDebug(long i, long prev){
+    private boolean modDebug(long i, long prev){
         if (i%1000 == 0){
             System.out.print("Line "+i+" parsed at ");
             timestamp(prev);
-            prev = System.currentTimeMillis();
+            return true;
         }
+        return false;
     }
 }

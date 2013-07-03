@@ -4,6 +4,7 @@
  */
 package no.osl.cdms.profile.models;
 
+import no.osl.cdms.profile.analyzer.TimeMeasurementImpl;
 import no.osl.cdms.profile.factories.TimeMeasurementFactory;
 import no.osl.cdms.profile.interfaces.TimeMeasurement;
 import org.junit.Test;

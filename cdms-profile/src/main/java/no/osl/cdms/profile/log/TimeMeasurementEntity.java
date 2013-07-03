@@ -1,30 +1,78 @@
 package no.osl.cdms.profile.log;
 
+import no.osl.cdms.profile.api.TimeMeasurement;
+
 import javax.persistence.*;
 
+/**
+ * User: apalfi
+ */
 @Entity
-@Inheritance(strategy= InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name="TYPE")
-@Table(name="CDM_LOG_TIME_MEASUREMENT")
-public class TimeMeasurementEntity {
-    @Column(name = "DURATION")
-    protected String duration;
+@Table(name = "CDM_PROFILE_TIMEMEASUREMENT")
+public class TimeMeasurementEntity implements TimeMeasurement{
 
-    @Column(name = "TM_ID")
+    @Column(name = "TIMEMEASUREMENT_ID")
+    @SequenceGenerator(name = "TIMEMEASUREMENT_SEQ_GEN", sequenceName = "TIMEMEASUREMENT_SEQ")
     @Id
-    @GeneratedValue( strategy = GenerationType.IDENTITY )
-    private long timeMeasurementId;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "TIMEMEASUREMENT_SEQ_GEN")
+    private int id;
 
     @ManyToOne
-    @JoinColumn(name = "LOG_ENTRY_ID")
-    private MultiThreadContextEntity multiThreadContext;
+    @JoinColumn(name = "MEASURED_ID")
+    private MeasuredEntity measured;
+
+    @ManyToOne
+    @JoinColumn(name = "MULTICONTEXT_ID")
+    private MultiContextEntity multiContext;
+
+    @Column(name = "TIMESTAMP")
+    private String timestamp;
+
+    @Column(name = "DURATION")
+    private String duration;
 
     public TimeMeasurementEntity() {
 
     }
 
-    public TimeMeasurementEntity(String duration) {
+    public TimeMeasurementEntity(MeasuredEntity me, MultiContextEntity mcme, String timestamp,
+                                 String duration) {
+        this.measured = me;
+        this.multiContext = mcme;
+        this.timestamp = timestamp;
         this.duration = duration;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public MeasuredEntity getMeasured() {
+        return measured;
+    }
+
+    public void setMeasured(MeasuredEntity measured) {
+        this.measured = measured;
+    }
+
+    public MultiContextEntity getMultiContext() {
+        return multiContext;
+    }
+
+    public void setMultiContext(MultiContextEntity multiContextMeasurement) {
+        this.multiContext = multiContextMeasurement;
+    }
+
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
     }
 
     public String getDuration() {
@@ -35,19 +83,5 @@ public class TimeMeasurementEntity {
         this.duration = duration;
     }
 
-    public long getTimeMeasurementId() {
-        return timeMeasurementId;
-    }
 
-    public void setTimeMeasurementId(long timeMeasurementId) {
-        this.timeMeasurementId = timeMeasurementId;
-    }
-
-    public MultiThreadContextEntity getMultiThreadContext() {
-        return multiThreadContext;
-    }
-
-    public void setMultiThreadContext(MultiThreadContextEntity multiThreadContext) {
-        this.multiThreadContext = multiThreadContext;
-    }
 }
