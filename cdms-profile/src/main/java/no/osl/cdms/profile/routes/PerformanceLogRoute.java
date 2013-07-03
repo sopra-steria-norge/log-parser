@@ -1,4 +1,4 @@
-package no.osl.cdms.profile.route;
+package no.osl.cdms.profile.routes;
 
 import no.osl.cdms.profile.interfaces.Parser;
 import no.osl.cdms.profile.parser.DatabaseEntryParser;
@@ -9,6 +9,7 @@ import java.util.Map;
 
 public class PerformanceLogRoute extends RouteBuilder {
 
+    public static final String PERFORMANCE_LOG_ROUTE = "PerformanceLogRoute";
     private static final String LOG_DIRECTORY = "data";
     private static final String LOG_FILE = "performance.log";
     /**
@@ -16,17 +17,26 @@ public class PerformanceLogRoute extends RouteBuilder {
      */
     private static final int DELAY = 1000;
 
-    @Override
-    public void configure() throws Exception {
-        Parser logParser = new LogLineRegexParser(); // TODO should probably be registered in spring.xml
-        DatabaseEntryParser dbParser = new DatabaseEntryParser();
+   /* @Autowired
+    Parser logLineRegexParser;
 
+    @Autowired
+    DatabaseEntryParser databaseEntryParser;*/
+
+    @Override
+    public void configure() throws Exception{
+
+        onException(Exception.class)/*.process(exceptionHandler)*/.markRollbackOnly().handled(true);
+
+        Parser logLineRegexParser = new LogLineRegexParser();
+        DatabaseEntryParser databaseEntryParser = new DatabaseEntryParser();
         fromF("stream:file?fileName=%s/%s&scanStream=true&scanStreamDelay=%d", LOG_DIRECTORY, LOG_FILE, DELAY)
                 .convertBodyTo(String.class)
                 .choice().when(body().isGreaterThan(""))
-                .bean(logParser, "parse")
-                .bean(dbParser, "parse")
-                .bean(this, "log");
+                .bean(logLineRegexParser, "parse")
+                .bean(databaseEntryParser, "parse")
+                .bean(this, "printLogEntry")
+                .routeId(PERFORMANCE_LOG_ROUTE);
     }
 
     /**
