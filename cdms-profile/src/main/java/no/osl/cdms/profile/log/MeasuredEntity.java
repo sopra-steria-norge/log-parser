@@ -41,15 +41,6 @@ public class MeasuredEntity {
         this.timeMeasurements = timeMeasurements;
     }
 
-    public MeasuredEntity(int id, String name, String className, String method,
-                          List<TimeMeasurementEntity> timeMeasurements) {
-        this.id = id;
-        this.name = name;
-        this.className = className;
-        this.method = method;
-        this.timeMeasurements = timeMeasurements;
-    }
-
     public int getId() {
         return id;
     }

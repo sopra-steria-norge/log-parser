@@ -31,14 +31,6 @@ public class MultiContextEntity {
     }
 
     public MultiContextEntity(String start, String end, List<TimeMeasurementEntity> timeMeasurements) {
-        this.id = id;
-        this.start = start;
-        this.end = end;
-        this.timeMeasurements = timeMeasurements;
-    }
-
-    public MultiContextEntity(int id, String start, String end, List<TimeMeasurementEntity> timeMeasurements) {
-        this.id = id;
         this.start = start;
         this.end = end;
         this.timeMeasurements = timeMeasurements;

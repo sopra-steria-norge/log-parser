@@ -33,15 +33,6 @@ public class TimeMeasurementEntity {
 
     }
 
-    public TimeMeasurementEntity(int id, MeasuredEntity me, MultiContextEntity mcme, String timestamp,
-                                 String duration) {
-        this.id = id;
-        this.measured = me;
-        this.multiContext = mcme;
-        this.timestamp = timestamp;
-        this.duration = duration;
-    }
-
     public TimeMeasurementEntity(MeasuredEntity me, MultiContextEntity mcme, String timestamp,
                                  String duration) {
         this.measured = me;
