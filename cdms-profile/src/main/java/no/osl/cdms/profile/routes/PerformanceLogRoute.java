@@ -3,7 +3,9 @@ package no.osl.cdms.profile.routes;
 import no.osl.cdms.profile.interfaces.Parser;
 import no.osl.cdms.profile.parser.DatabaseEntryParser;
 import no.osl.cdms.profile.parser.LogLineRegexParser;
+import no.osl.cdms.profile.routes.logentryupdate.LogEntryUpdateProcessor;
 import org.apache.camel.builder.RouteBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Map;
 
@@ -15,27 +17,30 @@ public class PerformanceLogRoute extends RouteBuilder {
     /**
      * Milliseconds between each poll from the log file
      */
-    private static final int DELAY = 1000;
+    private static final int DELAY = 0;
 
-   /* @Autowired
+    @Autowired
     Parser logLineRegexParser;
 
     @Autowired
-    DatabaseEntryParser databaseEntryParser;*/
+    DatabaseEntryParser databaseEntryParser;
+
+    @Autowired
+    private LogEntryUpdateProcessor logEntryUpdateProcessor;
 
     @Override
     public void configure() throws Exception{
 
-        onException(Exception.class)/*.process(exceptionHandler)*/.markRollbackOnly().handled(true);
+        //onException(Exception.class)/*.process(exceptionHandler)*/.markRollbackOnly().handled(true);
 
         Parser logLineRegexParser = new LogLineRegexParser();
         DatabaseEntryParser databaseEntryParser = new DatabaseEntryParser();
         fromF("stream:file?fileName=%s/%s&scanStream=true&scanStreamDelay=%d", LOG_DIRECTORY, LOG_FILE, DELAY)
-                .convertBodyTo(String.class)
-                .choice().when(body().isGreaterThan(""))
-                .bean(logLineRegexParser, "parse")
-                .bean(databaseEntryParser, "parse")
-                .bean(this, "printLogEntry")
+                .convertBodyTo(String.class)                // Converts input to String
+                .choice().when(body().isGreaterThan(""))    // Ignores empty lines
+                .bean(logLineRegexParser, "parse")          // Parses log entry into String map
+                .bean(databaseEntryParser, "parse")         // Parses log entry into database format
+                .bean(logEntryUpdateProcessor)              // Adds log entry to database
                 .routeId(PERFORMANCE_LOG_ROUTE);
     }
 
