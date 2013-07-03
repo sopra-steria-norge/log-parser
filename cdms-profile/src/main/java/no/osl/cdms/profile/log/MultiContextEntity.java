@@ -1,5 +1,7 @@
 package no.osl.cdms.profile.log;
 
+import no.osl.cdms.profile.api.MultiContext;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -8,7 +10,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "CDM_PROFILE_MULTICONTEXT")
-public class MultiContextEntity {
+public class MultiContextEntity implements MultiContext{
 
     @Column(name = "MULTICONTEXT_ID")
     @SequenceGenerator(name = "MULTICONTEXT_SEQ_GEN", sequenceName = "MULTICONTEXT_SEQ")
