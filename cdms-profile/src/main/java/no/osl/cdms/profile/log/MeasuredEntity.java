@@ -3,7 +3,6 @@ package no.osl.cdms.profile.log;
 import no.osl.cdms.profile.api.Measured;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
