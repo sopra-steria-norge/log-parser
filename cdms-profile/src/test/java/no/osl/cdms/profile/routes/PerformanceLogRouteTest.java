@@ -1,8 +1,6 @@
 package no.osl.cdms.profile.routes;
 
-import no.osl.cdms.profile.routes.PerformanceLogRoute;
-import org.apache.camel.CamelContext;
-import org.apache.camel.impl.DefaultCamelContext;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,12 +16,13 @@ public class PerformanceLogRouteTest /*extends CamelSpringTestSupport*/ {
 
     @Before
     public void setup() throws Exception {
+        /*
         CamelContext context = new DefaultCamelContext(); // ikke nødvendig ved arv av CamelSpringTestSupport
         performanceLogRoute = new PerformanceLogRoute();
         context.setTracing(true);
         context.addRoutes(performanceLogRoute);
         context.start();
-
+        */
     }
 
     @Test
