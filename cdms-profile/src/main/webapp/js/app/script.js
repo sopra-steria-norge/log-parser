@@ -11,7 +11,7 @@ var palette = new Rickshaw.Color.Palette()
 
 var graph = new Rickshaw.Graph( {
         element: document.querySelector("#graph"),
-        renderer: 'area',
+        renderer: 'line',
         width: 900,
         height: 600,
         stroke: true,
@@ -72,6 +72,11 @@ var order = new Rickshaw.Graph.Behavior.Series.Order({
 var highlighter = new Rickshaw.Graph.Behavior.Series.Highlight({
 	graph: graph,
 	legend: legend
+});
+
+var renderController = new RenderController({
+	graph: graph,
+	element: document.querySelector('form')
 });
 
 

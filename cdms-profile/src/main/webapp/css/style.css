@@ -4,6 +4,7 @@ body{
 content{
 	width: 1200;
 }
+
 #graph_container {
 	position: relative;
 	display: inline-block;
@@ -45,7 +46,16 @@ content{
 #side_panel h1{
 	font-size: 20px;
 }
-
+#side_panel h6{
+	margin: 0px 0px 1em 0px;
+	font-size: 12px;
+	font-weight: normal;
+}
+#side_panel .toggler{
+	font-size: 12px;
+	display: inline-block;
+	vertical-align: top;
+}
 #legend{
 	display: inline-block;
 	background: white;

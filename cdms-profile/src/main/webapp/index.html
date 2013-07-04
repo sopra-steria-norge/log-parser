@@ -11,7 +11,44 @@
 		<form id=side_panel>
 			<h1>View Selection</h1>
 			<section><div id="legend"></div></section>
-			<section></section>
+			<section>
+				<h6>Data selection</h6>
+			</section>
+			<section>
+				<h6>Rendering options</h6>
+				<div id="renderer_option" class="toggler">
+					<input type="radio" name="renderer" id="area" value="area">
+					<label class="area" for="area">area</label>
+					<input type="radio" name="renderer" id="bar" value="bar">
+					<label class="bar" for="bar">bar</label>
+					<input type="radio" name="renderer" id="line" value="line" checked>
+					<label class="line" for="line">line</label>
+				</div>
+			</section>
+			<section>
+				<h6>Offset Options</h6>
+				<div id="offset_option" class="toggler">
+					<input type="radio" name="offset" id="stack" value="stack">
+					<label class="stack" for="stack">stack</label>
+					<input type="radio" name="offset" id="stream" value="stream">
+					<label class="stream" for="stream">stream</label>
+					<input type="radio" name="offset" id="pct" value="pct">
+					<label class="pct" for="pct">pct</label>
+					<input type="radio" name="offset" id="value" value="value" checked>
+					<label class="value" for="value">value</label>
+				</div>
+			</section>
+			<section>
+				<h6>Interpolation Options</h6>
+				<div id="interpolation_option" class="toggler">
+					<input type="radio" name="interpolation" id="cardinal" value="cardinal">
+					<label class="cardinal" for="cardinal">cardinal</label>
+					<input type="radio" name="interpolation" id="linear" value="linear" checked>
+					<label class="linear" for="linear">linear</label>
+					<input type="radio" name="interpolation" id="step-after" value="step-after">
+					<label class="step-after" for="step-after">step</label>
+				</div>
+			</section>
 		</form>
 		<div id="graph_container">
 			<div id="graph"></div>
@@ -21,6 +58,7 @@
 	<script src="js/external/d3.v2.js"></script>
 	<script src="js/external/jquery-ui.js"></script>
 	<script src="js/external/rickshaw.js"></script>
+	<script type="text/javascript" src="js/app/RenderController.js"></script>
 	<script type="text/javascript" src="js/app/script.js"></script>
 </body>
 </html>

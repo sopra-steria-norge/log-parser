@@ -27,12 +27,11 @@
     </context-param>
 
     <servlet>
-        <servlet-name>Rest</servlet-name>
-        <servlet-class>org.apache.cxf.transport.servlet.CXFServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
+        <servlet-name>GraphWeb</servlet-name>
+        <servlet-class>no.osl.cdms.profile.web.GraphWebservice</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>Rest</servlet-name>
-        <url-pattern>/rest/*</url-pattern>
+        <servlet-name>GraphWeb</servlet-name>
+        <url-pattern>/*</url-pattern>
     </servlet-mapping>
 </web-app>
