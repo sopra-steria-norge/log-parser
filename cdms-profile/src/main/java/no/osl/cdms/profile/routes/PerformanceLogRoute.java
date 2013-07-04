@@ -32,7 +32,6 @@ public class PerformanceLogRoute extends RouteBuilder {
     public void configure() throws Exception{
 
         //onException(Exception.class)/*.process(exceptionHandler)*/.markRollbackOnly().handled(true);
-
         Parser logLineRegexParser = new LogLineRegexParser();
         DatabaseEntryParser databaseEntryParser = new DatabaseEntryParser();
         fromF("stream:file?fileName=%s/%s&scanStream=true&scanStreamDelay=%d", LOG_DIRECTORY, LOG_FILE, DELAY)
