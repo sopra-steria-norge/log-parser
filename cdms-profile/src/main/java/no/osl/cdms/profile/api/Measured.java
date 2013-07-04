@@ -30,4 +30,9 @@ public interface Measured {
 
     void setTimeMeasurements(List<TimeMeasurementEntity> timeMeasurements);
 
+    @Override
+    public boolean equals(Object obj);
+
+    @Override
+    public int hashCode();
 }

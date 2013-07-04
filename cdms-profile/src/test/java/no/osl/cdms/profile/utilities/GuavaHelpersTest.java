@@ -9,8 +9,11 @@ import com.google.common.collect.Maps;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import no.osl.cdms.profile.factories.TimeMeasurementFactory;
-import no.osl.cdms.profile.interfaces.TimeMeasurement;
+import no.osl.cdms.profile.api.Measured;
+import no.osl.cdms.profile.api.TimeMeasurement;
+import no.osl.cdms.profile.factories.EntityFactory;
+import no.osl.cdms.profile.log.MeasuredEntity;
+import no.osl.cdms.profile.log.TimeMeasurementEntity;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -75,11 +78,18 @@ public class GuavaHelpersTest {
         System.out.println("getConverterLocalOK");
         Map<String, String> map = Maps.newLinkedHashMap();
         map.put("LocalThreadContext.duration", "PT0.015S");
-        map.put("LocalThreadContext.id", "myID");
+        map.put("LocalThreadContext.id", "myID.test");
+        map.put("timestamp", "2013-06-25 15:02:08,876");
         Function<Map.Entry<String, String>, TimeMeasurement> functor = GuavaHelpers.getConverter(map);
+
         TimeMeasurement result = null;
-        TimeMeasurement expResult = TimeMeasurementFactory.create("myID", "PT0.015S");
+        TimeMeasurement expResult = EntityFactory.createTimeMeasurement("2013-06-25 15:02:08,876", "PT0.015S");
+        Measured expSub = EntityFactory.createMeasured("myID", "test");
+        expSub.getTimeMeasurements().add((TimeMeasurementEntity) expResult);
+        expResult.setMeasured((MeasuredEntity) expSub);
+
         for (Entry<String, String> e : map.entrySet()) {
+            System.out.println(e.getKey() + ": " + e.getValue());
             if (e.getKey().endsWith("duration")) {
                 result = functor.apply(e);
             }
@@ -92,10 +102,16 @@ public class GuavaHelpersTest {
         System.out.println("testGetConverterLocalWierdTimeFormat");
         Map<String, String> map = Maps.newLinkedHashMap();
         map.put("LocalThreadContext.duration", "15.0");
-        map.put("LocalThreadContext.id", "myID");
+        map.put("LocalThreadContext.id", "myID.test");
+        map.put("timestamp", "2013-06-25 15:02:08,876");
         Function<Map.Entry<String, String>, TimeMeasurement> functor = GuavaHelpers.getConverter(map);
+
         TimeMeasurement result = null;
-        TimeMeasurement expResult = TimeMeasurementFactory.create("myID", "PT0.015S");
+        TimeMeasurement expResult = EntityFactory.createTimeMeasurement("2013-06-25 15:02:08,876", "PT0.015S");
+        Measured expSub = EntityFactory.createMeasured("myID", "test");
+        expSub.getTimeMeasurements().add((TimeMeasurementEntity) expResult);
+        expResult.setMeasured((MeasuredEntity) expSub);
+
         for (Entry<String, String> e : map.entrySet()) {
             if (e.getKey().endsWith("duration")) {
                 result = functor.apply(e);
@@ -109,15 +125,22 @@ public class GuavaHelpersTest {
         System.out.println("testGetConverterLocalWrongFormat");
         Map<String, String> map = Maps.newLinkedHashMap();
         map.put("LocalThreadContext.duration", "15.0aasda");
-        map.put("LocalThreadContext.id", "myID");
+        map.put("LocalThreadContext.id", "myID.test");
+        map.put("timestamp", "2013-06-25 15:02:08,876");
         Function<Map.Entry<String, String>, TimeMeasurement> functor = GuavaHelpers.getConverter(map);
+
         TimeMeasurement result = null;
-        TimeMeasurement expResult = TimeMeasurementFactory.create("myID", "PT0.015S");
+        TimeMeasurement expResult = EntityFactory.createTimeMeasurement("2013-06-25 15:02:08,876", "PT0.015S");
+        Measured expSub = EntityFactory.createMeasured("myID", "test");
+        expSub.getTimeMeasurements().add((TimeMeasurementEntity) expResult);
+        expResult.setMeasured((MeasuredEntity) expSub);
+
         for (Entry<String, String> e : map.entrySet()) {
             if (e.getKey().endsWith("duration")) {
                 result = functor.apply(e);
             }
         }
+        System.out.println("result: " + result);
     }
 
     @Test
@@ -128,18 +151,34 @@ public class GuavaHelpersTest {
         map.put("DoesntNeedIt.Wait.duration", "PT47.061S");
         map.put("DoesntNeedIt.Lap.Class.method:duration", "PT0.015S");
         map.put("DoesntNeedIt.Lap.Class.function:duration", "PT0.005S");
+        map.put("timestamp", "2013-06-25 15:02:08,876");
         Function<Map.Entry<String, String>, TimeMeasurement> functor = GuavaHelpers.getConverter(map);
 
         TimeMeasurement[] expResult = new TimeMeasurement[]{
-            TimeMeasurementFactory.create("Total", "PT0.015S"),
-            TimeMeasurementFactory.create("Wait", "PT47.061S"),
-            TimeMeasurementFactory.create("Class.method", "PT0.015S"),
-            TimeMeasurementFactory.create("Class.function", "PT0.005S")
+            EntityFactory.createTimeMeasurement("2013-06-25 15:02:08,876", "PT0.015S"),
+            EntityFactory.createTimeMeasurement("2013-06-25 15:02:08,876", "PT47.061S"),
+            EntityFactory.createTimeMeasurement("2013-06-25 15:02:08,876", "PT0.015S"),
+            EntityFactory.createTimeMeasurement("2013-06-25 15:02:08,876", "PT0.005S")
         };
+        Measured[] expSub = new Measured[]{
+            EntityFactory.createMeasured("Total", ""),
+            EntityFactory.createMeasured("Wait", ""),
+            EntityFactory.createMeasured("Class", "method"),
+            EntityFactory.createMeasured("Class", "function")
+        };
+        for (int i = 0; i < expResult.length; i++) {
+            expSub[i].getTimeMeasurements().add((TimeMeasurementEntity) expResult[i]);
+            expResult[i].setMeasured((MeasuredEntity) expSub[i]);
+        }
         int expResultCounter = 0;
         for (Entry<String, String> e : map.entrySet()) {
             if (e.getKey().endsWith("duration")) {
-                assertEquals(expResult[expResultCounter++], functor.apply(e));
+                TimeMeasurement tm = functor.apply(e);
+                if (!tm.equals(expResult[expResultCounter])) {
+                    System.out.println(expResult[expResultCounter]);
+                    System.out.println(tm);
+                }
+                assertEquals(expResult[expResultCounter++], tm);
             }
         }
     }

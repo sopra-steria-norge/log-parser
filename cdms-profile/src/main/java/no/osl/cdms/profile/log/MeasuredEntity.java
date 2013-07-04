@@ -11,7 +11,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "CDM_PROFILE_MEASURED")
-public class MeasuredEntity implements Measured{
+public class MeasuredEntity implements Measured {
 
     @Column(name = "MEASURED_ID")
     @SequenceGenerator(name = "MEASURED_SEQ_GEN", sequenceName = "MEASURED_SEQ")
@@ -82,4 +82,45 @@ public class MeasuredEntity implements Measured{
     public void setTimeMeasurements(List<TimeMeasurementEntity> timeMeasurements) {
         this.timeMeasurements = timeMeasurements;
     }
+
+    @Override
+    public String toString() {
+        return "MeasuredEntity{" + "id=" + id + ", name=" + name + ", className=" + className + ", method=" + method + ", timeMeasurements=" + timeMeasurements.size() + '}';
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 97 * hash + this.id;
+        hash = 97 * hash + (this.name != null ? this.name.hashCode() : 0);
+        hash = 97 * hash + (this.className != null ? this.className.hashCode() : 0);
+        hash = 97 * hash + (this.method != null ? this.method.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final MeasuredEntity other = (MeasuredEntity) obj;
+        if (this.id != other.id) {
+            return false;
+        }
+        if ((this.name == null) ? (other.name != null) : !this.name.equals(other.name)) {
+            return false;
+        }
+        if ((this.className == null) ? (other.className != null) : !this.className.equals(other.className)) {
+            return false;
+        }
+        if ((this.method == null) ? (other.method != null) : !this.method.equals(other.method)) {
+            return false;
+        }
+        return true;
+    }
+    
+    
 }

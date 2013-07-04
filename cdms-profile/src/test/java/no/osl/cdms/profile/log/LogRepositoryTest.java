@@ -29,7 +29,7 @@ public class LogRepositoryTest {
     //Test test
     @Test
     public void simple_entityManagerTest() {
-        MeasuredEntity measured = new MeasuredEntity("testName", "testClass", "testMethod", new ArrayList<TimeMeasurementEntity>());
+        MeasuredEntity measured = new MeasuredEntity("testName", "testClass", "testMethod");
         entityManager.persist(measured);
         assertEquals(measured, entityManager.find(MeasuredEntity.class, measured.getId()));
         TimeMeasurementEntity tm = new TimeMeasurementEntity(measured, null, "timestamp", "duration");

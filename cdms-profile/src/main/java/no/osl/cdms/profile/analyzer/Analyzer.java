@@ -12,14 +12,16 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import no.osl.cdms.profile.interfaces.TimeMeasurement;
+import no.osl.cdms.profile.api.TimeMeasurement;
+import org.joda.time.convert.ConverterManager;
+import org.joda.time.convert.DurationConverter;
 
 /**
  *
  * @author nutgaard
  */
 public class Analyzer implements DataAnalyzer {
-
+    private static DurationConverter converter = ConverterManager.getInstance().getDurationConverter("PT0.123S");
     private Multimap<String, TimeMeasurement> map;
 
     public Analyzer(final List<TimeMeasurement> times) {
@@ -33,7 +35,8 @@ public class Analyzer implements DataAnalyzer {
         }
         for (TimeMeasurement tm : times) {
             map.put("total", tm);
-            map.put(tm.getName(), tm);
+            map.put(tm.getMeasured().getClassName(), tm);
+            map.put(tm.getMeasured().getClassName()+"."+tm.getMeasured().getMethod(), tm);
         }
         for (String key : map.keySet()) {
             Collections.sort(new ArrayList(map.get(key)));
@@ -48,7 +51,7 @@ public class Analyzer implements DataAnalyzer {
         }
         double sum = 0;
         for (TimeMeasurement tm : col) {
-            sum += tm.getTime();
+            sum += converter.getDurationMillis(tm.getDuration());
         }
         return sum / col.size();
     }
@@ -62,7 +65,7 @@ public class Analyzer implements DataAnalyzer {
         double mean = average(id);
         double stddevSum = 0;
         for (TimeMeasurement tm : col) {
-            stddevSum += Math.pow(tm.getTime() - mean, 2);
+            stddevSum += Math.pow(converter.getDurationMillis(tm.getDuration()) - mean, 2);
         }
         stddevSum /= map.get(id).size();
         return Math.sqrt(stddevSum);
@@ -77,10 +80,10 @@ public class Analyzer implements DataAnalyzer {
         List<TimeMeasurement> tms = new ArrayList<TimeMeasurement>(col);
         double ind = k / 100.0 * tms.size();
         if (ind == (int) ind) {
-            return (tms.get((int) ind).getTime() + tms.get((int) (ind - 1)).getTime()) / 2;
+            return (converter.getDurationMillis(tms.get((int) ind).getDuration()) + converter.getDurationMillis(tms.get((int) (ind - 1)).getDuration())) / 2;
         } else {
             ind = Math.round(ind);
-            return tms.get((int) (ind - 1)).getTime();
+            return converter.getDurationMillis(tms.get((int) (ind - 1)).getDuration());
         }
     }
 
@@ -92,11 +95,11 @@ public class Analyzer implements DataAnalyzer {
             return out;
         }
         List<TimeMeasurement> tms = new ArrayList<TimeMeasurement>(col);
-        double min = tms.get(0).getTime();
-        double bucketSize = (tms.get(tms.size() - 1).getTime() - min) / (NOFBuckets - 1);
+        double min = converter.getDurationMillis(tms.get(0).getDuration());
+        double bucketSize = (converter.getDurationMillis(tms.get(tms.size() - 1).getDuration()) - min) / (NOFBuckets - 1);
 
         for (TimeMeasurement tm : tms) {
-            out[(int) ((tm.getTime() - min) / bucketSize)]++;
+            out[(int) ((converter.getDurationMillis(tm.getDuration()) - min) / bucketSize)]++;
         }
         return out;
     }
