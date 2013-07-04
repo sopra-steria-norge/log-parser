@@ -1,5 +1,6 @@
 package no.osl.cdms.profile.log;
 
+import com.google.common.collect.Lists;
 import no.osl.cdms.profile.api.Measured;
 
 import javax.persistence.*;
@@ -35,11 +36,11 @@ public class MeasuredEntity implements Measured{
 
     }
 
-    public MeasuredEntity(String name, String className, String method, List<TimeMeasurementEntity> timeMeasurements) {
+    public MeasuredEntity(String name, String className, String method) {
         this.name = name;
         this.className = className;
         this.method = method;
-        this.timeMeasurements = timeMeasurements;
+        this.timeMeasurements = Lists.newLinkedList();
     }
 
     public int getId() {
