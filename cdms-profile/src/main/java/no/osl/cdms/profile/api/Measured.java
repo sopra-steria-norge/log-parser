@@ -2,7 +2,6 @@ package no.osl.cdms.profile.api;
 
 import no.osl.cdms.profile.log.TimeMeasurementEntity;
 
-import javax.persistence.*;
 import java.util.List;
 
 /**
@@ -30,4 +29,9 @@ public interface Measured {
 
     void setTimeMeasurements(List<TimeMeasurementEntity> timeMeasurements);
 
+    @Override
+    public boolean equals(Object obj);
+
+    @Override
+    public int hashCode();
 }

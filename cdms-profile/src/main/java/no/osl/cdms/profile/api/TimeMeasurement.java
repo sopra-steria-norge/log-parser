@@ -6,7 +6,7 @@ import no.osl.cdms.profile.log.MultiContextEntity;
 /**
  * User: apalfi
  */
-public interface TimeMeasurement {
+public interface TimeMeasurement extends Comparable<TimeMeasurement>{
 
     int getId();
 
@@ -27,4 +27,9 @@ public interface TimeMeasurement {
     String getDuration();
 
     void setDuration(String duration);
+    
+    @Override
+    public boolean equals(Object obj);
+    @Override
+    public int hashCode();
 }

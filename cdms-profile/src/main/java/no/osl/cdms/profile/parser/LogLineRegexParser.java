@@ -25,6 +25,9 @@ public class LogLineRegexParser implements Parser {
             return parse(text);
         }
         appendToProperties(properties, "", text);
+        if (properties.size() > 0) {
+            properties.put("timestamp", getTimestamp(text));
+        }
         return properties;
     }
 
@@ -56,5 +59,9 @@ public class LogLineRegexParser implements Parser {
                 properties.put(base + kvMatch.group(1), kvMatch.group(2));
             }
         }
+    }
+
+    private String getTimestamp(String line) {
+        return line.substring(0, "2013-06-25 15:02:10,063".length());
     }
 }

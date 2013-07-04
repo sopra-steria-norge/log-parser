@@ -8,8 +8,9 @@ import no.osl.cdms.profile.interfaces.DataAnalyzer;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import no.osl.cdms.profile.factories.TimeMeasurementFactory;
-import no.osl.cdms.profile.interfaces.TimeMeasurement;
+import no.osl.cdms.profile.api.TimeMeasurement;
+import no.osl.cdms.profile.factories.EntityFactory;
+import no.osl.cdms.profile.log.MeasuredEntity;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,7 +22,7 @@ import static org.junit.Assert.*;
  */
 public class AnalyzerTest {
 
-    public final double[] data = {43, 54, 56, 61, 62, 66, 68, 69, 69, 70, 71, 72, 77, 78, 79, 85, 87, 88, 89, 93, 95, 96, 98, 99, 99};
+    public final int[] data = {43, 54, 56, 61, 62, 66, 68, 69, 69, 70, 71, 72, 77, 78, 79, 85, 87, 88, 89, 93, 95, 96, 98, 99, 99};
     private List<TimeMeasurement> tms;
     private DataAnalyzer analyzer;
     private String id = "WAIT0";
@@ -32,10 +33,16 @@ public class AnalyzerTest {
     @Before
     public void setUp() {
         tms = new LinkedList<TimeMeasurement>();
+        MeasuredEntity me = (MeasuredEntity)EntityFactory.createMeasured(id, "");
+        MeasuredEntity me2 = (MeasuredEntity)EntityFactory.createMeasured("WAIT1", "");
         for (double d : data) {
-            tms.add(TimeMeasurementFactory.create("WAIT0", d));
+            TimeMeasurement tm = EntityFactory.createTimeMeasurement("2013-06-25 15:02:08,876", "PT"+String.valueOf(d/1000)+"S");
+            tm.setMeasured(me);
+            tms.add(tm);
         }
-        tms.add(TimeMeasurementFactory.create("WAIT1231", 9999));//Indirect test of delegate
+        TimeMeasurement tm2 = EntityFactory.createTimeMeasurement("2013-06-25 15:02:08,876", "PT0.0"+String.valueOf(9999/1000)+"S");
+        tm2.setMeasured(me2);
+        tms.add(tm2);//Indirect test of delegate
         this.analyzer = new Analyzer(tms);
     }
 
@@ -48,6 +55,7 @@ public class AnalyzerTest {
     @Test
     public void setupNull() {
         System.out.println("AnalyzerSetup::null");
+        System.out.println("Sending null");
         Analyzer a = new Analyzer(null);
         assertEquals(0, a.average("total"), 0);
         assertEquals(0, a.stddev("total"), 0);
