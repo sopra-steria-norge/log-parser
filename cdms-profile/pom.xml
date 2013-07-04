@@ -72,6 +72,7 @@
                 <groupId>org.apache.openjpa</groupId>
                 <artifactId>openjpa-maven-plugin</artifactId>
                 <configuration>
+
                     <includes>
                         <!-- Keep this list sorted -->
                         **/*MeasuredEntity.class,
@@ -160,6 +161,11 @@
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-stream</artifactId>
+            <version>${camel.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-jpa</artifactId>
             <version>${camel.version}</version>
         </dependency>
 
