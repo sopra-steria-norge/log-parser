@@ -1,5 +1,6 @@
 package no.osl.cdms.profile.log;
 
+import com.google.common.collect.Lists;
 import no.osl.cdms.profile.api.MultiContext;
 
 import javax.persistence.*;
@@ -32,10 +33,10 @@ public class MultiContextEntity implements MultiContext{
 
     }
 
-    public MultiContextEntity(String start, String end, List<TimeMeasurementEntity> timeMeasurements) {
+    public MultiContextEntity(String start, String end) {
         this.start = start;
         this.end = end;
-        this.timeMeasurements = timeMeasurements;
+        this.timeMeasurements = Lists.newLinkedList();
     }
 
     public int getId() {
