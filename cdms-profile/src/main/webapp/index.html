@@ -16,37 +16,51 @@
 			</section>
 			<section>
 				<h6>Rendering options</h6>
-				<div id="renderer_option" class="toggler">
-					<input type="radio" name="renderer" id="area" value="area">
+				<div id="renderer_form" class="toggler">
+					<input type="radio" name="renderer" id="area" value="area" checked>
 					<label class="area" for="area">area</label>
 					<input type="radio" name="renderer" id="bar" value="bar">
 					<label class="bar" for="bar">bar</label>
-					<input type="radio" name="renderer" id="line" value="line" checked>
+					<input type="radio" name="renderer" id="line" value="line">
 					<label class="line" for="line">line</label>
 				</div>
 			</section>
 			<section>
-				<h6>Offset Options</h6>
-				<div id="offset_option" class="toggler">
-					<input type="radio" name="offset" id="stack" value="stack">
-					<label class="stack" for="stack">stack</label>
-					<input type="radio" name="offset" id="stream" value="stream">
-					<label class="stream" for="stream">stream</label>
-					<input type="radio" name="offset" id="pct" value="pct">
-					<label class="pct" for="pct">pct</label>
-					<input type="radio" name="offset" id="value" value="value" checked>
-					<label class="value" for="value">value</label>
+				<h6>Offset options</h6>
+				<div id="offset_form">
+					<label for="stack">
+						<input type="radio" name="offset" id="stack" value="zero" checked>
+						<span>stack</span>
+					</label>
+					<label for="stream">
+						<input type="radio" name="offset" id="stream" value="wiggle">
+						<span>stream</span>
+					</label>
+					<label for="pct">
+						<input type="radio" name="offset" id="pct" value="expand">
+						<span>percent</span>
+					</label>
+					<label for="value">
+						<input type="radio" name="offset" id="value" value="value">
+						<span>value</span>
+					</label>
 				</div>
 			</section>
 			<section>
 				<h6>Interpolation Options</h6>
-				<div id="interpolation_option" class="toggler">
-					<input type="radio" name="interpolation" id="cardinal" value="cardinal">
-					<label class="cardinal" for="cardinal">cardinal</label>
-					<input type="radio" name="interpolation" id="linear" value="linear" checked>
-					<label class="linear" for="linear">linear</label>
-					<input type="radio" name="interpolation" id="step-after" value="step-after">
-					<label class="step-after" for="step-after">step</label>
+				<div id="interpolation_form">
+					<label for="cardinal">
+						<input type="radio" name="interpolation" id="cardinal" value="cardinal" checked>
+						<span>cardinal</span>
+					</label>
+					<label for="linear">
+						<input type="radio" name="interpolation" id="linear" value="linear">
+						<span>linear</span>
+					</label>
+					<label for="step">
+						<input type="radio" name="interpolation" id="step" value="step-before">
+						<span>step</span>
+					</label>
 				</div>
 			</section>
 		</form>

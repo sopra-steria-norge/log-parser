@@ -121,7 +121,7 @@ var RenderController = function(args)
 			defaults: {offset:'zero'}
 		},
 		line:{
-			interpolation: true,
+			interpolation: false,
 			offset: ['expand', 'value'],
 			defaults: {offset:'value'}
 		}

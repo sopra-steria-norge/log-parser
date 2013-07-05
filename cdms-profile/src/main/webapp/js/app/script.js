@@ -6,18 +6,18 @@
 var recSeries = ["Receive", [{x:0.5, y:0.008}, {x:0.8, y:0.012}, {x:0.9, y:0.014}, {x:0.95, y:0.017}]];
 var stoSeries = ["Store", [{x:0.5, y:0.008}, {x:0.8, y:0.011}, {x:0.9, y:0.014}, {x:0.95, y:0.017}]];
 var waitSeries = ["Wait", [{x:0.5, y:0.658}, {x:0.8, y:4.981}, {x:0.9, y:18.4668}, {x:0.95, y:50.22915}]];
+var tullSeries = ["Pro", [{x:0.5, y:4.658}, {x:0.8, y:4.981}, {x:0.9, y:8.4668}, {x:0.95, y:25.22915}]]
 
 var palette = new Rickshaw.Color.Palette()
 
 var graph = new Rickshaw.Graph( {
         element: document.querySelector("#graph"),
-        renderer: 'line',
+        renderer: 'area',
         width: 900,
         height: 600,
         stroke: true,
-        interpolation: false,
+        preserve: true,
         padding: { top: 0.06, right: 0.02, bottom: 0.08, left: 0.02 },
-        offset:'value',
         series: [
         	{
                 data: recSeries[1],
@@ -33,23 +33,33 @@ var graph = new Rickshaw.Graph( {
             	name: waitSeries[0],
             	color: palette.color(),
             	data: waitSeries[1]
+            },
+            {
+            	name: tullSeries[0],
+            	color: palette.color(),
+            	data: tullSeries[1]
             }
         ]
 } );
 
 var x_axis = new Rickshaw.Graph.Axis.X({
-	graph: graph
+	graph: graph,
+	ticksTreatment: 'glow'
 });
 
 var y_axis = new Rickshaw.Graph.Axis.Y({
 	graph: graph,
-	pixelsPerTick: 30
+	pixelsPerTick: 30,
+	ticksTreatment: 'glow'
 });
 
 
 var hover_detail = new Rickshaw.Graph.HoverDetail({
 	graph: graph,
-	formatter: function(series,x,y) {return "x:" + parseFloat(x) + "<br>y:" + parseFloat(y);}
+	formatter: function(series,x,y) {
+		var swatch = '<span class="detail_swatch" style="background-color: ' + series.color + '"></span>';
+		return swatch + series.name + "<br>x:" + parseFloat(x) + "<br>y:" + parseFloat(y);
+	}
 });
 
 var legend = new Rickshaw.Graph.Legend({
