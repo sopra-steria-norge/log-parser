@@ -1,14 +1,12 @@
 package no.osl.cdms.profile.web;
 
-import no.osl.cdms.profile.api.MultiContext;
+import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
-import javax.ws.rs.GET;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
 
 /**
  * Created with IntelliJ IDEA. User: ohelstro Date: 02.07.13 Time: 11:05 To
@@ -23,19 +21,21 @@ import javax.ws.rs.core.MediaType;
  |-> Create json data with [name: "name" and data[{x: , y:},{x: , y: }]]
  */
 @Path("rest")
-public class RESTService  {
+public class RESTService extends HttpServlet {
 
     @Autowired
     DataRetriever dataRetriever;
 
-
-
-    @GET
-    @Path("multicontext")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<MultiContext> getMultiContextsAfterTimestamp(@QueryParam("timestamp") String timestamp) {
-        List<MultiContext> result = dataRetriever.getMultiContextsAfterTimestamp(timestamp);
-        return result;
-
+//
+//    @GET
+//    @Path("multicontext")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public List<MultiContext> getMultiContextsAfterTimestamp(@QueryParam("timestamp") String timestamp) {
+//        List<MultiContext> result = dataRetriever.getMultiContextsAfterTimestamp(timestamp);
+//        return result;
+//    }
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        resp.getWriter().write("Some rest thing");
     }
 }
