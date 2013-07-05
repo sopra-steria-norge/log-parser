@@ -5,6 +5,8 @@ import no.osl.cdms.profile.api.MultiContext;
 import no.osl.cdms.profile.api.TimeMeasurement;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import java.util.List;
 
 /**
@@ -12,6 +14,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "CDM_PROFILE_MULTICONTEXT")
+@XmlRootElement
 public class MultiContextEntity implements MultiContext{
 
     @Column(name = "MULTICONTEXT_ID")
@@ -26,6 +29,7 @@ public class MultiContextEntity implements MultiContext{
     @Column(name = "END_TIME")
     private String end;
 
+    @XmlTransient
     @OneToMany(mappedBy = "multiContext", targetEntity = TimeMeasurementEntity.class,
             fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<TimeMeasurementEntity> timeMeasurements;
