@@ -36,12 +36,10 @@ public class AnalyzerTest {
         MeasuredEntity me = (MeasuredEntity)EntityFactory.createMeasured(id, "");
         MeasuredEntity me2 = (MeasuredEntity)EntityFactory.createMeasured("WAIT1", "");
         for (double d : data) {
-            TimeMeasurement tm = EntityFactory.createTimeMeasurement("2013-06-25 15:02:08,876", "PT"+String.valueOf(d/1000)+"S");
-            tm.setMeasured(me);
+            TimeMeasurement tm = EntityFactory.createTimeMeasurement(me, "2013-06-25 15:02:08,876", "PT"+String.valueOf(d/1000)+"S");
             tms.add(tm);
         }
-        TimeMeasurement tm2 = EntityFactory.createTimeMeasurement("2013-06-25 15:02:08,876", "PT0.0"+String.valueOf(9999/1000)+"S");
-        tm2.setMeasured(me2);
+        TimeMeasurement tm2 = EntityFactory.createTimeMeasurement(me2, "2013-06-25 15:02:08,876", "PT0.0"+String.valueOf(9999/1000)+"S");
         tms.add(tm2);//Indirect test of delegate
         this.analyzer = new Analyzer(tms);
     }

@@ -2,6 +2,7 @@ package no.osl.cdms.profile.log;
 
 import com.google.common.collect.Lists;
 import no.osl.cdms.profile.api.Measured;
+import no.osl.cdms.profile.api.TimeMeasurement;
 
 import javax.persistence.*;
 import java.util.List;
@@ -122,5 +123,8 @@ public class MeasuredEntity implements Measured {
         return true;
     }
     
-    
+
+    public void addTimeMeasurement(TimeMeasurement timeMeasurement) {
+        timeMeasurement.setMeasured(this);
+    }
 }

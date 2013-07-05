@@ -38,10 +38,6 @@ public class EntitiesTest {
         timeMeasurementEntity = new TimeMeasurementEntity(measuredEntity, multiContextEntity, "timestamp", "duration");
         timeMeasurementEntity2 = new TimeMeasurementEntity(measuredEntity, multiContextEntity, "timestamp", "duration");
 
-        multiContextEntity.getTimeMeasurements().add(timeMeasurementEntity);
-        measuredEntity.getTimeMeasurements().add(timeMeasurementEntity);
-        multiContextEntity.getTimeMeasurements().add(timeMeasurementEntity2);
-
         entityManager.persist(measuredEntity);
         entityManager.persist(multiContextEntity);
 

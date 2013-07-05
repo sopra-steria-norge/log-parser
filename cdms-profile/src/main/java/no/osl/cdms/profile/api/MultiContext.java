@@ -24,4 +24,6 @@ public interface MultiContext {
     List<TimeMeasurementEntity> getTimeMeasurements();
 
     void setTimeMeasurements(List<TimeMeasurementEntity> timeMeasurements);
+
+    void addTimeMeasurement(TimeMeasurement timeMeasurement);
 }

@@ -40,8 +40,8 @@ public class TimeMeasurementEntity implements TimeMeasurement {
 
     public TimeMeasurementEntity(MeasuredEntity me, MultiContextEntity mcme, String timestamp,
                                  String duration) {
-        this.measured = me;
-        this.multiContext = mcme;
+        setMeasured(me);
+        setMultiContext(mcme);
         this.timestamp = timestamp;
         this.duration = duration;
     }
@@ -60,6 +60,7 @@ public class TimeMeasurementEntity implements TimeMeasurement {
 
     public void setMeasured(MeasuredEntity measured) {
         this.measured = measured;
+        measured.getTimeMeasurements().add(this);
     }
 
     public MultiContextEntity getMultiContext() {
@@ -68,6 +69,8 @@ public class TimeMeasurementEntity implements TimeMeasurement {
 
     public void setMultiContext(MultiContextEntity multiContextMeasurement) {
         this.multiContext = multiContextMeasurement;
+        if (multiContextMeasurement != null)
+            multiContextMeasurement.getTimeMeasurements().add(this);
     }
 
     public String getTimestamp() {

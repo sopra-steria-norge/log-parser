@@ -31,10 +31,6 @@ public class EntityFactory {
         return (TimeMeasurement) (new TimeMeasurementEntity((MeasuredEntity) measured, null, timestamp, duration));
     }
 
-    public static TimeMeasurement createTimeMeasurement(String timestamp, String duration) {
-        return (TimeMeasurement) (new TimeMeasurementEntity(null, null, timestamp, duration));
-    }
-
     public static MultiContext createMultiContext(String start, String end) {
         MultiContext mc = new MultiContextEntity(start, end);
         return mc;
@@ -53,7 +49,6 @@ public class EntityFactory {
         Map<String, String> measuredFiltered = Maps.filterEntries(properties, GuavaHelpers.isDuration());
         List<TimeMeasurement> measured = Lists.newLinkedList(Iterables.transform(measuredFiltered.entrySet(), GuavaHelpers.getConverter(properties)));
         for (TimeMeasurement tm : measured) {
-            mcme.getTimeMeasurements().add((TimeMeasurementEntity) tm);
             tm.setMultiContext(mcme);
         }
         return measured;
@@ -65,10 +60,9 @@ public class EntityFactory {
         String[] id = GuavaHelpers.parseKey("LocalThreadContext.id", properties);
         String classname = id[0];
         String methodname = id[1];
-        TimeMeasurement tm = createTimeMeasurement(timestamp, duration);
         Measured m = createMeasured(classname, methodname);
+        TimeMeasurement tm = createTimeMeasurement(m, timestamp, duration);
         tm.setMeasured((MeasuredEntity) m);
-        m.getTimeMeasurements().add((TimeMeasurementEntity) tm);
         List<TimeMeasurement> list = Lists.newLinkedList();
         list.add(tm);
         return list;

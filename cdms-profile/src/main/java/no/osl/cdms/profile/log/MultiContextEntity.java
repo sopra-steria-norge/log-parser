@@ -2,6 +2,7 @@ package no.osl.cdms.profile.log;
 
 import com.google.common.collect.Lists;
 import no.osl.cdms.profile.api.MultiContext;
+import no.osl.cdms.profile.api.TimeMeasurement;
 
 import javax.persistence.*;
 import java.util.List;
@@ -19,10 +20,10 @@ public class MultiContextEntity implements MultiContext{
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MULTICONTEXT_SEQ_GEN")
     private int id;
 
-    @Column(name = "START")
+    @Column(name = "START_TIME")
     private String start;
 
-    @Column(name = "END")
+    @Column(name = "END_TIME")
     private String end;
 
     @OneToMany(mappedBy = "multiContext", targetEntity = TimeMeasurementEntity.class,
@@ -69,5 +70,9 @@ public class MultiContextEntity implements MultiContext{
 
     public void setTimeMeasurements(List<TimeMeasurementEntity> timeMeasurements) {
         this.timeMeasurements = timeMeasurements;
+    }
+
+    public void addTimeMeasurement(TimeMeasurement timeMeasurement) {
+        timeMeasurement.setMultiContext(this);
     }
 }

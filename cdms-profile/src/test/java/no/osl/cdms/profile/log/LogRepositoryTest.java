@@ -11,8 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import java.util.ArrayList;
-
 import static junit.framework.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -28,28 +26,22 @@ public class LogRepositoryTest {
     private LogRepository logRepository;
 
     private MeasuredEntity measuredEntity1, measuredEntity2;
-    private TimeMeasurementEntity timeMeasurementEntity1, timeMEasurementEntity2;
+    private TimeMeasurementEntity timeMeasurementEntity1, timeMeasurementEntity2;
     private MultiContextEntity multiContextEntity1;
 
     @Before
     public void before() {
 
         measuredEntity1 = new MeasuredEntity("testName1", "testClass1", "testMethod1");
-        measuredEntity2 = new MeasuredEntity("testName2", "testClass2", "testmethod2");
+        measuredEntity2 = new MeasuredEntity("testName2", "testClass1", "testMethod2");
 
         multiContextEntity1 = new MultiContextEntity("testStart", "testEnd");
-
         timeMeasurementEntity1 = new TimeMeasurementEntity(measuredEntity1, multiContextEntity1, "testTimestamp1", "testDuration1");
-        timeMEasurementEntity2 = new TimeMeasurementEntity(measuredEntity2, multiContextEntity1, "testTimestamp2", "testDuration2");
-
-        measuredEntity1.getTimeMeasurements().add(timeMeasurementEntity1);
-        measuredEntity2.getTimeMeasurements().add(timeMEasurementEntity2);
-        multiContextEntity1.getTimeMeasurements().add(timeMeasurementEntity1);
-        multiContextEntity1.getTimeMeasurements().add(timeMEasurementEntity2);
-
-        entityManager.persist(measuredEntity1);
-        entityManager.persist(measuredEntity2);
+        timeMeasurementEntity2 = new TimeMeasurementEntity(measuredEntity2, multiContextEntity1, "testTimestamp2", "testDuration2");
         entityManager.persist(multiContextEntity1);
+        entityManager.persist(measuredEntity2);
+        entityManager.persist(measuredEntity1);
+
 
     }
 
@@ -64,7 +56,7 @@ public class LogRepositoryTest {
     public void saveMultiContext_test() {
         TimeMeasurementEntity tme = new TimeMeasurementEntity(measuredEntity1, multiContextEntity1, "timestamp", "duration");
         MultiContextEntity multiContextEntity = new MultiContextEntity("start", "stop");
-        multiContextEntity.getTimeMeasurements().add(tme);
+        multiContextEntity.addTimeMeasurement(tme);
         logRepository.saveMultiContext(multiContextEntity);
         assertEquals(multiContextEntity, entityManager.find(MultiContextEntity.class, multiContextEntity.getId()));
     }
@@ -91,7 +83,6 @@ public class LogRepositoryTest {
     @Test
     public void getTimeMeasurement_test() {
         assertEquals(logRepository.getTimeMeasurement(timeMeasurementEntity1.getId()), timeMeasurementEntity1);
-        assertEquals(logRepository.getTimeMeasurement(timeMEasurementEntity2.getId()), timeMEasurementEntity2);
+        assertEquals(logRepository.getTimeMeasurement(timeMeasurementEntity2.getId()), timeMeasurementEntity2);
     }
-
 }
