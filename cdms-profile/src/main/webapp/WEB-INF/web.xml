@@ -1,37 +1,23 @@
-<web-app>
-    <welcome-file-list>
-        <welcome-file>index.html</welcome-file>
-    </welcome-file-list>
-
-    <listener>
-        <listener-class>org.springframework.web.context.ContextLoaderListener
-        </listener-class>
-    </listener>
-
-    <context-param>
-        <param-name>contextClass</param-name>
-        <param-value>org.springframework.osgi.web.context.support.OsgiBundleXmlWebApplicationContext
-        </param-value>
-    </context-param>
-
-    <context-param>
-        <param-name>org.eclipse.jetty.servlet.SessionIdPathParameterName</param-name>
-        <param-value>none</param-value>
-    </context-param>
-
-    <context-param>
-        <param-name>contextConfigLocation</param-name>
-        <param-value>
-            /META-INF/spring/cdms-profile-ctx.xml
-        </param-value>
-    </context-param>
-
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<web-app 
+    xmlns="http://java.sun.com/xml/ns/javaee" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" 
+    version="2.5">
     <servlet>
-        <servlet-name>GraphWeb</servlet-name>
-        <servlet-class>no.osl.cdms.profile.web.GraphWebservice</servlet-class>
+        <servlet-name>REST</servlet-name>
+        <servlet-class>no.osl.cdms.profile.web.RESTService</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>JMX</servlet-name>
+        <servlet-class>no.osl.cdms.profile.web.JMXService</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>GraphWeb</servlet-name>
-        <url-pattern>/*</url-pattern>
+        <servlet-name>REST</servlet-name>
+        <url-pattern>/rest/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>JMX</servlet-name>
+        <url-pattern>/jmx/*</url-pattern>
     </servlet-mapping>
 </web-app>
