@@ -16,8 +16,6 @@ var RenderController = function(args)
 			unstack: false
 		};
 
-		//console.log($(this.offset).find(':nth-child(3)').click())
-
 		this.renderer.addEventListener('change', function(e){
 
 			$(this.offset).find('input').prop('disabled', false); // enables all offset radio buttons
@@ -25,25 +23,20 @@ var RenderController = function(args)
 
         	if(e.srcElement.value == 'area')
         	{
-				console.log(e.srcElement.value);
-				$(this.offset).find('#stack').click(); // clicks "stack"
+				$(this.offset).find('#stack').click();
 				$(this.interpolation).find('#cardinal').click();
 
-				this.config.renderer = 'area';
         	}
         	else if( e.srcElement.value == 'bar')
         	{
-				console.log(e.srcElement.value);
-                $(this.offset).find('#stack').click(); // clicks "stack"
+                $(this.offset).find('#stack').click();
 
 				// disables all interpolation radio button as it has no effect on bar graphs
                 $(this.interpolation).find('input').prop('disabled', true);
 
-                this.config.renderer = 'bar';
         	}
         	else if(e.srcElement.value == 'line')
         	{
-				console.log(e.srcElement.value);
 				$(this.offset).find('#value').click();
 				$(this.interpolation).find('#cardinal').click();
 
@@ -51,9 +44,8 @@ var RenderController = function(args)
 				$(this.offset).find('#stack').prop('disabled', true);
 				$(this.offset).find('#stream').prop('disabled', true);
 
-				this.config.renderer = 'line'
         	}
-
+			this.config.renderer = e.srcElement.value;
 			this.graph.configure(this.config);
         	this.graph.render();
         }.bind(this), false);

@@ -79,7 +79,7 @@ var legend = new Rickshaw.Graph.Legend(
 	graph: graph
 });
 
-var toggler = new Rickshaw.Graph.Behavior.Series.Toggle(
+var toggle = new Rickshaw.Graph.Behavior.Series.Toggle(
 {
 	graph: graph,
 	legend: legend
