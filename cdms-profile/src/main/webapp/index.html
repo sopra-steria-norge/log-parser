@@ -16,51 +16,37 @@
 			</section>
 			<section>
 				<h6>Rendering options</h6>
-				<div id="renderer_form" class="toggler">
+				<div id="renderer_options" class="options">
 					<input type="radio" name="renderer" id="area" value="area" checked>
-					<label class="area" for="area">area</label>
+					<label class="area" for="area"><span>area</span></label>
 					<input type="radio" name="renderer" id="bar" value="bar">
-					<label class="bar" for="bar">bar</label>
+					<label class="bar" for="bar"><span>bar</span></label>
 					<input type="radio" name="renderer" id="line" value="line">
-					<label class="line" for="line">line</label>
+					<label class="line" for="line"><span>line</span></label>
 				</div>
 			</section>
 			<section>
 				<h6>Offset options</h6>
-				<div id="offset_form">
-					<label for="stack">
-						<input type="radio" name="offset" id="stack" value="zero" checked>
-						<span>stack</span>
-					</label>
-					<label for="stream">
-						<input type="radio" name="offset" id="stream" value="wiggle">
-						<span>stream</span>
-					</label>
-					<label for="pct">
-						<input type="radio" name="offset" id="pct" value="expand">
-						<span>percent</span>
-					</label>
-					<label for="value">
-						<input type="radio" name="offset" id="value" value="value">
-						<span>value</span>
-					</label>
+				<div id="offset_options" class="options">
+					<input type="radio" name="offset" id="stack" value="zero" checked>
+					<label class="stack" for="stack"><span>stack</span></label>
+					<input type="radio" name="offset" id="stream" value="wiggle">
+					<label class="stream" for="stream"><span>stream</span></label>
+					<input type="radio" name="offset" id="pct" value="expand">
+					<label class="pct" for="pct"><span>percent</span></label>
+					<input type="radio" name="offset" id="value" value="value">
+					<label class="value" for="value"><span>value</span></label>
 				</div>
 			</section>
 			<section>
 				<h6>Interpolation Options</h6>
-				<div id="interpolation_form">
-					<label for="cardinal">
-						<input type="radio" name="interpolation" id="cardinal" value="cardinal" checked>
-						<span>cardinal</span>
-					</label>
-					<label for="linear">
-						<input type="radio" name="interpolation" id="linear" value="linear">
-						<span>linear</span>
-					</label>
-					<label for="step">
-						<input type="radio" name="interpolation" id="step" value="step-before">
-						<span>step</span>
-					</label>
+				<div id="interpolation_options" class="options">
+					<input type="radio" name="interpolation" id="cardinal" value="cardinal" checked>
+					<label class="cardinal" for="cardinal"><span>cardinal</span></label>
+					<input type="radio" name="interpolation" id="linear" value="linear">
+					<label class="linear" for="linear"><span>linear</span></label>
+					<input type="radio" name="interpolation" id="step" value="step-before">
+					<label class="step" for="step"><span>step</span></label>
 				</div>
 			</section>
 		</form>
