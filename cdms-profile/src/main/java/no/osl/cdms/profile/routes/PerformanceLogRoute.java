@@ -1,8 +1,15 @@
 package no.osl.cdms.profile.routes;
 
+import no.osl.cdms.profile.api.Measured;
+import no.osl.cdms.profile.api.TimeMeasurement;
+import no.osl.cdms.profile.factories.EntityFactory;
+import no.osl.cdms.profile.log.LogRepository;
+import no.osl.cdms.profile.log.MultiContextEntity;
+import no.osl.cdms.profile.log.TimeMeasurementEntity;
 import no.osl.cdms.profile.parser.DatabaseEntryParser;
 import no.osl.cdms.profile.parser.LogLineRegexParser;
 import org.apache.camel.builder.RouteBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Map;
 
@@ -14,21 +21,39 @@ public class PerformanceLogRoute extends RouteBuilder {
     private static final int DELAY = 0;
 
     private LogLineRegexParser logLineRegexParser = new LogLineRegexParser();
-    private DatabaseEntryParser databaseEntryParser = new DatabaseEntryParser();
+    private EntityFactory entityFactory = EntityFactory.getInstance();
 
     private static final String LOG_FILE_ENDPOINT = "stream:file?fileName="+LOG_DIRECTORY +"/"+LOG_FILE+"&scanStream=true&scanStreamDelay=" + DELAY;
-    private static final String DATABASE_ENDPOINT = "jpa:no.osl.cdms.profile.log.TimeMeasurementEntity";
+    private static final String DATABASE_ENDPOINT = "jpa:";
+
+
+    //private LogRepository logRepository;
+
+    /*public void setLogRepository(LogRepository logRepository) {
+        this.logRepository = logRepository;
+    }*/
 
     @Override
     public void configure() throws Exception{
 
+
+
         //onException(Exception.class)/*.process(exceptionHandler)*/.markRollbackOnly().handled(true);
         from(LOG_FILE_ENDPOINT)
-                .convertBodyTo(String.class)                // Converts input to String
-                .choice().when(body().isGreaterThan(""))    // Ignores empty lines
-                .bean(logLineRegexParser, "parse")          // Parses log entry into String map
-                .bean(databaseEntryParser, "parse")         // Parses log entry into database format
-                .to(DATABASE_ENDPOINT)                      // Adds log entry to database
+                .convertBodyTo(String.class)                  // Converts input to String
+                .choice().when(body().isGreaterThan(""))      // Ignores empty lines
+                .bean(logLineRegexParser, "parse")            // Parses log entry into String map
+                .bean(entityFactory, "createTimemeasurement") // Parses log entry into database format
+                .split(body())
+                .choice().when(body().isNotNull())
+                //.bean(entityFactory, "splitTimeMeasurement")
+                //.split(body())
+//                .choice().when(body().isInstanceOf(no.osl.cdms.profile.api.Measured.class))
+                .bean(this, "print")
+                //.bean(logRepository, "saveTimeMeasurement")
+                .to("jpa:" + body().getClass().toString() + "?usePersist=true")
+                //.to(DATABASE_ENDPOINT)                        // Adds log entries to database
+
                 .routeId(PERFORMANCE_LOG_ROUTE_ID);
     }
 
@@ -43,6 +68,21 @@ public class PerformanceLogRoute extends RouteBuilder {
         }
         System.out.println();
         return log;
+    }
+
+    public Object fix(Object input) {
+        if (input instanceof TimeMeasurement) {
+            TimeMeasurement timeMeasurement = (TimeMeasurement) input;
+            timeMeasurement.setMultiContext(null);
+        }
+
+
+        return input;
+    }
+
+    public Object print (TimeMeasurementEntity timeMeasurementEntity) {
+        System.err.println(timeMeasurementEntity.getMeasured().toString());
+        return timeMeasurementEntity;
     }
 
     public String toString() {

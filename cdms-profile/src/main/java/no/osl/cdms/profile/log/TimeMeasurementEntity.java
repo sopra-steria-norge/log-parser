@@ -20,11 +20,11 @@ public class TimeMeasurementEntity implements TimeMeasurement {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "TIMEMEASUREMENT_SEQ_GEN")
     private int id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "MEASURED_ID")
     private MeasuredEntity measured;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "MULTICONTEXT_ID")
     private MultiContextEntity multiContext;
 
@@ -69,8 +69,9 @@ public class TimeMeasurementEntity implements TimeMeasurement {
 
     public void setMultiContext(MultiContextEntity multiContextMeasurement) {
         this.multiContext = multiContextMeasurement;
-        if (multiContextMeasurement != null)
+        if (multiContextMeasurement != null){
             multiContextMeasurement.getTimeMeasurements().add(this);
+        }
     }
 
     public String getTimestamp() {
