@@ -9,11 +9,10 @@ import com.google.common.collect.Maps;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import no.osl.cdms.profile.api.Measured;
+
+import no.osl.cdms.profile.api.Procedure;
 import no.osl.cdms.profile.api.TimeMeasurement;
 import no.osl.cdms.profile.factories.EntityFactory;
-import no.osl.cdms.profile.log.MeasuredEntity;
-import no.osl.cdms.profile.log.TimeMeasurementEntity;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -83,8 +82,8 @@ public class GuavaHelpersTest {
         Function<Map.Entry<String, String>, TimeMeasurement> functor = GuavaHelpers.getConverter(map);
 
         TimeMeasurement result = null;
-        Measured expSub = EntityFactory.createMeasured("myID", "test");
-        TimeMeasurement expResult = EntityFactory.createTimeMeasurement(expSub, "2013-06-25 15:02:08,876", "PT0.015S");
+        Procedure expSub = EntityFactory.getInstance().createProcedure("myID", "test");
+        TimeMeasurement expResult = EntityFactory.getInstance().createTimeMeasurement(expSub, "2013-06-25 15:02:08,876", "PT0.015S");
 
         for (Entry<String, String> e : map.entrySet()) {
             System.out.println(e.getKey() + ": " + e.getValue());
@@ -105,8 +104,8 @@ public class GuavaHelpersTest {
         Function<Map.Entry<String, String>, TimeMeasurement> functor = GuavaHelpers.getConverter(map);
 
         TimeMeasurement result = null;
-        Measured expSub = EntityFactory.createMeasured("myID", "test");
-        TimeMeasurement expResult = EntityFactory.createTimeMeasurement(expSub, "2013-06-25 15:02:08,876", "PT0.015S");
+        Procedure expSub = EntityFactory.getInstance().createProcedure("myID", "test");
+        TimeMeasurement expResult = EntityFactory.getInstance().createTimeMeasurement(expSub, "2013-06-25 15:02:08,876", "PT0.015S");
 
         for (Entry<String, String> e : map.entrySet()) {
             if (e.getKey().endsWith("duration")) {
@@ -126,8 +125,8 @@ public class GuavaHelpersTest {
         Function<Map.Entry<String, String>, TimeMeasurement> functor = GuavaHelpers.getConverter(map);
 
         TimeMeasurement result = null;
-        Measured expSub = EntityFactory.createMeasured("myID", "test");
-        TimeMeasurement expResult = EntityFactory.createTimeMeasurement(expSub, "2013-06-25 15:02:08,876", "PT0.015S");
+        Procedure expSub = EntityFactory.getInstance().createProcedure("myID", "test");
+        TimeMeasurement expResult = EntityFactory.getInstance().createTimeMeasurement(expSub, "2013-06-25 15:02:08,876", "PT0.015S");
 
         for (Entry<String, String> e : map.entrySet()) {
             if (e.getKey().endsWith("duration")) {
@@ -148,17 +147,17 @@ public class GuavaHelpersTest {
         map.put("timestamp", "2013-06-25 15:02:08,876");
         Function<Map.Entry<String, String>, TimeMeasurement> functor = GuavaHelpers.getConverter(map);
 
-        Measured[] expSub = new Measured[]{
-                EntityFactory.createMeasured("Total", ""),
-                EntityFactory.createMeasured("Wait", ""),
-                EntityFactory.createMeasured("Class", "method"),
-                EntityFactory.createMeasured("Class", "function")
+        Procedure[] expSub = new Procedure[]{
+                EntityFactory.getInstance().createProcedure("Total", ""),
+                EntityFactory.getInstance().createProcedure("Wait", ""),
+                EntityFactory.getInstance().createProcedure("Class", "method"),
+                EntityFactory.getInstance().createProcedure("Class", "function")
         };
         TimeMeasurement[] expResult = new TimeMeasurement[]{
-            EntityFactory.createTimeMeasurement(expSub[0], "2013-06-25 15:02:08,876", "PT0.015S"),
-            EntityFactory.createTimeMeasurement(expSub[1], "2013-06-25 15:02:08,876", "PT47.061S"),
-            EntityFactory.createTimeMeasurement(expSub[2], "2013-06-25 15:02:08,876", "PT0.015S"),
-            EntityFactory.createTimeMeasurement(expSub[3], "2013-06-25 15:02:08,876", "PT0.005S")
+            EntityFactory.getInstance().createTimeMeasurement(expSub[0], "2013-06-25 15:02:08,876", "PT0.015S"),
+            EntityFactory.getInstance().createTimeMeasurement(expSub[1], "2013-06-25 15:02:08,876", "PT47.061S"),
+            EntityFactory.getInstance().createTimeMeasurement(expSub[2], "2013-06-25 15:02:08,876", "PT0.015S"),
+            EntityFactory.getInstance().createTimeMeasurement(expSub[3], "2013-06-25 15:02:08,876", "PT0.005S")
         };
         int expResultCounter = 0;
         for (Entry<String, String> e : map.entrySet()) {

@@ -1,9 +1,9 @@
 package no.osl.cdms.profile.log;
 
-import no.osl.cdms.profile.api.Measured;
+import no.osl.cdms.profile.api.Procedure;
 import no.osl.cdms.profile.api.MultiContext;
-import no.osl.cdms.profile.api.TimeMeasurement;
 import org.springframework.stereotype.Repository;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -19,8 +19,8 @@ public class LogRepository {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public void saveMeasured(MeasuredEntity measuredEntity) {
-        entityManager.persist(measuredEntity);
+    public void saveProcedure(ProcedureEntity procedureEntity) {
+        entityManager.persist(procedureEntity);
     }
 
     public void saveMultiContext(MultiContextEntity multiContextEntity) {
@@ -31,8 +31,8 @@ public class LogRepository {
         entityManager.persist(timeMeasurementEntity);
     }
 
-    public MeasuredEntity getMeasured(int id) {
-        return entityManager.find(MeasuredEntity.class, id);
+    public ProcedureEntity getProcedure(int id) {
+        return entityManager.find(ProcedureEntity.class, id);
     }
 
     public MultiContextEntity getMultiContext(int id) {
@@ -52,15 +52,19 @@ public class LogRepository {
 
     }
 
-    public Measured getEqualMeasured(Measured measured) {
-        TypedQuery<MeasuredEntity> query = entityManager.createQuery(
-                "SELECT a FROM MeasuredEntity a where a.name = :name AND" +
-                        "a.class = :class AND" +
-                        "a.method = :method", MeasuredEntity.class);
-        query.setParameter("name", measured.getName());
-        query.setParameter("class", measured.getClassName());
-        query.setParameter("method", measured.getMethod());
-        MeasuredEntity result = query.getSingleResult();
-        return result;
+    public Procedure getEqualProcedure(Procedure procedure) {
+        TypedQuery<ProcedureEntity> query = entityManager.createQuery(
+                "SELECT a FROM ProcedureEntity a where a.name = :name AND " +
+                        "a.className = :class AND " +
+                        "a.method = :method", ProcedureEntity.class);
+        query.setParameter("name", procedure.getName());
+        query.setParameter("class", procedure.getClassName());
+        query.setParameter("method", procedure.getMethod());
+
+        try {
+            return query.getSingleResult();
+        } catch (javax.persistence.NoResultException e) {
+            return null;
+        }
     }
 }

@@ -10,8 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import java.util.ArrayList;
-
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
 
@@ -27,26 +25,26 @@ public class EntitiesTest {
     @PersistenceContext
     private EntityManager entityManager;
 
-    private MeasuredEntity measuredEntity;
+    private ProcedureEntity procedureEntity;
     private MultiContextEntity multiContextEntity;
     private TimeMeasurementEntity timeMeasurementEntity, timeMeasurementEntity2;
 
     @Before
     public void before() {
-        measuredEntity = new MeasuredEntity("name", "classname", "method");
+        procedureEntity = new ProcedureEntity("name", "classname", "method");
         multiContextEntity = new MultiContextEntity("start", "end");
-        timeMeasurementEntity = new TimeMeasurementEntity(measuredEntity, multiContextEntity, "timestamp", "duration");
-        timeMeasurementEntity2 = new TimeMeasurementEntity(measuredEntity, multiContextEntity, "timestamp", "duration");
+        timeMeasurementEntity = new TimeMeasurementEntity(procedureEntity, multiContextEntity, "timestamp", "duration");
+        timeMeasurementEntity2 = new TimeMeasurementEntity(procedureEntity, multiContextEntity, "timestamp", "duration");
 
-        entityManager.persist(measuredEntity);
+        entityManager.persist(procedureEntity);
         entityManager.persist(multiContextEntity);
 
     }
 
     @Test
     public void persisting_measured_should_cascade_persist() {
-        MeasuredEntity measured = entityManager.find(MeasuredEntity.class, measuredEntity.getId());
-        assertTrue(measured.getTimeMeasurements().size() == measuredEntity.getTimeMeasurements().size());
+        ProcedureEntity measured = entityManager.find(ProcedureEntity.class, procedureEntity.getId());
+        assertTrue(measured.getTimeMeasurements().size() == procedureEntity.getTimeMeasurements().size());
         assertEquals(measured.getTimeMeasurements().get(0), entityManager.find(TimeMeasurementEntity.class,
                 measured.getTimeMeasurements().get(0).getId()));
     }

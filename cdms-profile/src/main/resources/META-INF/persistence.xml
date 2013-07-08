@@ -11,7 +11,7 @@
         <jta-data-source>osgi:service/javax.sql.DataSource/(osgi.jndi.service.name=jdbc/cdms)</jta-data-source>
 
         <!-- Keep this list sorted -->
-        <class>no.osl.cdms.profile.log.MeasuredEntity</class>
+        <class>no.osl.cdms.profile.log.ProcedureEntity</class>
         <class>no.osl.cdms.profile.log.MultiContextEntity</class>
         <class>no.osl.cdms.profile.log.TimeMeasurementEntity</class>
 
@@ -35,7 +35,7 @@
     <persistence-unit name="cdmsProfilePersistenceUnitTest" transaction-type="RESOURCE_LOCAL">
         <provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider>
 
-        <class>no.osl.cdms.profile.log.MeasuredEntity</class>
+        <class>no.osl.cdms.profile.log.ProcedureEntity</class>
         <class>no.osl.cdms.profile.log.MultiContextEntity</class>
         <class>no.osl.cdms.profile.log.TimeMeasurementEntity</class>
 

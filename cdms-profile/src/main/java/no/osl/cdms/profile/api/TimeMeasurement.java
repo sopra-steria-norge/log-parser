@@ -1,6 +1,6 @@
 package no.osl.cdms.profile.api;
 
-import no.osl.cdms.profile.log.MeasuredEntity;
+import no.osl.cdms.profile.log.ProcedureEntity;
 import no.osl.cdms.profile.log.MultiContextEntity;
 
 /**
@@ -12,9 +12,9 @@ public interface TimeMeasurement extends Comparable<TimeMeasurement>{
 
     void setId(int id);
 
-    MeasuredEntity getMeasured();
+    ProcedureEntity getProcedure();
 
-    void setMeasured(MeasuredEntity measured);
+    void setProcedure(ProcedureEntity measured);
 
     MultiContextEntity getMultiContext();
 

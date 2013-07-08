@@ -35,8 +35,8 @@ public class Analyzer implements DataAnalyzer {
         }
         for (TimeMeasurement tm : times) {
             map.put("total", tm);
-            map.put(tm.getMeasured().getClassName(), tm);
-            map.put(tm.getMeasured().getClassName()+"."+tm.getMeasured().getMethod(), tm);
+            map.put(tm.getProcedure().getClassName(), tm);
+            map.put(tm.getProcedure().getClassName()+"."+tm.getProcedure().getMethod(), tm);
         }
         for (String key : map.keySet()) {
             Collections.sort(new ArrayList(map.get(key)));
