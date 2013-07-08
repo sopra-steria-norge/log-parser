@@ -4,127 +4,69 @@ var RenderController = function(args)
 	{
 		this.element = args.element;
 		this.graph = args.graph;
-		this.settings = this.serialize();
 
-		this.inputs = {
-			renderer: this.element.elements.renderer,
-			offset: this.element.elements.offset,
-			interpolation: this.element.elements.interpolation
+		this.renderer = this.element[0];
+		this.offset = this.element[1];
+		this.interpolation = this.element[2];
+
+		this.config = {
+			renderer: 'area',
+			offset: 'zero',
+			interpolation: 'cardinal',
+			unstack: false
 		};
 
-		this.element.addEventListener('change', function(e){
-        	this.settings = this.serialize();
+		this.renderer.addEventListener('change', function(e){
 
-        	if(e.target.name == 'renderer')
+			$(this.offset).find('input').prop('disabled', false); // enables all offset radio buttons
+			$(this.interpolation).find('input').prop('disabled', false); // enables all interpolation radio buttons
+
+        	if(e.srcElement.value == 'area')
         	{
-        		this.setDefaultOffset(e.target.value);
+				$(this.offset).find('#stack').click();
+				$(this.interpolation).find('#cardinal').click();
+
         	}
+        	else if( e.srcElement.value == 'bar')
+        	{
+                $(this.offset).find('#stack').click();
 
-        	this.syncOptions();
-        	this.settings = this.serialize();
+				// disables all interpolation radio button as it has no effect on bar graphs
+                $(this.interpolation).find('input').prop('disabled', true);
 
-        	var config={
-        		renderer: this.settings.renderer,
-        		interpolation: this.settings.interpolation
-        	};
+        	}
+        	else if(e.srcElement.value == 'line')
+        	{
+				$(this.offset).find('#value').click();
+				$(this.interpolation).find('#cardinal').click();
 
-			if(this.settings.offset == 'value')
-			{
-				config.unstack = true;
-				config.offset = 'zero';
-			}
-			else if(this.settings.offset == 'expand')
-			{
-				config.unstack = false;
-				config.offset = this.settings.offset;
-			}
-			else
-			{
-				config.unstack = false;
-				config.offset = this.settings.offset;
-			}
+				// disables stack and stream offset for line
+				$(this.offset).find('#stack').prop('disabled', true);
+				$(this.offset).find('#stream').prop('disabled', true);
 
-			this.graph.configure(config);
-			this.graph.render();
+        	}
+			this.config.renderer = e.srcElement.value;
+			this.graph.configure(this.config);
+        	this.graph.render();
         }.bind(this), false);
-	};
 
-	this.serialize = function()
-	{
-		var values = {};
-		var pairs = $(this.element).serializeArray();
-		pairs.forEach( function(pair) {
-			values[pair.name] = pair.value;
-		});
-		return values;
-	};
+        this.offset.addEventListener('change', function(e)
+        {
+        	this.config.offset = e.srcElement.value;
+        	this.config.unstack = false;
+			if(e.srcElement.value == 'value') {this.config.unstack = true;}
+			this.graph.configure(this.config);
+            this.graph.render();
 
-	this.syncOptions = function()
-	{
-		var options = this.rendererOptions[this.settings.renderer]
+        }.bind(this), false);
 
-		Array.prototype.forEach.call(this.inputs.interpolation, function(input)
-		{
-			if (options.interpolation)
-			{
-				input.disabled = false;
-				input.parentNode.classList.remove('disabled');
-			}
-			else
-			{
-				input.disabled = true;
-				input.parentNode.classList.add('disabled');
-			}
-		}.bind(this));
+        this.interpolation.addEventListener('change', function(e)
+        {
+        	this.config.interpolation = e.srcElement.value;
+        	this.graph.configure(this.config);
+            this.graph.render();
 
-		Array.prototype.forEach.call(this.inputs.offset, function(input)
-		{
-			if(options.offset.filter(function(o) {return o == input.value} ).length)
-			{
-				input.disabled = false;
-				input.parentNode.classList.remove('disabled');
-			}
-			else
-			{
-				input.disabled = true;
-				input.parentNode.classList.add('disabled');
-			}
-		}.bind(this));
-	};
-
-	this.setDefaultOffset = function(renderer)
-	{
-		var options = this.rendererOptions[renderer];
-
-		if(options.defaults && options.defaults.offset) {
-			Array.prototype.forEach.call(this.inputs.offset, function(input){
-				if(input.value == options.defaults.offset)
-				{
-					input.checked = true;
-				}
-				else {
-					input.checked = false;
-				}
-			}.bind(this));
-		}
-	};
-
-	this.rendererOptions = {
-		area:{
-			interpolation: true,
-			offset: ['zero', 'wiggle', 'expand', 'value'],
-			defaults: {offset:'zero'}
-		},
-		bar: {
-			interpolation: false,
-			offset: ['zero', 'wiggle', 'expand', 'value'],
-			defaults: {offset:'zero'}
-		},
-		line:{
-			interpolation: false,
-			offset: ['expand', 'value'],
-			defaults: {offset:'value'}
-		}
+        }.bind(this), false);
 	};
 
 	this.initialize();
