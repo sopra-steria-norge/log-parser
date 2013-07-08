@@ -19,11 +19,14 @@ content{
 
 .rickshaw_legend{
 	font-size: 14px;
-
+	opacity: 0.8;
 }
 
 .rickshaw_legend .action{
 	font-size: 16px;
+}
+.rickshaw_legend .action:hover {
+	opacity: 1.0;
 }
 .detail_swatch {
 	float: right;
@@ -45,7 +48,7 @@ content{
 }
 
 #side_panel{
-	padding: 0px 20px 20px 0;
+	padding: 0px 20px 20px 40px;
 	width: 250px;
 	display: inline-block;
 	vertical-align: top;
@@ -53,15 +56,15 @@ content{
 #side_panel h1{
 	font-size: 20px;
 }
-#side_panel h6{
-	margin: 0px 0px 1em 0px;
-	font-size: 12px;
-	font-weight: normal;
-}
+
 #side_panel label{
 	font-size: 12px;
+	margin: 0px 0px 0px 0px;
 	display: inline-block;
-	vertical-align: top;
+
+}
+#side_panel input[type="radio"]{
+	margin: 0px 0px 0px 0px;
 }
 #legend{
 	display: inline-block;
