@@ -3,6 +3,8 @@ package no.osl.cdms.profile.api;
 import no.osl.cdms.profile.log.ProcedureEntity;
 import no.osl.cdms.profile.log.MultiContextEntity;
 
+import java.util.Date;
+
 /**
  * User: apalfi
  */
@@ -20,9 +22,9 @@ public interface TimeMeasurement extends Comparable<TimeMeasurement>{
 
     void setMultiContext(MultiContextEntity multiContextMeasurement);
 
-    String getTimestamp();
+    Date getTimestamp();
 
-    void setTimestamp(String timestamp);
+    void setTimestamp(Date timestamp);
 
     String getDuration();
 

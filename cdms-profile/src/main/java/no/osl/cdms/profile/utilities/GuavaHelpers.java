@@ -6,12 +6,18 @@ package no.osl.cdms.profile.utilities;
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Map;
 
 import no.osl.cdms.profile.api.Procedure;
 import no.osl.cdms.profile.api.TimeMeasurement;
 import no.osl.cdms.profile.factories.EntityFactory;
 import no.osl.cdms.profile.log.ProcedureEntity;
+import org.joda.time.DateTime;
 import org.joda.time.convert.ConverterManager;
 import org.joda.time.convert.DurationConverter;
 
@@ -40,15 +46,25 @@ public class GuavaHelpers {
             @Override
             public TimeMeasurement apply(Map.Entry<String, String> input) {
                 String[] measured = parseKey(input.getKey(), properties);
-                String timestamp = properties.get("timestamp");
                 String time = parseDuration(input.getValue());
 
                 Procedure m = (ProcedureEntity) EntityFactory.getInstance().createProcedure(measured[0], measured[1]);
-                TimeMeasurement tm = EntityFactory.getInstance().createTimeMeasurement(m, timestamp, time);
+                TimeMeasurement tm = EntityFactory.getInstance().createTimeMeasurement(m, parseDateString(properties.get("timestamp")), time);
 
                 return tm;
             }
         };
+    }
+
+    public static Date parseDateString(String string) {
+        Date date = null;
+        try {
+            date = new SimpleDateFormat("yyyy-mm-dd kk:mm:ss,SSS", Locale.ENGLISH).parse(string);
+        } catch (ParseException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+
+        return date;
     }
 
     public static String[] parseKey(String key, Map<String, String> map) {

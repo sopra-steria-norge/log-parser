@@ -1,4 +1,3 @@
-drop table CDM_PROFILE_MEASURED cascade constraints;
 drop table CDM_PROFILE_TIMEMEASUREMENT cascade constraints;
 drop table CDM_PROFILE_PROCEDURE cascade constraints;
 drop table CDM_PROFILE_MULTICONTEXT cascade constraints;

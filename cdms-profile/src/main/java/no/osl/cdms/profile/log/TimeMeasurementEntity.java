@@ -7,6 +7,8 @@ import javax.persistence.*;
 import org.joda.time.convert.ConverterManager;
 import org.joda.time.convert.DurationConverter;
 
+import java.util.Date;
+
 /**
  * User: apalfi
  */
@@ -29,7 +31,7 @@ public class TimeMeasurementEntity implements TimeMeasurement {
     private MultiContextEntity multiContext;
 
     @Column(name = "TIMESTAMP")
-    private String timestamp;
+    private Date timestamp;
 
     @Column(name = "DURATION")
     private String duration;
@@ -38,10 +40,10 @@ public class TimeMeasurementEntity implements TimeMeasurement {
 
     }
 
-    public TimeMeasurementEntity(ProcedureEntity me, MultiContextEntity mcme, String timestamp,
+    public TimeMeasurementEntity(ProcedureEntity procedure, MultiContextEntity multiContext, Date timestamp,
                                  String duration) {
-        setProcedure(me);
-        setMultiContext(mcme);
+        setProcedure(procedure);
+        setMultiContext(multiContext);
         this.timestamp = timestamp;
         this.duration = duration;
     }
@@ -74,11 +76,11 @@ public class TimeMeasurementEntity implements TimeMeasurement {
         }
     }
 
-    public String getTimestamp() {
+    public Date getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(String timestamp) {
+    public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
     }
 

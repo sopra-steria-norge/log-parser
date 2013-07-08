@@ -2,7 +2,9 @@ package no.osl.cdms.profile.api;
 
 import no.osl.cdms.profile.log.TimeMeasurementEntity;
 
+import java.util.Date;
 import java.util.List;
+
 
 /**
  * User: apalfi
@@ -13,13 +15,13 @@ public interface MultiContext {
 
     void setId(int id);
 
-    String getStart();
+    Date getStart();
 
-    void setStart(String start);
+    void setStart(Date start);
 
-    String getEnd();
+    Date getEnd();
 
-    void setEnd(String end);
+    void setEnd(Date end);
 
     List<TimeMeasurementEntity> getTimeMeasurements();
 

@@ -11,6 +11,7 @@ import java.util.List;
 import no.osl.cdms.profile.api.TimeMeasurement;
 import no.osl.cdms.profile.factories.EntityFactory;
 import no.osl.cdms.profile.log.ProcedureEntity;
+import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -36,10 +37,12 @@ public class AnalyzerTest {
         ProcedureEntity me = (ProcedureEntity)EntityFactory.getInstance().createProcedure(id, "");
         ProcedureEntity me2 = (ProcedureEntity)EntityFactory.getInstance().createProcedure("WAIT1", "");
         for (double d : data) {
-            TimeMeasurement tm = EntityFactory.getInstance().createTimeMeasurement(me, "2013-06-25 15:02:08,876", "PT"+String.valueOf(d/1000)+"S");
+            TimeMeasurement tm = EntityFactory.getInstance().createTimeMeasurement(me, new DateTime("2013-06-25 15:02:08,876").toDate()
+                    , "PT"+String.valueOf(d/1000)+"S");
             tms.add(tm);
         }
-        TimeMeasurement tm2 = EntityFactory.getInstance().createTimeMeasurement(me2, "2013-06-25 15:02:08,876", "PT0.0"+String.valueOf(9999/1000)+"S");
+        TimeMeasurement tm2 = EntityFactory.getInstance().createTimeMeasurement(me2,
+                new DateTime("2013-06-25 15:02:08,876").toDate(), "PT0.0"+String.valueOf(9999/1000)+"S");
         tms.add(tm2);//Indirect test of delegate
         this.analyzer = new Analyzer(tms);
     }
@@ -49,7 +52,7 @@ public class AnalyzerTest {
         tms.clear();
         tms = null;
     }
-    
+
     @Test
     public void setupNull() {
         System.out.println("AnalyzerSetup::null");
@@ -63,7 +66,7 @@ public class AnalyzerTest {
             assertEquals(0, i, 0);
         }
     }
-    
+
     @Test
     public void testSorted() {
         System.out.println("sorted");
