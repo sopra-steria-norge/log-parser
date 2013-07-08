@@ -11,7 +11,7 @@ import java.util.List;
  * User: apalfi
  */
 @Entity
-@Table(name = "CDM_PROFILE_PROCEDURE"/*, uniqueConstraints={@UniqueConstraint(columnNames={"CLASS", "METHOD"})}*/)
+@Table(name = "CDM_PROFILE_PROCEDURE")
 public class ProcedureEntity implements Procedure {
 
     @Column(name = "PROCEDURE_ID")

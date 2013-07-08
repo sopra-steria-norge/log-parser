@@ -75,7 +75,7 @@
 
                     <includes>
                         <!-- Keep this list sorted -->
-                        **/*MeasuredEntity.class,
+                        **/*ProcedureEntity.class,
                         **/*MultiContextEntity.class,
                         **/*TimeMeasurementEntity.class,
                     </includes>
@@ -309,6 +309,14 @@
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-server</artifactId>
             <version>${jetty.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-jackson</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-mapper-asl</artifactId>
         </dependency>
             
     </dependencies>

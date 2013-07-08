@@ -10,16 +10,29 @@ import java.util.LinkedList;
 import java.util.List;
 import no.osl.cdms.profile.api.TimeMeasurement;
 import no.osl.cdms.profile.factories.EntityFactory;
+import no.osl.cdms.profile.log.LogRepository;
 import no.osl.cdms.profile.log.ProcedureEntity;
+import no.osl.cdms.profile.utilities.GuavaHelpers;
+import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
+
 import static org.junit.Assert.*;
 
 /**
  *
  * @author nutgaard
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(value = {"classpath:META-INF/spring/cdms-profile-ctx.xml",
+        "classpath:test-cdms-profile-infra-ctx.xml"})
+@Transactional
 public class AnalyzerTest {
 
     public final int[] data = {43, 54, 56, 61, 62, 66, 68, 69, 69, 70, 71, 72, 77, 78, 79, 85, 87, 88, 89, 93, 95, 96, 98, 99, 99};
@@ -27,19 +40,25 @@ public class AnalyzerTest {
     private DataAnalyzer analyzer;
     private String id = "WAIT0";
 
+    @Autowired
+    private LogRepository logRepository;
+
     public AnalyzerTest() {
     }
 
     @Before
     public void setUp() {
+        EntityFactory.getInstance().setLogRepository(logRepository);
         tms = new LinkedList<TimeMeasurement>();
         ProcedureEntity me = (ProcedureEntity)EntityFactory.getInstance().createProcedure(id, "");
         ProcedureEntity me2 = (ProcedureEntity)EntityFactory.getInstance().createProcedure("WAIT1", "");
         for (double d : data) {
-            TimeMeasurement tm = EntityFactory.getInstance().createTimeMeasurement(me, "2013-06-25 15:02:08,876", "PT"+String.valueOf(d/1000)+"S");
+            TimeMeasurement tm = EntityFactory.getInstance().createTimeMeasurement(me,
+                    GuavaHelpers.parseDateString("2013-06-25 15:02:08,876"), "PT"+String.valueOf(d/1000)+"S");
             tms.add(tm);
         }
-        TimeMeasurement tm2 = EntityFactory.getInstance().createTimeMeasurement(me2, "2013-06-25 15:02:08,876", "PT0.0"+String.valueOf(9999/1000)+"S");
+        TimeMeasurement tm2 = EntityFactory.getInstance().createTimeMeasurement(me2,
+                GuavaHelpers.parseDateString("2013-06-25 15:02:08,876"), "PT0.0"+String.valueOf(9999/1000)+"S");
         tms.add(tm2);//Indirect test of delegate
         this.analyzer = new Analyzer(tms);
     }
@@ -49,7 +68,7 @@ public class AnalyzerTest {
         tms.clear();
         tms = null;
     }
-    
+
     @Test
     public void setupNull() {
         System.out.println("AnalyzerSetup::null");
@@ -63,7 +82,7 @@ public class AnalyzerTest {
             assertEquals(0, i, 0);
         }
     }
-    
+
     @Test
     public void testSorted() {
         System.out.println("sorted");

@@ -6,6 +6,11 @@ package no.osl.cdms.profile.utilities;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Maps;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -13,6 +18,9 @@ import java.util.Set;
 import no.osl.cdms.profile.api.Procedure;
 import no.osl.cdms.profile.api.TimeMeasurement;
 import no.osl.cdms.profile.factories.EntityFactory;
+import org.joda.time.DateTime;
+import org.joda.time.convert.ConverterManager;
+import org.joda.time.convert.InstantConverter;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -83,7 +91,8 @@ public class GuavaHelpersTest {
 
         TimeMeasurement result = null;
         Procedure expSub = EntityFactory.getInstance().createProcedure("myID", "test");
-        TimeMeasurement expResult = EntityFactory.getInstance().createTimeMeasurement(expSub, "2013-06-25 15:02:08,876", "PT0.015S");
+        TimeMeasurement expResult = EntityFactory.getInstance().createTimeMeasurement(expSub,
+                GuavaHelpers.parseDateString("2013-06-25 15:02:08,876"), "PT0.015S");
 
         for (Entry<String, String> e : map.entrySet()) {
             System.out.println(e.getKey() + ": " + e.getValue());
@@ -105,7 +114,9 @@ public class GuavaHelpersTest {
 
         TimeMeasurement result = null;
         Procedure expSub = EntityFactory.getInstance().createProcedure("myID", "test");
-        TimeMeasurement expResult = EntityFactory.getInstance().createTimeMeasurement(expSub, "2013-06-25 15:02:08,876", "PT0.015S");
+
+        TimeMeasurement expResult = EntityFactory.getInstance().createTimeMeasurement(expSub,
+                GuavaHelpers.parseDateString("2013-06-25 15:02:08,876"), "PT0.015S");
 
         for (Entry<String, String> e : map.entrySet()) {
             if (e.getKey().endsWith("duration")) {
@@ -126,7 +137,8 @@ public class GuavaHelpersTest {
 
         TimeMeasurement result = null;
         Procedure expSub = EntityFactory.getInstance().createProcedure("myID", "test");
-        TimeMeasurement expResult = EntityFactory.getInstance().createTimeMeasurement(expSub, "2013-06-25 15:02:08,876", "PT0.015S");
+        TimeMeasurement expResult = EntityFactory.getInstance().createTimeMeasurement(expSub,
+                GuavaHelpers.parseDateString("2013-06-25 15:02:08,876"), "PT0.015S");
 
         for (Entry<String, String> e : map.entrySet()) {
             if (e.getKey().endsWith("duration")) {
@@ -154,10 +166,14 @@ public class GuavaHelpersTest {
                 EntityFactory.getInstance().createProcedure("Class", "function")
         };
         TimeMeasurement[] expResult = new TimeMeasurement[]{
-            EntityFactory.getInstance().createTimeMeasurement(expSub[0], "2013-06-25 15:02:08,876", "PT0.015S"),
-            EntityFactory.getInstance().createTimeMeasurement(expSub[1], "2013-06-25 15:02:08,876", "PT47.061S"),
-            EntityFactory.getInstance().createTimeMeasurement(expSub[2], "2013-06-25 15:02:08,876", "PT0.015S"),
-            EntityFactory.getInstance().createTimeMeasurement(expSub[3], "2013-06-25 15:02:08,876", "PT0.005S")
+            EntityFactory.getInstance().createTimeMeasurement(expSub[0],
+                    GuavaHelpers.parseDateString("2013-06-25 15:02:08,876"), "PT0.015S"),
+            EntityFactory.getInstance().createTimeMeasurement(expSub[1],
+                    GuavaHelpers.parseDateString("2013-06-25 15:02:08,876"), "PT47.061S"),
+            EntityFactory.getInstance().createTimeMeasurement(expSub[2],
+                    GuavaHelpers.parseDateString("2013-06-25 15:02:08,876"), "PT0.015S"),
+            EntityFactory.getInstance().createTimeMeasurement(expSub[3],
+                    GuavaHelpers.parseDateString("2013-06-25 15:02:08,876"), "PT0.005S")
         };
         int expResultCounter = 0;
         for (Entry<String, String> e : map.entrySet()) {
@@ -171,6 +187,8 @@ public class GuavaHelpersTest {
             }
         }
     }
+
+
 
     @Test
     public void testGetConverterMultiIllegalArguments() {

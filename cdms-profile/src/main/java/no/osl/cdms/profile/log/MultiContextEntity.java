@@ -7,6 +7,7 @@ import no.osl.cdms.profile.api.TimeMeasurement;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -24,10 +25,10 @@ public class MultiContextEntity implements MultiContext{
     private int id;
 
     @Column(name = "START_TIME")
-    private String start;
+    private Date start;
 
     @Column(name = "END_TIME")
-    private String end;
+    private Date end;
 
     @XmlTransient
     @OneToMany(mappedBy = "multiContext", targetEntity = TimeMeasurementEntity.class,
@@ -38,7 +39,7 @@ public class MultiContextEntity implements MultiContext{
 
     }
 
-    public MultiContextEntity(String start, String end) {
+    public MultiContextEntity(Date start, Date end) {
         this.start = start;
         this.end = end;
         this.timeMeasurements = Lists.newLinkedList();
@@ -52,19 +53,19 @@ public class MultiContextEntity implements MultiContext{
         this.id = id;
     }
 
-    public String getStart() {
+    public Date getStart() {
         return start;
     }
 
-    public void setStart(String start) {
+    public void setStart(Date start) {
         this.start = start;
     }
 
-    public String getEnd() {
+    public Date getEnd() {
         return end;
     }
 
-    public void setEnd(String end) {
+    public void setEnd(Date end) {
         this.end = end;
     }
 

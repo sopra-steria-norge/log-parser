@@ -19,15 +19,18 @@ content{
 
 .rickshaw_legend{
 	font-size: 14px;
-	opacity: 0.8;
+	opacity: 1.0;
 }
 
 .rickshaw_legend .action{
 	font-size: 16px;
-}
-.rickshaw_legend .action:hover {
 	opacity: 1.0;
 }
+.rickshaw_legend .action:hover {
+	opacity: 0.4;
+}
+
+
 .detail_swatch {
 	float: right;
 	display: inline-block;

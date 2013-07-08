@@ -12,6 +12,7 @@ import no.osl.cdms.profile.api.MultiContext;
 import no.osl.cdms.profile.api.TimeMeasurement;
 import no.osl.cdms.profile.log.MultiContextEntity;
 import no.osl.cdms.profile.utilities.GuavaHelpers;
+import org.joda.time.DateTime;
 import org.springframework.stereotype.Component;
 
 /**
@@ -38,8 +39,8 @@ public class ObjectMapUnmarshaller {
 
     private Object unmarshallMulti(Map<String, String> obj) {
         MultiContext mc = new MultiContextEntity();
-        mc.setStart(obj.get("MultiThreadContext.Total.start"));
-        mc.setEnd(obj.get("MultiThreadContext.Total.end"));
+        mc.setStart(new DateTime(obj.get("MultiThreadContext.Total.start")).toDate());
+        mc.setEnd(new DateTime(obj.get("MultiThreadContext.Total.end")).toDate());
         List<TimeMeasurement> list = Lists.newLinkedList();
         Map<String, String> filtered = Maps.filterEntries(obj, GuavaHelpers.isDuration());
 //        List<TimeMeasurement> measurements = Lists.transform(filtered.entrySet(), GuavaHelpers.getConverter(obj));

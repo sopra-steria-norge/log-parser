@@ -2,6 +2,7 @@ package no.osl.cdms.profile.log;
 
 import no.osl.cdms.profile.api.Procedure;
 import no.osl.cdms.profile.api.MultiContext;
+import org.joda.time.DateTime;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -46,8 +47,10 @@ public class LogRepository {
     public List<MultiContext> getMultiContextsAfterTimestamp(String timestamp) {
 
         ArrayList<MultiContext> result = new ArrayList<MultiContext>();
-        result.add(new MultiContextEntity("2013-06-25T01:15:52.458Z", "2013-06-25T01:16:18.847Z"));
-        result.add(new MultiContextEntity("2013-06-25T01:15:52.600Z", "2013-06-25T01:16:20.847Z"));
+        result.add(new MultiContextEntity(new DateTime("2013-06-25T01:15:52.458Z").toDate(),
+                new DateTime("2013-06-25T01:16:18.847Z").toDate()));
+        result.add(new MultiContextEntity(new DateTime("2013-06-25T01:15:52.600Z").toDate(),
+                new DateTime("2013-06-25T01:16:20.847Z").toDate()));
         return result;
 
     }

@@ -33,7 +33,6 @@ public class EntityFactoryTest {
     }
 
     @Test
-    @Rollback(false)
     public void uniqueProcedure() {
         ProcedureEntity old = new ProcedureEntity("name", "class", "method");
         logRepository.saveProcedure(old);
