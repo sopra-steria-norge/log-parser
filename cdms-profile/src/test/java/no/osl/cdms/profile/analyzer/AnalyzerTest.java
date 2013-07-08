@@ -33,13 +33,13 @@ public class AnalyzerTest {
     @Before
     public void setUp() {
         tms = new LinkedList<TimeMeasurement>();
-        MeasuredEntity me = (MeasuredEntity)EntityFactory.createMeasured(id, "");
-        MeasuredEntity me2 = (MeasuredEntity)EntityFactory.createMeasured("WAIT1", "");
+        MeasuredEntity me = (MeasuredEntity)EntityFactory.getInstance().createMeasured(id, "");
+        MeasuredEntity me2 = (MeasuredEntity)EntityFactory.getInstance().createMeasured("WAIT1", "");
         for (double d : data) {
-            TimeMeasurement tm = EntityFactory.createTimeMeasurement(me, "2013-06-25 15:02:08,876", "PT"+String.valueOf(d/1000)+"S");
+            TimeMeasurement tm = EntityFactory.getInstance().createTimeMeasurement(me, "2013-06-25 15:02:08,876", "PT"+String.valueOf(d/1000)+"S");
             tms.add(tm);
         }
-        TimeMeasurement tm2 = EntityFactory.createTimeMeasurement(me2, "2013-06-25 15:02:08,876", "PT0.0"+String.valueOf(9999/1000)+"S");
+        TimeMeasurement tm2 = EntityFactory.getInstance().createTimeMeasurement(me2, "2013-06-25 15:02:08,876", "PT0.0"+String.valueOf(9999/1000)+"S");
         tms.add(tm2);//Indirect test of delegate
         this.analyzer = new Analyzer(tms);
     }

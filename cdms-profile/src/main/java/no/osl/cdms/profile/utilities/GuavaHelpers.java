@@ -43,8 +43,8 @@ public class GuavaHelpers {
                 String timestamp = properties.get("timestamp");
                 String time = parseDuration(input.getValue());
 
-                Measured m = (MeasuredEntity) EntityFactory.createMeasured(measured[0], measured[1]);
-                TimeMeasurement tm = EntityFactory.createTimeMeasurement(m, timestamp, time);
+                Measured m = (MeasuredEntity) EntityFactory.getInstance().createMeasured(measured[0], measured[1]);
+                TimeMeasurement tm = EntityFactory.getInstance().createTimeMeasurement(m, timestamp, time);
 
                 return tm;
             }

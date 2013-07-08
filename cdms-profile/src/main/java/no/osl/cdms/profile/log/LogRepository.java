@@ -2,8 +2,8 @@ package no.osl.cdms.profile.log;
 
 import no.osl.cdms.profile.api.Measured;
 import no.osl.cdms.profile.api.MultiContext;
-import no.osl.cdms.profile.api.TimeMeasurement;
 import org.springframework.stereotype.Repository;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -54,13 +54,17 @@ public class LogRepository {
 
     public Measured getEqualMeasured(Measured measured) {
         TypedQuery<MeasuredEntity> query = entityManager.createQuery(
-                "SELECT a FROM MeasuredEntity a where a.name = :name AND" +
-                        "a.class = :class AND" +
+                "SELECT a FROM MeasuredEntity a where a.name = :name AND " +
+                        "a.className = :class AND " +
                         "a.method = :method", MeasuredEntity.class);
         query.setParameter("name", measured.getName());
         query.setParameter("class", measured.getClassName());
         query.setParameter("method", measured.getMethod());
-        MeasuredEntity result = query.getSingleResult();
-        return result;
+
+        try {
+            return query.getSingleResult();
+        } catch (javax.persistence.NoResultException e) {
+            return null;
+        }
     }
 }

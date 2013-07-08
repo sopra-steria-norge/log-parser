@@ -11,7 +11,7 @@ import java.util.List;
  * User: apalfi
  */
 @Entity
-@Table(name = "CDM_PROFILE_MEASURED")
+@Table(name = "CDM_PROFILE_MEASURED", uniqueConstraints={@UniqueConstraint(columnNames={"CLASS", "METHOD"})})
 public class MeasuredEntity implements Measured {
 
     @Column(name = "MEASURED_ID")

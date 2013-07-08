@@ -83,8 +83,8 @@ public class GuavaHelpersTest {
         Function<Map.Entry<String, String>, TimeMeasurement> functor = GuavaHelpers.getConverter(map);
 
         TimeMeasurement result = null;
-        Measured expSub = EntityFactory.createMeasured("myID", "test");
-        TimeMeasurement expResult = EntityFactory.createTimeMeasurement(expSub, "2013-06-25 15:02:08,876", "PT0.015S");
+        Measured expSub = EntityFactory.getInstance().createMeasured("myID", "test");
+        TimeMeasurement expResult = EntityFactory.getInstance().createTimeMeasurement(expSub, "2013-06-25 15:02:08,876", "PT0.015S");
 
         for (Entry<String, String> e : map.entrySet()) {
             System.out.println(e.getKey() + ": " + e.getValue());
@@ -105,8 +105,8 @@ public class GuavaHelpersTest {
         Function<Map.Entry<String, String>, TimeMeasurement> functor = GuavaHelpers.getConverter(map);
 
         TimeMeasurement result = null;
-        Measured expSub = EntityFactory.createMeasured("myID", "test");
-        TimeMeasurement expResult = EntityFactory.createTimeMeasurement(expSub, "2013-06-25 15:02:08,876", "PT0.015S");
+        Measured expSub = EntityFactory.getInstance().createMeasured("myID", "test");
+        TimeMeasurement expResult = EntityFactory.getInstance().createTimeMeasurement(expSub, "2013-06-25 15:02:08,876", "PT0.015S");
 
         for (Entry<String, String> e : map.entrySet()) {
             if (e.getKey().endsWith("duration")) {
@@ -126,8 +126,8 @@ public class GuavaHelpersTest {
         Function<Map.Entry<String, String>, TimeMeasurement> functor = GuavaHelpers.getConverter(map);
 
         TimeMeasurement result = null;
-        Measured expSub = EntityFactory.createMeasured("myID", "test");
-        TimeMeasurement expResult = EntityFactory.createTimeMeasurement(expSub, "2013-06-25 15:02:08,876", "PT0.015S");
+        Measured expSub = EntityFactory.getInstance().createMeasured("myID", "test");
+        TimeMeasurement expResult = EntityFactory.getInstance().createTimeMeasurement(expSub, "2013-06-25 15:02:08,876", "PT0.015S");
 
         for (Entry<String, String> e : map.entrySet()) {
             if (e.getKey().endsWith("duration")) {
@@ -149,16 +149,16 @@ public class GuavaHelpersTest {
         Function<Map.Entry<String, String>, TimeMeasurement> functor = GuavaHelpers.getConverter(map);
 
         Measured[] expSub = new Measured[]{
-                EntityFactory.createMeasured("Total", ""),
-                EntityFactory.createMeasured("Wait", ""),
-                EntityFactory.createMeasured("Class", "method"),
-                EntityFactory.createMeasured("Class", "function")
+                EntityFactory.getInstance().createMeasured("Total", ""),
+                EntityFactory.getInstance().createMeasured("Wait", ""),
+                EntityFactory.getInstance().createMeasured("Class", "method"),
+                EntityFactory.getInstance().createMeasured("Class", "function")
         };
         TimeMeasurement[] expResult = new TimeMeasurement[]{
-            EntityFactory.createTimeMeasurement(expSub[0], "2013-06-25 15:02:08,876", "PT0.015S"),
-            EntityFactory.createTimeMeasurement(expSub[1], "2013-06-25 15:02:08,876", "PT47.061S"),
-            EntityFactory.createTimeMeasurement(expSub[2], "2013-06-25 15:02:08,876", "PT0.015S"),
-            EntityFactory.createTimeMeasurement(expSub[3], "2013-06-25 15:02:08,876", "PT0.005S")
+            EntityFactory.getInstance().createTimeMeasurement(expSub[0], "2013-06-25 15:02:08,876", "PT0.015S"),
+            EntityFactory.getInstance().createTimeMeasurement(expSub[1], "2013-06-25 15:02:08,876", "PT47.061S"),
+            EntityFactory.getInstance().createTimeMeasurement(expSub[2], "2013-06-25 15:02:08,876", "PT0.015S"),
+            EntityFactory.getInstance().createTimeMeasurement(expSub[3], "2013-06-25 15:02:08,876", "PT0.005S")
         };
         int expResultCounter = 0;
         for (Entry<String, String> e : map.entrySet()) {
