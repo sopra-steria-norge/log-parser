@@ -75,7 +75,7 @@
 
                     <includes>
                         <!-- Keep this list sorted -->
-                        **/*MeasuredEntity.class,
+                        **/*ProcedureEntity.class,
                         **/*MultiContextEntity.class,
                         **/*TimeMeasurementEntity.class,
                     </includes>
