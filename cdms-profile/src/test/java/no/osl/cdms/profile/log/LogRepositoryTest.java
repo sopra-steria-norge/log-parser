@@ -25,36 +25,36 @@ public class LogRepositoryTest {
     @Autowired
     private LogRepository logRepository;
 
-    private MeasuredEntity measuredEntity1, measuredEntity2;
+    private ProcedureEntity procedureEntity1, procedureEntity2;
     private TimeMeasurementEntity timeMeasurementEntity1, timeMeasurementEntity2;
     private MultiContextEntity multiContextEntity1;
 
     @Before
     public void before() {
 
-        measuredEntity1 = new MeasuredEntity("testName1", "testClass1", "testMethod1");
-        measuredEntity2 = new MeasuredEntity("testName2", "testClass1", "testMethod2");
+        procedureEntity1 = new ProcedureEntity("testName1", "testClass1", "testMethod1");
+        procedureEntity2 = new ProcedureEntity("testName2", "testClass1", "testMethod2");
 
         multiContextEntity1 = new MultiContextEntity("testStart", "testEnd");
-        timeMeasurementEntity1 = new TimeMeasurementEntity(measuredEntity1, multiContextEntity1, "testTimestamp1", "testDuration1");
-        timeMeasurementEntity2 = new TimeMeasurementEntity(measuredEntity2, multiContextEntity1, "testTimestamp2", "testDuration2");
+        timeMeasurementEntity1 = new TimeMeasurementEntity(procedureEntity1, multiContextEntity1, "testTimestamp1", "testDuration1");
+        timeMeasurementEntity2 = new TimeMeasurementEntity(procedureEntity2, multiContextEntity1, "testTimestamp2", "testDuration2");
         entityManager.persist(multiContextEntity1);
-        entityManager.persist(measuredEntity2);
-        entityManager.persist(measuredEntity1);
+        entityManager.persist(procedureEntity2);
+        entityManager.persist(procedureEntity1);
 
 
     }
 
     @Test
     public void saveMeasured_test() {
-        MeasuredEntity me1 = new MeasuredEntity("testName", "testClass1", "testMethod1");
-        logRepository.saveMeasured(me1);
-        assertEquals(me1, entityManager.find(MeasuredEntity.class, me1.getId()));
+        ProcedureEntity me1 = new ProcedureEntity("testName", "testClass1", "testMethod1");
+        logRepository.saveProcedure(me1);
+        assertEquals(me1, entityManager.find(ProcedureEntity.class, me1.getId()));
     }
 
     @Test
     public void saveMultiContext_test() {
-        TimeMeasurementEntity tme = new TimeMeasurementEntity(measuredEntity1, multiContextEntity1, "timestamp", "duration");
+        TimeMeasurementEntity tme = new TimeMeasurementEntity(procedureEntity1, multiContextEntity1, "timestamp", "duration");
         MultiContextEntity multiContextEntity = new MultiContextEntity("start", "stop");
         multiContextEntity.addTimeMeasurement(tme);
         logRepository.saveMultiContext(multiContextEntity);
@@ -63,15 +63,15 @@ public class LogRepositoryTest {
 
     @Test
     public void saveTimeMeasurement_test() {
-        TimeMeasurementEntity tme = new TimeMeasurementEntity(measuredEntity1, multiContextEntity1, "timestamp", "duration");
+        TimeMeasurementEntity tme = new TimeMeasurementEntity(procedureEntity1, multiContextEntity1, "timestamp", "duration");
         logRepository.saveTimeMeasurement(tme);
         assertEquals(tme, entityManager.find(TimeMeasurementEntity.class, tme.getId()));
     }
 
     @Test
     public void getMeasured_test() {
-        assertEquals(logRepository.getMeasured(measuredEntity1.getId()), measuredEntity1);
-        assertEquals(logRepository.getMeasured(measuredEntity2.getId()), measuredEntity2);
+        assertEquals(logRepository.getProcedure(procedureEntity1.getId()), procedureEntity1);
+        assertEquals(logRepository.getProcedure(procedureEntity2.getId()), procedureEntity2);
     }
 
     @Test

@@ -7,11 +7,11 @@ package no.osl.cdms.profile.utilities;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import java.util.Map;
-import no.osl.cdms.profile.api.Measured;
+
+import no.osl.cdms.profile.api.Procedure;
 import no.osl.cdms.profile.api.TimeMeasurement;
 import no.osl.cdms.profile.factories.EntityFactory;
-import no.osl.cdms.profile.log.MeasuredEntity;
-import no.osl.cdms.profile.log.TimeMeasurementEntity;
+import no.osl.cdms.profile.log.ProcedureEntity;
 import org.joda.time.convert.ConverterManager;
 import org.joda.time.convert.DurationConverter;
 
@@ -43,7 +43,7 @@ public class GuavaHelpers {
                 String timestamp = properties.get("timestamp");
                 String time = parseDuration(input.getValue());
 
-                Measured m = (MeasuredEntity) EntityFactory.getInstance().createMeasured(measured[0], measured[1]);
+                Procedure m = (ProcedureEntity) EntityFactory.getInstance().createProcedure(measured[0], measured[1]);
                 TimeMeasurement tm = EntityFactory.getInstance().createTimeMeasurement(m, timestamp, time);
 
                 return tm;

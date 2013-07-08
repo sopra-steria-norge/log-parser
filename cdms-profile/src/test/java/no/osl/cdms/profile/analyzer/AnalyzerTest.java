@@ -10,7 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 import no.osl.cdms.profile.api.TimeMeasurement;
 import no.osl.cdms.profile.factories.EntityFactory;
-import no.osl.cdms.profile.log.MeasuredEntity;
+import no.osl.cdms.profile.log.ProcedureEntity;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,8 +33,8 @@ public class AnalyzerTest {
     @Before
     public void setUp() {
         tms = new LinkedList<TimeMeasurement>();
-        MeasuredEntity me = (MeasuredEntity)EntityFactory.getInstance().createMeasured(id, "");
-        MeasuredEntity me2 = (MeasuredEntity)EntityFactory.getInstance().createMeasured("WAIT1", "");
+        ProcedureEntity me = (ProcedureEntity)EntityFactory.getInstance().createProcedure(id, "");
+        ProcedureEntity me2 = (ProcedureEntity)EntityFactory.getInstance().createProcedure("WAIT1", "");
         for (double d : data) {
             TimeMeasurement tm = EntityFactory.getInstance().createTimeMeasurement(me, "2013-06-25 15:02:08,876", "PT"+String.valueOf(d/1000)+"S");
             tms.add(tm);

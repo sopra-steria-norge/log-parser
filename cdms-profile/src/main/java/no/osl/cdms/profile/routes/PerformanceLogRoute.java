@@ -1,15 +1,10 @@
 package no.osl.cdms.profile.routes;
 
-import no.osl.cdms.profile.api.Measured;
 import no.osl.cdms.profile.api.TimeMeasurement;
 import no.osl.cdms.profile.factories.EntityFactory;
-import no.osl.cdms.profile.log.LogRepository;
-import no.osl.cdms.profile.log.MultiContextEntity;
 import no.osl.cdms.profile.log.TimeMeasurementEntity;
-import no.osl.cdms.profile.parser.DatabaseEntryParser;
 import no.osl.cdms.profile.parser.LogLineRegexParser;
 import org.apache.camel.builder.RouteBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Map;
 
@@ -48,7 +43,7 @@ public class PerformanceLogRoute extends RouteBuilder {
                 .choice().when(body().isNotNull())
                 //.bean(entityFactory, "splitTimeMeasurement")
                 //.split(body())
-//                .choice().when(body().isInstanceOf(no.osl.cdms.profile.api.Measured.class))
+//                .choice().when(body().isInstanceOf(no.osl.cdms.profile.api.Procedure.class))
                 .bean(this, "print")
                 //.bean(logRepository, "saveTimeMeasurement")
                 .to("jpa:" + body().getClass().toString() + "?usePersist=true")
@@ -81,7 +76,7 @@ public class PerformanceLogRoute extends RouteBuilder {
     }
 
     public Object print (TimeMeasurementEntity timeMeasurementEntity) {
-        System.err.println(timeMeasurementEntity.getMeasured().toString());
+        System.err.println(timeMeasurementEntity.getProcedure().toString());
         return timeMeasurementEntity;
     }
 

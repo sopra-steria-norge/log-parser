@@ -1,8 +1,8 @@
 package no.osl.cdms.profile.factories;
 
-import no.osl.cdms.profile.api.Measured;
+import no.osl.cdms.profile.api.Procedure;
 import no.osl.cdms.profile.log.LogRepository;
-import no.osl.cdms.profile.log.MeasuredEntity;
+import no.osl.cdms.profile.log.ProcedureEntity;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,10 +34,10 @@ public class EntityFactoryTest {
 
     @Test
     @Rollback(false)
-    public void measured_should_be_unique() {
-        MeasuredEntity old = new MeasuredEntity("name", "class", "method");
-        logRepository.saveMeasured(old);
-        Measured current = entityFactory.createMeasured("name", "class", "method");
+    public void uniqueProcedure() {
+        ProcedureEntity old = new ProcedureEntity("name", "class", "method");
+        logRepository.saveProcedure(old);
+        Procedure current = entityFactory.createProcedure("name", "class", "method");
 
         assertEquals(old, current);
     }

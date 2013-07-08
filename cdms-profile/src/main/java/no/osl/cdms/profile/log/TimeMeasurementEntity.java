@@ -3,7 +3,7 @@ package no.osl.cdms.profile.log;
 import no.osl.cdms.profile.api.TimeMeasurement;
 
 import javax.persistence.*;
-import org.joda.time.convert.Converter;
+
 import org.joda.time.convert.ConverterManager;
 import org.joda.time.convert.DurationConverter;
 
@@ -21,8 +21,8 @@ public class TimeMeasurementEntity implements TimeMeasurement {
     private int id;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "MEASURED_ID")
-    private MeasuredEntity measured;
+    @JoinColumn(name = "PROCEDURE_ID")
+    private ProcedureEntity procedure;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "MULTICONTEXT_ID")
@@ -38,9 +38,9 @@ public class TimeMeasurementEntity implements TimeMeasurement {
 
     }
 
-    public TimeMeasurementEntity(MeasuredEntity me, MultiContextEntity mcme, String timestamp,
+    public TimeMeasurementEntity(ProcedureEntity me, MultiContextEntity mcme, String timestamp,
                                  String duration) {
-        setMeasured(me);
+        setProcedure(me);
         setMultiContext(mcme);
         this.timestamp = timestamp;
         this.duration = duration;
@@ -54,13 +54,13 @@ public class TimeMeasurementEntity implements TimeMeasurement {
         this.id = id;
     }
 
-    public MeasuredEntity getMeasured() {
-        return measured;
+    public ProcedureEntity getProcedure() {
+        return procedure;
     }
 
-    public void setMeasured(MeasuredEntity measured) {
-        this.measured = measured;
-        measured.getTimeMeasurements().add(this);
+    public void setProcedure(ProcedureEntity procedure) {
+        this.procedure = procedure;
+        procedure.getTimeMeasurements().add(this);
     }
 
     public MultiContextEntity getMultiContext() {
@@ -100,7 +100,7 @@ public class TimeMeasurementEntity implements TimeMeasurement {
     public int hashCode() {
         int hash = 7;
         hash = 23 * hash + this.id;
-        hash = 23 * hash + (this.measured != null ? this.measured.hashCode() : 0);
+        hash = 23 * hash + (this.procedure != null ? this.procedure.hashCode() : 0);
         hash = 23 * hash + (this.multiContext != null ? this.multiContext.hashCode() : 0);
         hash = 23 * hash + (this.timestamp != null ? this.timestamp.hashCode() : 0);
         hash = 23 * hash + (this.duration != null ? this.duration.hashCode() : 0);
@@ -119,7 +119,7 @@ public class TimeMeasurementEntity implements TimeMeasurement {
         if (this.id != other.id) {
             return false;
         }
-        if (this.measured != other.measured && (this.measured == null || !this.measured.equals(other.measured))) {
+        if (this.procedure != other.procedure && (this.procedure == null || !this.procedure.equals(other.procedure))) {
             return false;
         }
         if (this.multiContext != other.multiContext && (this.multiContext == null || !this.multiContext.equals(other.multiContext))) {
@@ -133,7 +133,7 @@ public class TimeMeasurementEntity implements TimeMeasurement {
 
     @Override
     public String toString() {
-        return "TimeMeasurementEntity{" + "id=" + id + ", measured=" + measured + ", multiContext=" + multiContext + ", timestamp=" + timestamp + ", duration=" + duration + '}';
+        return "TimeMeasurementEntity{" + "id=" + id + ", procedure=" + procedure + ", multiContext=" + multiContext + ", timestamp=" + timestamp + ", duration=" + duration + '}';
     }
     
     

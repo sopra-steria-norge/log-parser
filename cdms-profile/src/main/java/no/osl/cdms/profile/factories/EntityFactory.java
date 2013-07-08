@@ -10,11 +10,11 @@ import com.google.common.collect.Maps;
 import java.util.List;
 import java.util.Map;
 
-import no.osl.cdms.profile.api.Measured;
+import no.osl.cdms.profile.api.Procedure;
 import no.osl.cdms.profile.api.MultiContext;
 import no.osl.cdms.profile.api.TimeMeasurement;
 import no.osl.cdms.profile.log.LogRepository;
-import no.osl.cdms.profile.log.MeasuredEntity;
+import no.osl.cdms.profile.log.ProcedureEntity;
 import no.osl.cdms.profile.log.MultiContextEntity;
 import no.osl.cdms.profile.log.TimeMeasurementEntity;
 import no.osl.cdms.profile.utilities.GuavaHelpers;
@@ -42,12 +42,12 @@ public class EntityFactory {
         return entityFactory;
     }
 
-    public TimeMeasurement createTimeMeasurement(Measured measured, MultiContext context, String timestamp, String duration) {
-        return (TimeMeasurement) (new TimeMeasurementEntity((MeasuredEntity) measured, (MultiContextEntity) context, timestamp, duration));
+    public TimeMeasurement createTimeMeasurement(Procedure procedure, MultiContext context, String timestamp, String duration) {
+        return (TimeMeasurement) (new TimeMeasurementEntity((ProcedureEntity) procedure, (MultiContextEntity) context, timestamp, duration));
     }
 
-    public TimeMeasurement createTimeMeasurement(Measured measured, String timestamp, String duration) {
-        return (TimeMeasurement) (new TimeMeasurementEntity((MeasuredEntity) measured, null, timestamp, duration));
+    public TimeMeasurement createTimeMeasurement(Procedure procedure, String timestamp, String duration) {
+        return (TimeMeasurement) (new TimeMeasurementEntity((ProcedureEntity) procedure, null, timestamp, duration));
     }
 
     public MultiContext createMultiContext(String start, String end) {
@@ -55,16 +55,16 @@ public class EntityFactory {
         return mc;
     }
 
-    public Measured createMeasured(String className, String methodName) {
-        return createMeasured("", className, methodName);
+    public Procedure createProcedure(String className, String methodName) {
+        return createProcedure("", className, methodName);
     }
 
-    public Measured createMeasured(String name, String className, String methodName) {
-        Measured newMeasured = new MeasuredEntity(name, className, methodName);
-        Measured existingMeasured = logRepository.getEqualMeasured(newMeasured);
+    public Procedure createProcedure(String name, String className, String methodName) {
+        Procedure newProcedure = new ProcedureEntity(name, className, methodName);
+        Procedure existingProcedure = logRepository.getEqualProcedure(newProcedure);
 
-        if (existingMeasured != null) return existingMeasured;
-        return newMeasured;
+        if (existingProcedure != null) return existingProcedure;
+        return newProcedure;
     }
 
     public List<TimeMeasurement> createMultiContext(Map<String, String> properties) {
@@ -86,10 +86,10 @@ public class EntityFactory {
         String[] id = GuavaHelpers.parseKey("LocalThreadContext.id", properties);
         String classname = id[0];
         String methodname = id[1];
-        //Measured m = createMeasured(classname, methodname);
-        Measured m = new MeasuredEntity("",classname, methodname);
+        Procedure m = createProcedure(classname, methodname);
+        //Procedure m = new ProcedureEntity("",classname, methodname);
         TimeMeasurement tm = createTimeMeasurement(m, timestamp, duration);
-        tm.setMeasured((MeasuredEntity) m);
+        tm.setProcedure((ProcedureEntity) m);
         List<TimeMeasurement> list = Lists.newLinkedList();
         list.add(tm);
         return list;
@@ -106,7 +106,7 @@ public class EntityFactory {
     public List<Object> splitTimeMeasurement(TimeMeasurement timeMeasurement) {
         List<Object> databaseEntities = Lists.newLinkedList();
         Object database_entity;
-        if ((database_entity = timeMeasurement.getMeasured()) != null) {
+        if ((database_entity = timeMeasurement.getProcedure()) != null) {
             databaseEntities.add(database_entity);
         }
         if ((database_entity = timeMeasurement.getMultiContext()) != null) {
