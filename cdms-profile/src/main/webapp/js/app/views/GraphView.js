@@ -13,16 +13,15 @@ app.GraphView = Backbone.View.extend({
         var stoSeries = ["Store", [{x:0.5, y:0.008}, {x:0.8, y:0.011}, {x:0.9, y:0.014}, {x:0.95, y:0.017}, {x:1, y:0.07}]];
         var waitSeries = ["Wait", [{x:0.5, y:0.658}, {x:0.8, y:4.981}, {x:0.9, y:18.4668}, {x:0.95, y:50.22915}, {x:1, y:60}]];
 
-
-        var palette = new Rickshaw.Color.Palette()
+        var palette = new Rickshaw.Color.Palette({scheme: 'spectrum2000'})
 
         var graph = new Rickshaw.Graph(
         {
                 element: this.el,
                 renderer: 'area',
                 offset: 'stack',
-                width: 900,
-                height: 600,
+                width: 1000,
+                height: 800,
                 stroke: true,
                 preserve: true,
                 padding: { top: 0.06, right: 0.0, bottom: 0.08, left: 0.00 },

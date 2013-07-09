@@ -1,6 +1,20 @@
 var app = app || {};
 
-$(function() {
+$(function(){
+	new app.GraphView();
+});
 
-	var gr = new app.GraphView();
-})
+$('.dropdown-toggle').dropdown();
+$('.nav-tabs').button();
+
+$(function() {
+    $('#fromDateTimePicker').datetimepicker({
+    	language: 'en'
+	});
+});
+
+$(function() {
+    $('#toDateTimePicker').datetimepicker({
+    	language: 'en'
+	});
+});

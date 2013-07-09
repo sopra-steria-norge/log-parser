@@ -13,13 +13,6 @@ import javax.ws.rs.Path;
  * change this template use File | Settings | File Templates.
  */
 
-/*TODO:
- 1. Establish connection to db
- 2. Define queries
- 3. Write "get"-methods for each graph
- |-> Get info from db
- |-> Create json data with [name: "name" and data[{x: , y:},{x: , y: }]]
- */
 @Path("rest")
 public class RESTService extends HttpServlet {
 

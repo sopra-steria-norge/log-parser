@@ -4,52 +4,161 @@
     <title>Profile</title>
 	<meta charset="utf-8">
 	<link type="text/css" rel="stylesheet" href="css/bootstrap.css">
+	<link type="text/css" rel="stylesheet" href="css/bootstrap-datetimepicker.min.css">
 	<link type="text/css" rel="stylesheet" href="css/rickshaw.css">
 	<link type="text/css" rel="stylesheet" href="css/style.css">
+
 </head>
 <body>
 	<div id="content">
 		<form id=side_panel>
 			<h1>View Selection</h1>
 			<section><div id="legend"></div></section>
-			<section>
-				<h6>Data selection</h6>
-			</section>
-			<section>
-				<h6>Rendering options</h6>
-				<div id="renderer_options" class="options">
-					<input type="radio" name="renderer" id="area" value="area" checked>
-					<label class="area" for="area"><span>area</span></label>
-					<input type="radio" name="renderer" id="bar" value="bar">
-					<label class="bar" for="bar"><span>bar</span></label>
-					<input type="radio" name="renderer" id="line" value="line">
-					<label class="line" for="line"><span>line</span></label>
+			<div class="accordion" id="accordion">
+				<div class="accordion-group">
+					<div class="accordion-heading">
+						<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+							Data Selection
+						</a>
+					</div>
+					<div id="collapseOne" class="accordion-body collapse in">
+						<div class="accordion-inner">
+							<div class="dropdown">
+								<button class="btn dropdown-toggle" data-toggle="dropdown">Quick Selection<span class="caret"></span></button>
+								<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+									<li class="dropdown-submenu">
+										<a tabindex="-1" href="#">Last</a>
+										<ul class="dropdown-menu">
+											<li><a tabindex="-1" href="#">Hour</a></li>
+											<li><a tabindex="-1" href="#">6 Hours</a></li>
+											<li><a tabindex="-1" href="#">12 Hours</a></li>
+											<li><a tabindex="-1" href="#">Day</a></li>
+											<li><a tabindex="-1" href="#">Week</a></li>
+											<li><a tabindex="-1" href="#">Month</a></li>
+										</ul>
+									</li>
+									<li><a tabindex="-1" href="#">Percentile</a></li>
+								</ul>
+							</div>
+							<h6>From</h6>
+							<div id="fromDateTimePicker" class="input-append date">
+								<input data-format="dd/MM/yyyy hh:mm:ss" type="text"></input>
+								<span class="add-on">
+									<i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar"></i>
+								</span>
+							</div>
+							<h6>To</h6>
+							<div id="toDateTimePicker" class="input-append date">
+								<input data-format="dd/MM/yyyy hh:mm:ss" type="text"></input>
+								<span class="add-on">
+									<i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar"></i>
+								</span>
+							</div>
+							<button type="button" class="btn btn-success">Update Graph</button>
+						</div>
+					</div>
 				</div>
-			</section>
-			<section>
-				<h6>Offset options</h6>
-				<div id="offset_options" class="options">
-					<input type="radio" name="offset" id="stack" value="zero" checked>
-					<label class="stack" for="stack"><span>stack</span></label>
-					<input type="radio" name="offset" id="stream" value="wiggle">
-					<label class="stream" for="stream"><span>stream</span></label>
-					<input type="radio" name="offset" id="pct" value="expand">
-					<label class="pct" for="pct"><span>percent</span></label>
-					<input type="radio" name="offset" id="value" value="value">
-					<label class="value" for="value"><span>value</span></label>
+				<div class="accordion-group">
+					<div class="accordion-heading">
+						<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+							Rendering options
+						</a>
+					</div>
+					<div id="collapseTwo" class="accordion-body collapse">
+						<div class="accordion-inner">
+							<h6>Rendering</h6>
+							<div id="renderer_options" class="options btn-group" data-toggle="buttons-radio">
+								<button type="button" class="btn active" name="renderer" id="area" value="area">Area</button>
+								<button type="button" class="btn" name="renderer" id="bar" value="bar">Bar</button>
+								<button type="button" class="btn" name="renderer" id="line" value="line">Line</button>
+							</div>
+							<h6>Offset</h6>
+							<div id="offset_options" class="options btn-group" data-toggle="buttons-radio">
+								<button type="button" class="btn active" name="offset" id="stack" value="zero">Stack</button>
+								<button type="button" class="btn" name="offset" id="stream" value="wiggle">Stream</button>
+								<button type="button" class="btn" name="offset" id="pct" value="expand">Percent</button>
+								<button type="button" class="btn" name="offset" id="value" value="value">Value</button>
+							</div>
+							<h6>Interpolation</h6>
+							<div id="interpolation_options" class="options btn-group" data-toggle="buttons-radio">
+								<button type="button" class="btn active" name="interpolation" id="cardinal" value="cardinal">Cardinal</button>
+								<button type="button" class="btn" name="interpolation" id="linear" value="linear">Linear</button>
+								<button type="button" class="btn" name="interpolation" id="step" value="step-before">Step</button>
+							</div>
+						</div>
+					</div>
 				</div>
-			</section>
-			<section>
-				<h6>Interpolation Options</h6>
-				<div id="interpolation_options" class="options">
-					<input type="radio" name="interpolation" id="cardinal" value="cardinal" checked>
-					<label class="cardinal" for="cardinal"><span>cardinal</span></label>
-					<input type="radio" name="interpolation" id="linear" value="linear">
-					<label class="linear" for="linear"><span>linear</span></label>
-					<input type="radio" name="interpolation" id="step" value="step-before">
-					<label class="step" for="step"><span>step</span></label>
-				</div>
-			</section>
+			</div>
+			<!--<section>-->
+				<!--<h6>Data selection</h6>-->
+				<!--<div class="dropdown">-->
+					<!--<button class="btn dropdown-toggle" data-toggle="dropdown">Quick Selection<span class="caret"></span></button>-->
+					<!--<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">-->
+						<!--<li class="dropdown-submenu">-->
+							<!--<a tabindex="-1" href="#">Last</a>-->
+							<!--<ul class="dropdown-menu">-->
+								<!--<li><a tabindex="-1" href="#">Hour</a></li>-->
+								<!--<li><a tabindex="-1" href="#">6 Hours</a></li>-->
+								<!--<li><a tabindex="-1" href="#">12 Hours</a></li>-->
+								<!--<li><a tabindex="-1" href="#">Day</a></li>-->
+								<!--<li><a tabindex="-1" href="#">Week</a></li>-->
+								<!--<li><a tabindex="-1" href="#">Month</a></li>-->
+							<!--</ul>-->
+						<!--</li>-->
+						<!--<li><a tabindex="-1" href="#">Percentile</a></li>-->
+						<!--<li class="divider"></li>-->
+						<!--<li><a tabindex="-1" href="#">Separated link</a></li>-->
+					<!--</ul>-->
+				<!--</div>-->
+				<!--<h6>From</h6>-->
+				<!--<div id="fromDateTimePicker" class="input-append date">-->
+					<!--<input data-format="dd/MM/yyyy hh:mm:ss" type="text"></input>-->
+					<!--<span class="add-on">-->
+						<!--<i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar"></i>-->
+					<!--</span>-->
+				<!--</div>-->
+				<!--<h6>To</h6>-->
+				<!--<div id="toDateTimePicker" class="input-append date">-->
+					<!--<input data-format="dd/MM/yyyy hh:mm:ss" type="text"></input>-->
+					<!--<span class="add-on">-->
+						<!--<i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar"></i>-->
+					<!--</span>-->
+				<!--</div>-->
+			<!--</section>-->
+			<!--<section>-->
+				<!--<h6>Rendering options</h6>-->
+				<!--<div id="renderer_options" class="options btn-group" data-toggle="buttons-radio">-->
+
+					<!--&lt;!&ndash;<input type="radio" name="renderer" id="area" value="area" checked>&ndash;&gt;-->
+					<!--&lt;!&ndash;<label class="area" for="area"><span>area</span></label>&ndash;&gt;-->
+					<!--&lt;!&ndash;<input type="radio" name="renderer" id="bar" value="bar">&ndash;&gt;-->
+					<!--&lt;!&ndash;<label class="bar" for="bar"><span>bar</span></label>&ndash;&gt;-->
+					<!--&lt;!&ndash;<input type="radio" name="renderer" id="line" value="line">&ndash;&gt;-->
+					<!--&lt;!&ndash;<label class="line" for="line"><span>line</span></label>&ndash;&gt;-->
+					<!--<button type="button" class="btn active" name="renderer" id="area" value="area">Area</button>-->
+					<!--<button type="button" class="btn" name="renderer" id="bar" value="bar">Bar</button>-->
+					<!--<button type="button" class="btn" name="renderer" id="line" value="line">Line</button>-->
+				<!--</div>-->
+			<!--</section>-->
+			<!--<section>-->
+				<!--<h6>Offset options</h6>-->
+				<!--<div id="offset_options" class="options btn-group" data-toggle="buttons-radio">-->
+					<!--<button type="button" class="btn active" name="offset" id="stack" value="zero">Stack</button>-->
+					<!--<button type="button" class="btn" name="offset" id="stream" value="wiggle">Stream</button>-->
+					<!--<button type="button" class="btn" name="offset" id="pct" value="expand">Percent</button>-->
+					<!--<button type="button" class="btn" name="offset" id="value" value="value">Value</button>-->
+				<!--</div>-->
+				<!--<br>-->
+			<!--</section>-->
+			<!--<section>-->
+				<!--<h6>Interpolation Options</h6>-->
+				<!--<div id="interpolation_options" class="options btn-group" data-toggle="buttons-radio">-->
+
+					<!--<button type="button" class="btn active" name="interpolation" id="cardinal" value="cardinal">Cardinal</button>-->
+					<!--<button type="button" class="btn" name="interpolation" id="linear" value="linear">Linear</button>-->
+					<!--<button type="button" class="btn" name="interpolation" id="step" value="step-before">Step</button>-->
+				<!--</div>-->
+			<!--</section>-->
 		</form>
 		<div id="graph_container">
 			<div id="graph"></div>
@@ -62,6 +171,9 @@
 	<script type="text/javascript" src="js/external/underscore.js"></script>
 	<script type="text/javascript" src="js/external/backbone.js"></script>
 	<script type="text/javascript" src="js/external/backbone-relational.js"></script>
+	<script type="text/javascript" src="js/external/bootstrap.js"></script>
+	<script type="text/javascript" src="js/external/bootstrap-datetimepicker.min.js"></script>
+	<script type="text/javascript" src="js/external/bootstrap-datetimepicker.nb.js"></script>
 	<script type="text/javascript" src="js/app/RenderController.js"></script>
 	<script type="text/javascript" src="js/app/views/GraphView.js"></script>
 	<script type="text/javascript" src="js/app/app.js"></script>
