@@ -141,6 +141,14 @@
                     <mainClass>no.osl.cdms.profile.web.GraphWebservice</mainClass>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-maven-plugin</artifactId>
+                <version>${camel.version}</version>
+                <configuration>
+                    <applicationContextUri>META-INF/spring/*.xml</applicationContextUri>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
@@ -187,6 +195,11 @@
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-jpa</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-maven-plugin</artifactId>
+            <version>${camel.version}</version>
+        </dependency>
 
         <!-- Testing -->
         <dependency>
@@ -216,6 +229,12 @@
         <dependency>
             <groupId>net.sf.ehcache</groupId>
             <artifactId>ehcache-openjpa</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <scope>test</scope>
         </dependency>
 
 
@@ -318,7 +337,17 @@
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-mapper-asl</artifactId>
         </dependency>
-            
+
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>core</artifactId>
+            <version>${org.osgi.core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.osgi</groupId>
+            <artifactId>spring-osgi-core</artifactId>
+            <version>${org.springframework.osgi.spring-osgi-core.version}</version>
+        </dependency>
     </dependencies>
 
 
