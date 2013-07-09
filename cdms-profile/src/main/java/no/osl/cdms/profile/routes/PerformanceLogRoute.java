@@ -21,8 +21,6 @@ public class PerformanceLogRoute extends RouteBuilder {
     private EntityFactory entityFactory = EntityFactory.getInstance();
 
     private static final String LOG_FILE_ENDPOINT = "stream:file?fileName="+LOG_DIRECTORY +"/"+LOG_FILE+"&scanStream=true&scanStreamDelay=" + DELAY;
-    private static final String DATABASE_ENDPOINT = "jpa:";
-
 
     @Autowired
     private LogRepository logRepository;
@@ -33,10 +31,6 @@ public class PerformanceLogRoute extends RouteBuilder {
 
     @Override
     public void configure() throws Exception{
-
-
-
-        //onException(Exception.class)/*.process(exceptionHandler)*/.markRollbackOnly().handled(true);
         from(LOG_FILE_ENDPOINT)
                 .convertBodyTo(String.class)                  // Converts input to String
                 .choice().when(body().isGreaterThan(""))      // Ignores empty lines
@@ -50,8 +44,6 @@ public class PerformanceLogRoute extends RouteBuilder {
                 .bean(this, "print")
 //                .bean(logRepository, "persistNewTimeMeasurement")
                 .to("jpa:" + body().getClass().toString() + "?usePersist=true")
-                //.to(DATABASE_ENDPOINT)                        // Adds log entries to database
-
                 .routeId(PERFORMANCE_LOG_ROUTE_ID);
     }
 
