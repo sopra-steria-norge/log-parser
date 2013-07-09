@@ -84,14 +84,14 @@ public class EntityFactory {
     }
 
     public List<TimeMeasurement> createLocalContextTimemeasurement(Map<String, String> properties) {
-        DateTime timestamp = new DateTime(properties.get("timestamp"));
+//        DateTime timestamp = new DateTime(properties.get("timestamp"));
         String duration = properties.get("LocalThreadContext.duration");
         String[] id = GuavaHelpers.parseKey("LocalThreadContext.id", properties);
         String classname = id[0];
         String methodname = id[1];
         Procedure m = createProcedure(classname, methodname);
         //Procedure m = new ProcedureEntity("",classname, methodname);
-        TimeMeasurement tm = createTimeMeasurement(m, timestamp.toDate(), duration);
+        TimeMeasurement tm = createTimeMeasurement(m, GuavaHelpers.parseDateString(properties.get("timestamp")), duration);
         tm.setProcedure((ProcedureEntity) m);
         List<TimeMeasurement> list = Lists.newLinkedList();
         list.add(tm);

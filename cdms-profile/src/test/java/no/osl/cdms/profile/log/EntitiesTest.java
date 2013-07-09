@@ -65,7 +65,6 @@ public class EntitiesTest {
     }
 
     @Test
-    @Rollback(false)
     public void persisting_timemeasurement_should_cascade_persist() {
         System.out.println("persisting_timemeasurement_should_cascade_persist");
         ProcedureEntity procedure = new ProcedureEntity("name", "class", "method");

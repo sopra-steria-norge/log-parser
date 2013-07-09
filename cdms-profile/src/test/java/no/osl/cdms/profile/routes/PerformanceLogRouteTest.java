@@ -1,16 +1,28 @@
 package no.osl.cdms.profile.routes;
 
 import no.osl.cdms.profile.log.LogRepository;
+import no.osl.cdms.profile.factories.EntityFactory;
+import no.osl.cdms.profile.log.LogRepository;
+import org.apache.camel.CamelContext;
+import org.apache.camel.impl.DefaultCamelContext;
 import org.apache.camel.test.spring.CamelSpringTestSupport;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.mockito.Mockito.mock;
 
+//@RunWith(SpringJUnit4ClassRunner.class)
+//@ContextConfiguration(value = {"classpath:META-INF/spring/cdms-profile-ctx.xml",
+//        "classpath:test-cdms-profile-infra-ctx.xml"})
 public class PerformanceLogRouteTest extends CamelSpringTestSupport {
 
     PerformanceLogRoute performanceLogRoute;
