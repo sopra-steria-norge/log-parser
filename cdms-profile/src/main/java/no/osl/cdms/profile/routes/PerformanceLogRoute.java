@@ -17,62 +17,23 @@ public class PerformanceLogRoute extends RouteBuilder {
     private static final String LOG_FILE = "performance.log";
     private static final int DELAY = 0;
 
-    private LogLineRegexParser logLineRegexParser = new LogLineRegexParser();
+    private static final String LOG_FILE_ENDPOINT = "stream:file?fileName=%s/%s&scanStream=true&scanStreamDelay=%d";
+    private static final String DATABASE_ENDPOINT = "jpa:%s?usePersist=true";
+
     private EntityFactory entityFactory = EntityFactory.getInstance();
-
-    private static final String LOG_FILE_ENDPOINT = "stream:file?fileName="+LOG_DIRECTORY +"/"+LOG_FILE+"&scanStream=true&scanStreamDelay=" + DELAY;
-
-    @Autowired
-    private LogRepository logRepository;
-
-    public void setLogRepository(LogRepository logRepository) {
-        this.logRepository = logRepository;
-    }
+    private LogLineRegexParser logLineRegexParser = new LogLineRegexParser();
 
     @Override
     public void configure() throws Exception{
-        from(LOG_FILE_ENDPOINT)
+        fromF(LOG_FILE_ENDPOINT, LOG_DIRECTORY, LOG_FILE, DELAY)
                 .convertBodyTo(String.class)                  // Converts input to String
                 .choice().when(body().isGreaterThan(""))      // Ignores empty lines
                 .bean(logLineRegexParser, "parse")            // Parses log entry into String map
                 .bean(entityFactory, "createTimemeasurement") // Parses log entry into database format
                 .split(body())
                 .choice().when(body().isNotNull())
-                //.bean(entityFactory, "splitTimeMeasurement")
-                //.split(body())
-//                .choice().when(body().isInstanceOf(no.osl.cdms.profile.api.Procedure.class))
-                .bean(this, "print")
-//                .bean(logRepository, "persistNewTimeMeasurement")
-                .to("jpa:" + body().getClass().toString() + "?usePersist=true")
+                .toF(DATABASE_ENDPOINT, body().getClass().toString())
                 .routeId(PERFORMANCE_LOG_ROUTE_ID);
-    }
-
-    /**
-     * Test method for viewing parsed log entry
-     * Can safely be deleted
-     * @param log
-     */
-    public Map<String, String> printLogEntry(Map<String, String> log) {
-        for (String key: log.keySet()) {
-            System.out.printf("%s\t\t%s\n", key, log.get(key));
-        }
-        System.out.println();
-        return log;
-    }
-
-    public Object fix(Object input) {
-        if (input instanceof TimeMeasurement) {
-            TimeMeasurement timeMeasurement = (TimeMeasurement) input;
-            timeMeasurement.setMultiContext(null);
-        }
-
-
-        return input;
-    }
-
-    public Object print (TimeMeasurementEntity timeMeasurementEntity) {
-        System.err.println(timeMeasurementEntity.getProcedure());
-        return timeMeasurementEntity;
     }
 
     public String toString() {
