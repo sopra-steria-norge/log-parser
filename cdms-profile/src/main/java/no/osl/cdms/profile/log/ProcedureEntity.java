@@ -29,10 +29,6 @@ public class ProcedureEntity implements Procedure {
     @Column(name = "METHOD")
     private String method;
 
-    @OneToMany(mappedBy = "procedure", targetEntity = TimeMeasurementEntity.class, fetch = FetchType.EAGER,
-            cascade = CascadeType.ALL)
-    private List<TimeMeasurementEntity> timeMeasurements;
-
     public ProcedureEntity() {
 
     }
@@ -41,7 +37,6 @@ public class ProcedureEntity implements Procedure {
         this.name = name;
         this.className = className;
         this.method = method;
-        this.timeMeasurements = Lists.newLinkedList();
     }
 
     public int getId() {
@@ -76,17 +71,9 @@ public class ProcedureEntity implements Procedure {
         this.method = method;
     }
 
-    public List<TimeMeasurementEntity> getTimeMeasurements() {
-        return timeMeasurements;
-    }
-
-    public void setTimeMeasurements(List<TimeMeasurementEntity> timeMeasurements) {
-        this.timeMeasurements = timeMeasurements;
-    }
-
     @Override
     public String toString() {
-        return "ProcedureEntity{" + "id=" + id + ", name=" + name + ", className=" + className + ", method=" + method + ", timeMeasurements=" + timeMeasurements.size() + '}';
+        return "ProcedureEntity{" + "id=" + id + ", name=" + name + ", className=" + className + ", method=" + method + '}';
     }
 
     @Override
@@ -121,10 +108,5 @@ public class ProcedureEntity implements Procedure {
             return false;
         }
         return true;
-    }
-    
-
-    public void addTimeMeasurement(TimeMeasurement timeMeasurement) {
-        timeMeasurement.setProcedure(this);
     }
 }

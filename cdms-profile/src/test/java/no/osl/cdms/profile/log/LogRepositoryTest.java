@@ -63,7 +63,6 @@ public class LogRepositoryTest {
                 new DateTime("2013-06-25T01:15:52.458Z").toDate(), "PT0.107S");
         MultiContextEntity multiContextEntity = new MultiContextEntity(new DateTime("2013-06-25T01:15:52.458Z").toDate(),
                 new DateTime("2013-06-25T01:15:52.458Z").toDate());
-        multiContextEntity.addTimeMeasurement(tme);
         logRepository.persistNewMultiContext(multiContextEntity);
         assertEquals(multiContextEntity, entityManager.find(MultiContextEntity.class, multiContextEntity.getId()));
     }

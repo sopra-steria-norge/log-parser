@@ -30,11 +30,6 @@ public class MultiContextEntity implements MultiContext{
     @Column(name = "END_TIME")
     private Date end;
 
-    @XmlTransient
-    @OneToMany(mappedBy = "multiContext", targetEntity = TimeMeasurementEntity.class,
-            fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private List<TimeMeasurementEntity> timeMeasurements;
-
     public MultiContextEntity() {
 
     }
@@ -42,7 +37,6 @@ public class MultiContextEntity implements MultiContext{
     public MultiContextEntity(Date start, Date end) {
         this.start = start;
         this.end = end;
-        this.timeMeasurements = Lists.newLinkedList();
     }
 
     public int getId() {
@@ -67,17 +61,5 @@ public class MultiContextEntity implements MultiContext{
 
     public void setEnd(Date end) {
         this.end = end;
-    }
-
-    public List<TimeMeasurementEntity> getTimeMeasurements() {
-        return timeMeasurements;
-    }
-
-    public void setTimeMeasurements(List<TimeMeasurementEntity> timeMeasurements) {
-        this.timeMeasurements = timeMeasurements;
-    }
-
-    public void addTimeMeasurement(TimeMeasurement timeMeasurement) {
-        timeMeasurement.setMultiContext(this);
     }
 }

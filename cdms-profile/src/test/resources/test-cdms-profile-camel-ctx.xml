@@ -16,8 +16,5 @@
         <property name="propagationBehaviorName" value="PROPAGATION_REQUIRES_NEW" />
     </bean>
 
-    <camel:camelContext id="cdms-profile-camel-context">
-        <camel:routeBuilder ref="performanceLogRoute" />
-    </camel:camelContext>
 
 </beans>

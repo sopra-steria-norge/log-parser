@@ -22,10 +22,4 @@ public interface MultiContext {
     Date getEnd();
 
     void setEnd(Date end);
-
-    List<TimeMeasurementEntity> getTimeMeasurements();
-
-    void setTimeMeasurements(List<TimeMeasurementEntity> timeMeasurements);
-
-    void addTimeMeasurement(TimeMeasurement timeMeasurement);
 }

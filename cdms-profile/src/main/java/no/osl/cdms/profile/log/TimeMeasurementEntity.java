@@ -62,7 +62,6 @@ public class TimeMeasurementEntity implements TimeMeasurement {
 
     public void setProcedure(ProcedureEntity procedure) {
         this.procedure = procedure;
-        procedure.getTimeMeasurements().add(this);
     }
 
     public MultiContextEntity getMultiContext() {
@@ -71,9 +70,6 @@ public class TimeMeasurementEntity implements TimeMeasurement {
 
     public void setMultiContext(MultiContextEntity multiContextMeasurement) {
         this.multiContext = multiContextMeasurement;
-        if (multiContextMeasurement != null){
-            multiContextMeasurement.getTimeMeasurements().add(this);
-        }
     }
 
     public Date getTimestamp() {
