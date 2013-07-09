@@ -7,6 +7,8 @@ package no.osl.cdms.profile.factories;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +20,7 @@ import no.osl.cdms.profile.log.ProcedureEntity;
 import no.osl.cdms.profile.log.MultiContextEntity;
 import no.osl.cdms.profile.log.TimeMeasurementEntity;
 import no.osl.cdms.profile.utilities.GuavaHelpers;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -42,15 +45,15 @@ public class EntityFactory {
         return entityFactory;
     }
 
-    public TimeMeasurement createTimeMeasurement(Procedure procedure, MultiContext context, String timestamp, String duration) {
+    public TimeMeasurement createTimeMeasurement(Procedure procedure, MultiContext context, Date timestamp, String duration) {
         return (TimeMeasurement) (new TimeMeasurementEntity((ProcedureEntity) procedure, (MultiContextEntity) context, timestamp, duration));
     }
 
-    public TimeMeasurement createTimeMeasurement(Procedure procedure, String timestamp, String duration) {
+    public TimeMeasurement createTimeMeasurement(Procedure procedure, Date timestamp, String duration) {
         return (TimeMeasurement) (new TimeMeasurementEntity((ProcedureEntity) procedure, null, timestamp, duration));
     }
 
-    public MultiContext createMultiContext(String start, String end) {
+    public MultiContext createMultiContext(Date start, Date end) {
         MultiContext mc = new MultiContextEntity(start, end);
         return mc;
     }
@@ -68,9 +71,9 @@ public class EntityFactory {
     }
 
     public List<TimeMeasurement> createMultiContext(Map<String, String> properties) {
-        String start = properties.get("MultiThreadContext.Total.start");
-        String end = properties.get("MultiThreadContext.Total.end");
-        MultiContextEntity mcme = new MultiContextEntity(start, end);
+        DateTime start = new DateTime(properties.get("MultiThreadContext.Total.start"));
+        DateTime end = new DateTime(properties.get("MultiThreadContext.Total.end"));
+        MultiContextEntity mcme = new MultiContextEntity(start.toDate(), end.toDate());
 
         Map<String, String> measuredFiltered = Maps.filterEntries(properties, GuavaHelpers.isDuration());
         List<TimeMeasurement> measured = Lists.newLinkedList(Iterables.transform(measuredFiltered.entrySet(), GuavaHelpers.getConverter(properties)));
@@ -81,14 +84,14 @@ public class EntityFactory {
     }
 
     public List<TimeMeasurement> createLocalContextTimemeasurement(Map<String, String> properties) {
-        String timestamp = properties.get("timestamp");
+//        DateTime timestamp = new DateTime(properties.get("timestamp"));
         String duration = properties.get("LocalThreadContext.duration");
         String[] id = GuavaHelpers.parseKey("LocalThreadContext.id", properties);
         String classname = id[0];
         String methodname = id[1];
         Procedure m = createProcedure(classname, methodname);
         //Procedure m = new ProcedureEntity("",classname, methodname);
-        TimeMeasurement tm = createTimeMeasurement(m, timestamp, duration);
+        TimeMeasurement tm = createTimeMeasurement(m, GuavaHelpers.parseDateString(properties.get("timestamp")), duration);
         tm.setProcedure((ProcedureEntity) m);
         List<TimeMeasurement> list = Lists.newLinkedList();
         list.add(tm);
