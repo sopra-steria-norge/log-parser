@@ -51,7 +51,7 @@ public class PerformanceLogRouteTest extends CamelSpringTestSupport {
 
     @Override
     protected AbstractApplicationContext createApplicationContext() {
-        return new ClassPathXmlApplicationContext("classpath:test-cdms-profile-camel-ctx.xml",
+        return new ClassPathXmlApplicationContext(/*"classpath:test-cdms-profile-camel-ctx.xml",*/
                 "classpath:test-cdms-profile-infra-ctx.xml");
     }
 }
