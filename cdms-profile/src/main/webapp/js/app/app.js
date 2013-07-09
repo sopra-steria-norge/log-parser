@@ -8,13 +8,35 @@ $('.dropdown-toggle').dropdown();
 $('.nav-tabs').button();
 
 $(function() {
-    $('#fromDateTimePicker').datetimepicker({
-    	language: 'en'
-	});
+	var date = new Date();
+    $('#fromDateTimePicker')
+    .datetimepicker({
+        	language: 'en',
+        	endDate: date,
+        	todayBtn: true,
+        	maskInput: true,
+        	pickerPosition: "bottom-left",
+        	minuteStep: 3
+    })
+    .on('changeDate', function(e){
+    	console.log(e.date);
+    })
 });
 
 $(function() {
-    $('#toDateTimePicker').datetimepicker({
-    	language: 'en'
-	});
+	var date = new Date();
+    $('#toDateTimePicker')
+    .datetimepicker({
+    	language: 'en',
+    	endDate: date,
+    	todayBtn: true,
+    	maskInput: true,
+    	pickerPosition: "bottom-left",
+    	minuteStep: 3
+	})
+	.on('changeDate', function(e){
+		console.log(e.date);
+	})
 });
+
+//$('#toDateTimePicker').setEndDate($('#toDateTimePicker').getDate());
