@@ -16,9 +16,9 @@ var RenderController = function(args)
 			unstack: false
 		};
 
-		this.renderer.addEventListener('change', function(e){
+		this.renderer.addEventListener('click', function(e){
 
-			$(this.offset).find('input').prop('disabled', false); // enables all offset radio buttons
+			$(this.offset).find('button').prop('disabled', false); // enables all offset radio buttons
 			$(this.interpolation).find('input').prop('disabled', false); // enables all interpolation radio buttons
 
         	if(e.srcElement.value == 'area')
@@ -50,7 +50,7 @@ var RenderController = function(args)
         	this.graph.render();
         }.bind(this), false);
 
-        this.offset.addEventListener('change', function(e)
+        this.offset.addEventListener('click', function(e)
         {
         	this.config.offset = e.srcElement.value;
         	this.config.unstack = false;
@@ -60,7 +60,7 @@ var RenderController = function(args)
 
         }.bind(this), false);
 
-        this.interpolation.addEventListener('change', function(e)
+        this.interpolation.addEventListener('click', function(e)
         {
         	this.config.interpolation = e.srcElement.value;
         	this.graph.configure(this.config);

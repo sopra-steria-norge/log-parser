@@ -7,9 +7,6 @@ app.Measured = Backbone.Model.extend({
 	},
 
 	idAttribute: 'id',
-	url: function(){
-		// TODO: Define url
-		return "SomeURL"
-	}
+	urlRoot:''
 
 });
