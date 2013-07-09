@@ -46,15 +46,14 @@ public class LogRepository {
         return entityManager.find(TimeMeasurementEntity.class, id);
     }
 
-    public List<MultiContext> getMultiContextsAfterTimestamp(String timestamp) {
 
-        ArrayList<MultiContext> result = new ArrayList<MultiContext>();
-        result.add(new MultiContextEntity(new DateTime("2013-06-25T01:15:52.458Z").toDate(),
-                new DateTime("2013-06-25T01:16:18.847Z").toDate()));
-        result.add(new MultiContextEntity(new DateTime("2013-06-25T01:15:52.600Z").toDate(),
-                new DateTime("2013-06-25T01:16:20.847Z").toDate()));
-        return result;
+    public List<TimeMeasurement> getTimeMeasurementsAfterDateByProcedure(Date date, Procedure procedure) {
+        TypedQuery<TimeMeasurement> query = entityManager.createQuery(
+                "SELECT a FROM TimeMeasurementEntity a where a.procedure = :procedure AND a.multiContext.start >= :start", TimeMeasurement.class);
+        query.setParameter("procedure", procedure);
+        query.setParameter("start", date);
 
+        return query.getResultList();
     }
 
     public Procedure getEqualPersistedProcedure(Procedure procedure) {
