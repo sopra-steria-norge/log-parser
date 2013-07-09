@@ -42,8 +42,8 @@ public class PerformanceLogRoute extends RouteBuilder {
                 //.split(body())
 //                .choice().when(body().isInstanceOf(no.osl.cdms.profile.api.Procedure.class))
                 .bean(this, "print")
-                .bean(logRepository, "persistNewTimeMeasurement")
-//                .to("jpa:" + body().getClass().toString() + "?usePersist=true")
+//                .bean(logRepository, "persistNewTimeMeasurement")
+                .to("jpa:" + body().getClass().toString() + "?usePersist=true")
                 .routeId(PERFORMANCE_LOG_ROUTE_ID);
     }
 

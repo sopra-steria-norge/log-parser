@@ -59,7 +59,7 @@ public class EntityFactory {
     }
 
     public Procedure createProcedure(String className, String methodName) {
-        return createProcedure("", className, methodName);
+        return createProcedure(null, className, methodName);
     }
 
     public Procedure createProcedure(String name, String className, String methodName) {
