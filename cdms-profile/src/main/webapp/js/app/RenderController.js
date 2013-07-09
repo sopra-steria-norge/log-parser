@@ -19,7 +19,7 @@ var RenderController = function(args)
 		this.renderer.addEventListener('click', function(e){
 
 			$(this.offset).find('button').prop('disabled', false); // enables all offset radio buttons
-			$(this.interpolation).find('input').prop('disabled', false); // enables all interpolation radio buttons
+			$(this.interpolation).find('button').prop('disabled', false); // enables all interpolation radio buttons
 
         	if(e.srcElement.value == 'area')
         	{
@@ -32,7 +32,7 @@ var RenderController = function(args)
                 $(this.offset).find('#stack').click();
 
 				// disables all interpolation radio button as it has no effect on bar graphs
-                $(this.interpolation).find('input').prop('disabled', true);
+                $(this.interpolation).find('button').prop('disabled', true);
 
         	}
         	else if(e.srcElement.value == 'line')
@@ -54,7 +54,10 @@ var RenderController = function(args)
         {
         	this.config.offset = e.srcElement.value;
         	this.config.unstack = false;
-			if(e.srcElement.value == 'value') {this.config.unstack = true;}
+			if(e.srcElement.value == 'value')
+			{
+				this.config.unstack = true;
+			}
 			this.graph.configure(this.config);
             this.graph.render();
 
