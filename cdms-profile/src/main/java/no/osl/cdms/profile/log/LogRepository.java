@@ -2,6 +2,7 @@ package no.osl.cdms.profile.log;
 
 import no.osl.cdms.profile.api.Procedure;
 import no.osl.cdms.profile.api.MultiContext;
+import no.osl.cdms.profile.api.TimeMeasurement;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Repository;
 
@@ -20,16 +21,16 @@ public class LogRepository {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public void saveProcedure(ProcedureEntity procedureEntity) {
-        entityManager.persist(procedureEntity);
+    public void persistNewProcedure(Procedure procedure) {
+        entityManager.persist((ProcedureEntity)procedure);
     }
 
-    public void saveMultiContext(MultiContextEntity multiContextEntity) {
-        entityManager.persist(multiContextEntity);
+    public void persistNewMultiContext(MultiContext multiContext) {
+        entityManager.persist((MultiContextEntity)multiContext);
     }
 
-    public void saveTimeMeasurement(TimeMeasurementEntity timeMeasurementEntity) {
-        entityManager.persist(timeMeasurementEntity);
+    public void persistNewTimeMeasurement(TimeMeasurement timeMeasurement) {
+        entityManager.persist((TimeMeasurementEntity)timeMeasurement);
     }
 
     public ProcedureEntity getProcedure(int id) {

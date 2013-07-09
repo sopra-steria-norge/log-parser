@@ -5,7 +5,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,7 +52,7 @@ public class LogRepositoryTest {
     public void saveProcedure_test() {
         System.out.println("saveProcedure_test");
         ProcedureEntity procedureEntity = new ProcedureEntity("testName", "testClass1", "testMethod1");
-        logRepository.saveProcedure(procedureEntity);
+        logRepository.persistNewProcedure(procedureEntity);
         assertEquals(procedureEntity, entityManager.find(ProcedureEntity.class, procedureEntity.getId()));
     }
 
@@ -65,7 +64,7 @@ public class LogRepositoryTest {
         MultiContextEntity multiContextEntity = new MultiContextEntity(new DateTime("2013-06-25T01:15:52.458Z").toDate(),
                 new DateTime("2013-06-25T01:15:52.458Z").toDate());
         multiContextEntity.addTimeMeasurement(tme);
-        logRepository.saveMultiContext(multiContextEntity);
+        logRepository.persistNewMultiContext(multiContextEntity);
         assertEquals(multiContextEntity, entityManager.find(MultiContextEntity.class, multiContextEntity.getId()));
     }
 
@@ -74,7 +73,7 @@ public class LogRepositoryTest {
         System.out.println("saveTimeMeasurement_test");
         TimeMeasurementEntity tme = new TimeMeasurementEntity(procedureEntity1, multiContextEntity1,
                 new DateTime("2013-06-25T01:15:52.458Z").toDate(), "PT0.107S");
-        logRepository.saveTimeMeasurement(tme);
+        logRepository.persistNewTimeMeasurement(tme);
         assertEquals(tme, entityManager.find(TimeMeasurementEntity.class, tme.getId()));
     }
 

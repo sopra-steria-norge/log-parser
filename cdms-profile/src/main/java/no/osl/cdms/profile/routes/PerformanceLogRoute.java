@@ -2,9 +2,11 @@ package no.osl.cdms.profile.routes;
 
 import no.osl.cdms.profile.api.TimeMeasurement;
 import no.osl.cdms.profile.factories.EntityFactory;
+import no.osl.cdms.profile.log.LogRepository;
 import no.osl.cdms.profile.log.TimeMeasurementEntity;
 import no.osl.cdms.profile.parser.LogLineRegexParser;
 import org.apache.camel.builder.RouteBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Map;
 
@@ -22,11 +24,12 @@ public class PerformanceLogRoute extends RouteBuilder {
     private static final String DATABASE_ENDPOINT = "jpa:";
 
 
-    //private LogRepository logRepository;
+    @Autowired
+    private LogRepository logRepository;
 
-    /*public void setLogRepository(LogRepository logRepository) {
+    public void setLogRepository(LogRepository logRepository) {
         this.logRepository = logRepository;
-    }*/
+    }
 
     @Override
     public void configure() throws Exception{
@@ -45,7 +48,7 @@ public class PerformanceLogRoute extends RouteBuilder {
                 //.split(body())
 //                .choice().when(body().isInstanceOf(no.osl.cdms.profile.api.Procedure.class))
                 .bean(this, "print")
-                //.bean(logRepository, "saveTimeMeasurement")
+//                .bean(logRepository, "persistNewTimeMeasurement")
                 .to("jpa:" + body().getClass().toString() + "?usePersist=true")
                 //.to(DATABASE_ENDPOINT)                        // Adds log entries to database
 
@@ -76,7 +79,7 @@ public class PerformanceLogRoute extends RouteBuilder {
     }
 
     public Object print (TimeMeasurementEntity timeMeasurementEntity) {
-        System.err.println(timeMeasurementEntity.getProcedure().toString());
+        System.err.println(timeMeasurementEntity.getProcedure());
         return timeMeasurementEntity;
     }
 

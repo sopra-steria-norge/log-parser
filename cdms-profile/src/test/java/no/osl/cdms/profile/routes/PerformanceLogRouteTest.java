@@ -24,13 +24,14 @@ public class PerformanceLogRouteTest extends CamelSpringTestSupport {
 
     PerformanceLogRoute performanceLogRoute;
 
-    @Autowired
-    private LogRepository logRepository;
+//    @Autowired
+//    private LogRepository logRepository;
 
     @Before
     public void setup() throws Exception {
 //        performanceLogRoute = new PerformanceLogRoute();
-//        EntityFactory.getInstance().setLogRepository(logRepository);
+////        performanceLogRoute.setLogRepository(logRepository);
+////        EntityFactory.getInstance().setLogRepository(logRepository);
 //        context.setTracing(true);
 //        context.addRoutes(performanceLogRoute);
 //        context.start();
