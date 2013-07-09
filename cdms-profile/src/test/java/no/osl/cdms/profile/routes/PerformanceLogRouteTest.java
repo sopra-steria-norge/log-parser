@@ -18,35 +18,34 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-//@RunWith(SpringJUnit4ClassRunner.class)
-//@ContextConfiguration(value = {"classpath:META-INF/spring/cdms-profile-ctx.xml",
-//        "classpath:test-cdms-profile-infra-ctx.xml"})
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(value = {"classpath:META-INF/spring/cdms-profile-ctx.xml",
+        "classpath:test-cdms-profile-infra-ctx.xml"})
 public class PerformanceLogRouteTest extends CamelSpringTestSupport {
 
     PerformanceLogRoute performanceLogRoute;
 
-//    @Autowired
-//    private LogRepository logRepository;
+    @Autowired
+    private LogRepository logRepository;
 
     @Before
     public void setup() throws Exception {
-        //performanceLogRoute = new PerformanceLogRoute();
-        //performanceLogRoute.setLogRepository(mock(LogRepository.class));
-        //performanceLogRoute.setLogRepository(logRepository);
-        //context.setTracing(true);
-        //context.addRoutes(performanceLogRoute);
-        //context.start();
+        performanceLogRoute = new PerformanceLogRoute();
+        EntityFactory.getInstance().setLogRepository(logRepository);
+        context.setTracing(true);
+        context.addRoutes(performanceLogRoute);
+        context.start();
     }
 
     @Test
     public void routeTest() throws Exception {
-        //Thread.sleep(1000);
-        //assert(true);
+        Thread.sleep(1000);
+        assert(true);
     }
 
     @After
     public void tearDown() throws Exception {
-        //context.stop();
+        context.stop();
     }
 
     @Override
