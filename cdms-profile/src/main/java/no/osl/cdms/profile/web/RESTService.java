@@ -50,7 +50,7 @@ public class RESTService extends HttpServlet {
     Logger logger = Logger.getLogger(getClass().getName());
 
     @GET
-    @Path("percentile/{procedureId}")
+    @Path("getPercentiles/{procedureId}")
     @Produces("application/json")
     public String getPercentiles(@PathParam("procedureId") String procedureId, @QueryParam("from") String from,
                                  @QueryParam("to") String to) {
@@ -64,24 +64,23 @@ public class RESTService extends HttpServlet {
 
     @GET
     @Path("test")
-    @Produces("application/json")
+    @Produces("text/plain")
     public String test() {
         return "hello, world";
     }
 
     @GET
-    @Path("procedures")
+    @Path("getProcedures")
     @Produces("application/json")
-    public String procedures() {
+    public String getProcedures() {
         return toJSON(dataRetriever.getAllProcedures());
     }
 
-
     @GET
-    @Path("timeMeasurementsAfterDate/{procedureId}")
+    @Path("getTimeMeasurementsBetweenDates/{procedureId}")
     @Produces("application/json")
-    public String getTimeMeasurement(@PathParam("procedureId") String procedureId, @QueryParam("from") String from,
-                                     @QueryParam("to") String to) {
+    public String getTimeMeasurementsBetweenDates(@PathParam("procedureId") String procedureId,
+                                                  @QueryParam("from") String from, @QueryParam("to") String to) {
         int procedureIdInt = Integer.parseInt(procedureId);
         return toJSON(dataRetriever.getTimeMeasurementBetweenDatesByProcedure(procedureIdInt, from, to));
     }
