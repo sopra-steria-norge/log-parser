@@ -5,9 +5,6 @@ import no.osl.cdms.profile.log.MultiContextEntity;
 
 import java.util.Date;
 
-/**
- * User: apalfi
- */
 public interface TimeMeasurement extends Comparable<TimeMeasurement>{
 
     int getId();

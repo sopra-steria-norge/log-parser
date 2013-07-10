@@ -1,21 +1,12 @@
 package no.osl.cdms.profile.log;
 
-import com.google.common.collect.Lists;
 import no.osl.cdms.profile.api.MultiContext;
-import no.osl.cdms.profile.api.TimeMeasurement;
 
 import javax.persistence.*;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 import java.util.Date;
-import java.util.List;
 
-/**
- * User: apalfi
- */
 @Entity
 @Table(name = "CDM_PROFILE_MULTICONTEXT")
-@XmlRootElement
 public class MultiContextEntity implements MultiContext{
 
     @Column(name = "MULTICONTEXT_ID")

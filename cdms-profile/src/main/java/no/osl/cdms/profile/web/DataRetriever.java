@@ -1,6 +1,5 @@
 package no.osl.cdms.profile.web;
 
-import no.osl.cdms.profile.api.MultiContext;
 import no.osl.cdms.profile.api.Procedure;
 import no.osl.cdms.profile.api.TimeMeasurement;
 import no.osl.cdms.profile.log.LogRepository;
@@ -20,12 +19,12 @@ public class DataRetriever {
 
     }
 
-    public List<TimeMeasurement> getTimeMeasurementAfterDateByProcedure(int procedureId, String date) {
-        if (!isQueryInCache("getTimeMeasurementAfterDateByProcedure:" + procedureId + ":" + date)) {
+    public List<TimeMeasurement> getTimeMeasurementAfterDateByProcedure(int procedureId, String jodatimedate) {
+        if (!isQueryInCache("getTimeMeasurementAfterDateByProcedure:" + procedureId + ":" + jodatimedate)) {
             Procedure procedure = logRepository.getProcedure(procedureId);
-            return logRepository.getTimeMeasurementsAfterDateByProcedure(new DateTime(date).toDate(), procedure);
+            return logRepository.getTimeMeasurementsAfterDateByProcedure(new DateTime(jodatimedate).toDate(), procedure);
         }
-        return (List<TimeMeasurement>) getFromCache("getTimeMeasurementAfterDateByProcedure:" + procedureId + ":" + date);
+        return (List<TimeMeasurement>) getFromCache("getTimeMeasurementAfterDateByProcedure:" + procedureId + ":" + jodatimedate);
 
     }
 

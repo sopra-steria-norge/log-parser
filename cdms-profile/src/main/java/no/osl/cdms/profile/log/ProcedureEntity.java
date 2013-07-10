@@ -1,15 +1,8 @@
 package no.osl.cdms.profile.log;
 
-import com.google.common.collect.Lists;
 import no.osl.cdms.profile.api.Procedure;
-import no.osl.cdms.profile.api.TimeMeasurement;
-
 import javax.persistence.*;
-import java.util.List;
 
-/**
- * User: apalfi
- */
 @Entity
 @Table(name = "CDM_PROFILE_PROCEDURE")
 public class ProcedureEntity implements Procedure {

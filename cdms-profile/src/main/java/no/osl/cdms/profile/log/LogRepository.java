@@ -13,9 +13,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-/**
- * User: apalfi
- */
 @Repository
 public class LogRepository {
 

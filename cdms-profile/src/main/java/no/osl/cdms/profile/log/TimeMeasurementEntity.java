@@ -1,17 +1,12 @@
 package no.osl.cdms.profile.log;
 
 import no.osl.cdms.profile.api.TimeMeasurement;
-
 import javax.persistence.*;
-
 import org.joda.time.convert.ConverterManager;
 import org.joda.time.convert.DurationConverter;
 
 import java.util.Date;
 
-/**
- * User: apalfi
- */
 @Entity
 @Table(name = "CDM_PROFILE_TIMEMEASUREMENT")
 public class TimeMeasurementEntity implements TimeMeasurement {
