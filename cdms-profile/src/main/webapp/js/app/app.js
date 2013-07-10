@@ -38,5 +38,3 @@ $(function() {
 		console.log(e.date);
 	})
 });
-
-//$('#toDateTimePicker').setEndDate($('#toDateTimePicker').getDate());

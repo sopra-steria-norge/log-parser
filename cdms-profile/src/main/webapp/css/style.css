@@ -5,17 +5,18 @@ section{
 }
 
 
-#side_panel{
+.side_panel{
 	padding: 0px 20px 20px 40px;
 	width: 290px;
 	display: inline-block;
 	vertical-align: top;
 }
-#side_panel h1{
+
+.side_panel h1{
 	font-size: 20px;
 }
 
-#side_panel label{
+.side_panel label{
 	font-size: 12px;
 	margin: 0px 0px 0px 0px;
 	display: inline-block;

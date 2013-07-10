@@ -1,12 +1,12 @@
 var app = app || {};
 
 app.MultiContext = Backbone.RelationalModel.extend({
+	idAttribute: '_id',
+    urlRoot: '/rest/multicontext/',
 	initialize: function(options) {
 
 	},
 
-	idAttribute: 'id',
-	urlRoot: '/rest/multicontext/',
 	url: function(){
 		// TODO: Define url
 		return "SomeURL"
