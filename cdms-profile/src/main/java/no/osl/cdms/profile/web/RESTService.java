@@ -53,11 +53,24 @@ public class RESTService extends HttpServlet {
     @Path("getPercentiles/{procedureId}")
     @Produces("application/json")
     public String getPercentiles(@PathParam("procedureId") String procedureId, @QueryParam("from") String from,
-                                 @QueryParam("to") String to) {
-        int[] percentages = {10,20,30,40,50,60,70,80,90}; // TODO do not hardcode this
+                                 @QueryParam("to") String to, @QueryParam("percentages") String percentages) {
+        int[] percentagesArray;
+        if (percentages == null) {
+            percentagesArray = new int[] {10,20,30,40,50,60,70,80,90,100};
+        } else {
+            String[] tmp = percentages.split(",");
+            percentagesArray = new int[tmp.length];
+            for (int i=0; i<tmp.length; i++) {
+                try {
+                    percentagesArray[i] = Integer.parseInt(tmp[i].replace(" ", ""));
+                } catch (NumberFormatException e) {
+                    logger.debug("Percentage '"+tmp[i]+"' from user input could not be parsed into int");
+                }
+            }
+        }
 
         int procedureIdInt = Integer.parseInt(procedureId);
-        String[] percentiles = dataRetriever.getPercentileByProcedure(procedureIdInt, from, to, percentages);
+        String[] percentiles = dataRetriever.getPercentileByProcedure(procedureIdInt, from, to, percentagesArray);
 
         return toJSON(percentiles);
     }
