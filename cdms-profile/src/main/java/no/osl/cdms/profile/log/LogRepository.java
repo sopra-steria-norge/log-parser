@@ -46,9 +46,10 @@ public class LogRepository {
 
     public List<TimeMeasurement> getTimeMeasurementsAfterDateByProcedure(Date date, Procedure procedure) {
         TypedQuery<TimeMeasurement> query = entityManager.createQuery(
-                "SELECT a FROM TimeMeasurementEntity a where a.procedure = :procedure AND a.multiContext.start >= :start", TimeMeasurement.class);
+                "SELECT a FROM TimeMeasurementEntity a where a.procedure = :procedure AND a.timestamp >= :timestamp" +
+                        "", TimeMeasurement.class);
         query.setParameter("procedure", procedure);
-        query.setParameter("start", date);
+        query.setParameter("timestamp", date);
 
         return query.getResultList();
     }

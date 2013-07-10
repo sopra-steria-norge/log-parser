@@ -44,11 +44,11 @@ public class LogRepositoryTest {
                 new DateTime("2011-06-25T01:15:52.700").toDate());
 
         timeMeasurementEntity1 = new TimeMeasurementEntity(procedureEntity1, multiContextEntity1,
-                new DateTime("2011-06-25T01:15:52.458Z").toDate(), "PT0.017S");
+                new DateTime("2013-06-25T01:15:52.458Z").toDate(), "PT0.017S");
         timeMeasurementEntity2 = new TimeMeasurementEntity(procedureEntity2, multiContextEntity1,
                 new DateTime("2013-06-25T01:15:52.458Z").toDate(), "PT0.107S");
         timeMeasurementEntity3 = new TimeMeasurementEntity(procedureEntity1, multiContextEntity2,
-                new DateTime("2013-06-25T01:15:52.458Z").toDate(), "PT0.107S");
+                new DateTime("2007-06-25T01:15:52.458Z").toDate(), "PT0.107S");
 
         entityManager.persist(timeMeasurementEntity1);
         entityManager.persist(timeMeasurementEntity2);
@@ -106,7 +106,7 @@ public class LogRepositoryTest {
     }
 
     @Test
-    public void getTimeMeasurementsAfterDate_test() {
+    public void getTimeMeasurementsAfterDateByProcedure_test() {
         System.out.println("getTimeMeasurementsAfterDate_test");
         Date date = new DateTime("2012-06-25T01:15:52.458Z").toDate();
         assertTrue(logRepository.getTimeMeasurementsAfterDateByProcedure(date, procedureEntity1).size() == 1);
