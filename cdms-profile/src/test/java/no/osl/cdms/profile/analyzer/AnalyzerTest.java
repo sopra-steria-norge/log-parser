@@ -143,6 +143,33 @@ public class AnalyzerTest {
     }
 
     @Test
+     public void testPercentile2() {
+        System.out.println("percentile 50");
+        int k = 50;
+        double expResult = 77.0;
+        double result = analyzer.percentile(id, k);
+        assertEquals(expResult, result, 0.0);
+    }
+
+    @Test
+    public void testPercentile3() {
+        System.out.println("percentile 0");
+        int k = 0;
+        double expResult = 43.0;
+        double result = analyzer.percentile(id, k);
+        assertEquals(expResult, result, 0.0);
+    }
+
+    @Test
+    public void testPercentile4() {
+        System.out.println("percentile 100");
+        int k = 100;
+        double expResult = 99.0;
+        double result = analyzer.percentile(id, k);
+        assertEquals(expResult, result, 0.0);
+    }
+
+    @Test
     public void testPercentile_null() {
         System.out.println("percentile 20_null");
         String id = "not";

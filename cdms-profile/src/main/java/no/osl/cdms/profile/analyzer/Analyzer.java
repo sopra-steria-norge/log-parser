@@ -78,6 +78,8 @@ public class Analyzer implements DataAnalyzer {
             return 0;
         }
         List<TimeMeasurement> tms = new ArrayList<TimeMeasurement>(col);
+        if (k == 0) return converter.getDurationMillis(tms.get(0).getDuration());
+        if (k == 100) return converter.getDurationMillis(tms.get(tms.size() - 1).getDuration());
         double ind = k / 100.0 * tms.size();
         if (ind == (int) ind) {
             return (converter.getDurationMillis(tms.get((int) ind).getDuration()) + converter.getDurationMillis(tms.get((int) (ind - 1)).getDuration())) / 2;
