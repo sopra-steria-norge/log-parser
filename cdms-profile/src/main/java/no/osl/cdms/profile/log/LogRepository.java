@@ -3,13 +3,11 @@ package no.osl.cdms.profile.log;
 import no.osl.cdms.profile.api.Procedure;
 import no.osl.cdms.profile.api.MultiContext;
 import no.osl.cdms.profile.api.TimeMeasurement;
-import org.joda.time.DateTime;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -44,12 +42,22 @@ public class LogRepository {
     }
 
 
-    public List<TimeMeasurement> getTimeMeasurementsAfterDateByProcedure(Date date, Procedure procedure) {
+    public List<TimeMeasurement> getTimeMeasurementsByProcedure(Date fromDate, Date toDate, Procedure procedure) {
         TypedQuery<TimeMeasurement> query = entityManager.createQuery(
-                "SELECT a FROM TimeMeasurementEntity a where a.procedure = :procedure AND a.timestamp >= :timestamp" +
-                        "", TimeMeasurement.class);
+                "SELECT a FROM TimeMeasurementEntity a where a.procedure = :procedure AND a.timestamp >= :fromDate" +
+                        " AND a.timestamp <= :toDate", TimeMeasurement.class);
         query.setParameter("procedure", procedure);
-        query.setParameter("timestamp", date);
+        query.setParameter("fromDate", fromDate);
+        query.setParameter("toDate", toDate);
+
+        return query.getResultList();
+    }
+
+    public List<TimeMeasurement> getTimeMeasurementsByProcedure(Procedure procedure) {
+        TypedQuery<TimeMeasurement> query = entityManager.createQuery(
+                "SELECT a FROM TimeMeasurementEntity a where a.procedure = :procedure",
+                TimeMeasurement.class);
+        query.setParameter("procedure", procedure);
 
         return query.getResultList();
     }

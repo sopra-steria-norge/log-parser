@@ -30,6 +30,7 @@ public class LogRepositoryTest {
 
     private ProcedureEntity procedureEntity1, procedureEntity2;
     private TimeMeasurementEntity timeMeasurementEntity1, timeMeasurementEntity2, timeMeasurementEntity3;
+    private TimeMeasurementEntity timeMeasurementEntity4;
     private MultiContextEntity multiContextEntity1, multiContextEntity2;
 
     @Before
@@ -49,10 +50,13 @@ public class LogRepositoryTest {
                 new DateTime("2013-06-25T01:15:52.458Z").toDate(), "PT0.107S");
         timeMeasurementEntity3 = new TimeMeasurementEntity(procedureEntity1, multiContextEntity2,
                 new DateTime("2007-06-25T01:15:52.458Z").toDate(), "PT0.107S");
+        timeMeasurementEntity4 = new TimeMeasurementEntity(procedureEntity1, multiContextEntity2,
+                new DateTime().plusDays(1).toDate(), "PT0.107S");
 
         entityManager.persist(timeMeasurementEntity1);
         entityManager.persist(timeMeasurementEntity2);
         entityManager.persist(timeMeasurementEntity3);
+        entityManager.persist(timeMeasurementEntity4);
 
 
     }
@@ -106,12 +110,21 @@ public class LogRepositoryTest {
     }
 
     @Test
-    public void getTimeMeasurementsAfterDateByProcedure_test() {
-        System.out.println("getTimeMeasurementsAfterDate_test");
+    public void getTimeMeasurementsByProcedure_test1() {
+        System.out.println("getTimeMeasurementsByProcedure_test1");
         Date date = new DateTime("2012-06-25T01:15:52.458Z").toDate();
-        assertTrue(logRepository.getTimeMeasurementsAfterDateByProcedure(date, procedureEntity1).size() == 1);
-        assertTrue(logRepository.getTimeMeasurementsAfterDateByProcedure(date, procedureEntity1).contains(timeMeasurementEntity1));
-        assertFalse(logRepository.getTimeMeasurementsAfterDateByProcedure(date, procedureEntity1).contains(timeMeasurementEntity3));
+        assertTrue(logRepository.getTimeMeasurementsByProcedure(date, new DateTime().toDate(), procedureEntity1).size() == 1);
+        assertTrue(logRepository.getTimeMeasurementsByProcedure(date, new DateTime().toDate(), procedureEntity1).contains(timeMeasurementEntity1));
+        assertFalse(logRepository.getTimeMeasurementsByProcedure(date, new DateTime().toDate(), procedureEntity1).contains(timeMeasurementEntity3));
+
+    }
+
+    @Test
+    public void getTimeMeasurementsByProcedure_test2() {
+        System.out.println("getTimeMeasurementsByProcedure_test2");
+        assertTrue(logRepository.getTimeMeasurementsByProcedure(procedureEntity1).size() == 3);
+        assertTrue(logRepository.getTimeMeasurementsByProcedure(procedureEntity1).contains(timeMeasurementEntity1));
+        assertTrue(logRepository.getTimeMeasurementsByProcedure(procedureEntity1).contains(timeMeasurementEntity3));
 
     }
 
