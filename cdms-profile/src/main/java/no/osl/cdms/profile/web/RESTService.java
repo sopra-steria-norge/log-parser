@@ -64,15 +64,20 @@ public class RESTService extends HttpServlet {
                 try {
                     percentagesArray[i] = Integer.parseInt(tmp[i].replace(" ", ""));
                 } catch (NumberFormatException e) {
-                    logger.debug("Percentage '"+tmp[i]+"' from user input could not be parsed into int");
+                    logger.debug("Percentage '"+tmp[i]+"' from user input could not be parsed into int. Percentage ignored.");
                 }
             }
         }
 
-        int procedureIdInt = Integer.parseInt(procedureId);
-        String[] percentiles = dataRetriever.getPercentileByProcedure(procedureIdInt, from, to, percentagesArray);
+        try {
+            int procedureIdInt = Integer.parseInt(procedureId);
+            String[] percentiles = dataRetriever.getPercentileByProcedure(procedureIdInt, from, to, percentagesArray);
 
-        return toJSON(percentiles);
+            return toJSON(percentiles);
+        } catch (NumberFormatException e) {
+            logger.debug("procedureId '" + procedureId + "' from user input could not be parsed into int");
+            return "415 Unsupported Media Type";
+        }
     }
 
     @GET
@@ -94,8 +99,13 @@ public class RESTService extends HttpServlet {
     @Produces("application/json")
     public String getTimeMeasurementsBetweenDates(@PathParam("procedureId") String procedureId,
                                                   @QueryParam("from") String from, @QueryParam("to") String to) {
-        int procedureIdInt = Integer.parseInt(procedureId);
-        return toJSON(dataRetriever.getTimeMeasurementBetweenDatesByProcedure(procedureIdInt, from, to));
+        try {
+            int procedureIdInt = Integer.parseInt(procedureId);
+            return toJSON(dataRetriever.getTimeMeasurementBetweenDatesByProcedure(procedureIdInt, from, to));
+        } catch (NumberFormatException e) {
+            logger.debug("procedureId '" + procedureId + "' from user input could not be parsed into int");
+            return "415 Unsupported Media Type";
+        }
     }
 
 //
