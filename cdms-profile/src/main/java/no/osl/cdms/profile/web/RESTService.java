@@ -69,6 +69,13 @@ public class RESTService extends HttpServlet {
         return "hello, world";
     }
 
+    @GET
+    @Path("procedures")
+    @Produces("application/json")
+    public String procedures() {
+        return toJSON(dataRetriever.getAllProcedures());
+    }
+
 
     @GET
     @Path("timeMeasurementsAfterDate/{procedureId}")
@@ -129,10 +136,5 @@ public class RESTService extends HttpServlet {
             logger.fatal(null, ex);
             throw new IllegalArgumentException();
         }
-    }
-
-    public static void main (String[] args) {
-        double[] a = {0.1,0.2,0.3,0.4};
-
     }
 }

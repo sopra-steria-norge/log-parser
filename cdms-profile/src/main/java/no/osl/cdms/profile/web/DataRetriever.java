@@ -4,6 +4,7 @@ import no.osl.cdms.profile.analyzer.Analyzer;
 import no.osl.cdms.profile.api.Procedure;
 import no.osl.cdms.profile.api.TimeMeasurement;
 import no.osl.cdms.profile.log.LogRepository;
+import no.osl.cdms.profile.log.ProcedureEntity;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,14 @@ public class DataRetriever {
 
     public DataRetriever() {
 
+    }
+
+    public List<ProcedureEntity> getAllProcedures(){
+        List<ProcedureEntity> procedures = (List<ProcedureEntity>) getFromCache("getAllProcedures");
+        if (procedures == null) {
+            procedures = logRepository.getAllProcedures();
+        }
+        return procedures;
     }
 
     public List<TimeMeasurement> getTimeMeasurementAfterDateByProcedure(int procedureId, String jodadatetime) {
