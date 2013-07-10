@@ -31,7 +31,7 @@ public class DataRetriever {
     }
 
     public List<TimeMeasurement> getTimeMeasurementBetweenDatesByProcedure(int procedureId, String jodadatetimeFrom,
-                                                                           String jodadatetimeTo) {
+                                                               String jodadatetimeTo) throws IllegalArgumentException{
         if (jodadatetimeTo == null) {
             jodadatetimeTo = new DateTime().toString();
         }
@@ -48,8 +48,8 @@ public class DataRetriever {
 
     }
 
-    public String[] getPercentileByProcedure(int procedureId, String fromDate, String toDate, int[] percentages) {
-
+    public String[] getPercentileByProcedure(int procedureId, String fromDate, String toDate, int[] percentages)
+                                                                             throws IllegalArgumentException {
         String cacheQuery = "getPercentileByProcedure:" + fromDate + ":" + toDate;
         for(double d : percentages) {
             cacheQuery += ":" + d;

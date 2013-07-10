@@ -49,6 +49,21 @@ public class RESTService extends HttpServlet {
 
     Logger logger = Logger.getLogger(getClass().getName());
 
+
+    @GET
+    @Path("test")
+    @Produces("text/plain")
+    public String test() {
+        return "hello, world";
+    }
+
+    @GET
+    @Path("getProcedures")
+    @Produces("application/json")
+    public String getProcedures() {
+        return toJSON(dataRetriever.getAllProcedures());
+    }
+
     @GET
     @Path("getPercentiles/{procedureId}")
     @Produces("application/json")
@@ -72,26 +87,15 @@ public class RESTService extends HttpServlet {
         try {
             int procedureIdInt = Integer.parseInt(procedureId);
             String[] percentiles = dataRetriever.getPercentileByProcedure(procedureIdInt, from, to, percentagesArray);
-
             return toJSON(percentiles);
+
         } catch (NumberFormatException e) {
             logger.debug("procedureId '" + procedureId + "' from user input could not be parsed into int");
             return "415 Unsupported Media Type";
+        } catch (IllegalArgumentException e) {
+            logger.debug("Timestamp '" + from + "' or '" + to +  "' from user input could not be parsed into Date");
+            return "415 Unsupported Media Type";
         }
-    }
-
-    @GET
-    @Path("test")
-    @Produces("text/plain")
-    public String test() {
-        return "hello, world";
-    }
-
-    @GET
-    @Path("getProcedures")
-    @Produces("application/json")
-    public String getProcedures() {
-        return toJSON(dataRetriever.getAllProcedures());
     }
 
     @GET
@@ -104,6 +108,9 @@ public class RESTService extends HttpServlet {
             return toJSON(dataRetriever.getTimeMeasurementBetweenDatesByProcedure(procedureIdInt, from, to));
         } catch (NumberFormatException e) {
             logger.debug("procedureId '" + procedureId + "' from user input could not be parsed into int");
+            return "415 Unsupported Media Type";
+        } catch (IllegalArgumentException e) {
+            logger.debug("Timestamp '" + from + "' or '" + to +  "' from user input could not be parsed into Date");
             return "415 Unsupported Media Type";
         }
     }
