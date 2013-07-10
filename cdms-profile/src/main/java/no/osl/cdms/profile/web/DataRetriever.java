@@ -30,13 +30,19 @@ public class DataRetriever {
         return procedures;
     }
 
-    public List<TimeMeasurement> getTimeMeasurementAfterDateByProcedure(int procedureId, String jodadatetime) {
-        List<TimeMeasurement> timeMeasurements = (List<TimeMeasurement>) getFromCache("getTimeMeasurementAfterDateByProcedure:"
-                + procedureId + ":" + jodadatetime);
+    public List<TimeMeasurement> getTimeMeasurementBetweenDatesByProcedure(int procedureId, String jodadatetimeFrom,
+                                                                           String jodadatetimeTo) {
+        if (jodadatetimeTo == null) {
+            jodadatetimeTo = new DateTime().toString();
+        }
+
+        List<TimeMeasurement> timeMeasurements = (List<TimeMeasurement>)
+                getFromCache("getTimeMeasurementBetweenDatesByProcedure:"+ procedureId + ":" + jodadatetimeFrom + ":" +
+                jodadatetimeTo);
         if (timeMeasurements == null) {
             Procedure procedure = logRepository.getProcedure(procedureId);
-            return logRepository.getTimeMeasurementsByProcedure(new DateTime(jodadatetime).toDate(),
-                    new DateTime().toDate(), procedure);
+            return logRepository.getTimeMeasurementsByProcedure(new DateTime(jodadatetimeFrom).toDate(),
+                    new DateTime(jodadatetimeTo).toDate(), procedure);
         }
         return timeMeasurements;
 

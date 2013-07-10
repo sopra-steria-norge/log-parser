@@ -80,9 +80,10 @@ public class RESTService extends HttpServlet {
     @GET
     @Path("timeMeasurementsAfterDate/{procedureId}")
     @Produces("application/json")
-    public String getTimeMeasurement(@PathParam("procedureId") String procedureId, @QueryParam("from") String from) {
+    public String getTimeMeasurement(@PathParam("procedureId") String procedureId, @QueryParam("from") String from,
+                                     @QueryParam("to") String to) {
         int procedureIdInt = Integer.parseInt(procedureId);
-        return toJSON(dataRetriever.getTimeMeasurementAfterDateByProcedure(procedureIdInt, from));
+        return toJSON(dataRetriever.getTimeMeasurementBetweenDatesByProcedure(procedureIdInt, from, to));
     }
 
 //

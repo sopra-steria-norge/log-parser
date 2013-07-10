@@ -54,7 +54,7 @@ public class DataRetrieverTest {
     }
 
     @Test
-    public void getTimeMeasurementAfterDateByProcedure_test() {
+    public void getTimeMeasurementBetweenDatesByProcedure_test() {
         System.out.println("getTimeMeasurementAfterDateByProcedure_test");
 
 
@@ -62,7 +62,8 @@ public class DataRetrieverTest {
         expected.add(timeMeasurement);
         expected.add(timeMeasurement2);
 
-        List<TimeMeasurement> tm = dataRetriever.getTimeMeasurementAfterDateByProcedure(procedure.getId(), "2011-06-25T01:15:52.458Z");
+        List<TimeMeasurement> tm = dataRetriever.getTimeMeasurementBetweenDatesByProcedure(procedure.getId(),
+                "2011-06-25T01:15:52.458Z", "2013-06-25T01:15:52.458Z");
         assertEquals(expected, tm);
 
     }
