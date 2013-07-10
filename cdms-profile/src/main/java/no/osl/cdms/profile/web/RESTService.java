@@ -2,6 +2,10 @@ package no.osl.cdms.profile.web;
 
 import java.io.IOException;
 import java.io.StringWriter;
+
+import no.osl.cdms.profile.api.MultiContext;
+import no.osl.cdms.profile.log.MultiContextEntity;
+import no.osl.cdms.profile.log.ProcedureEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.HttpServlet;
@@ -30,6 +34,14 @@ import org.joda.time.DateTime;
 @Path("rest")
 public class RESTService extends HttpServlet {
     static int idCounter = 1;
+    static int procedureCounter = 1;
+    static int multiContextCounter = 1;
+    static ProcedureEntity[] procedures = {new ProcedureEntity(null, "Total", null),
+            new ProcedureEntity(null, "IcwMessageProcessorBean", "process"),
+            new ProcedureEntity(null, "FlightServiceImpl", "process"),
+            new ProcedureEntity(null, "Wait", null),
+            new ProcedureEntity(null, "Milestone", "execute"),
+            new ProcedureEntity(null, "UpdateMessageFactory", "createUpdatesForPublishing")};
     @Autowired
     DataRetriever dataRetriever;
 
@@ -47,24 +59,34 @@ public class RESTService extends HttpServlet {
 //        System.out.println("Autowired: "+dataRetriever);
 //        String response = toJSON(dataRetriever.getMultiContextsAfterTimestamp(new DateTime().toString()));
 //        System.out.println("Serialized data: "+response);
-        
+
         StringBuilder sb = new StringBuilder();
-        sb.append("[");        
-        for (int i = 0; i < 10; i++)sb.append(createSingle()).append(",");
+        sb.append("[");
+        for (int i = 0; i < 6; i++)sb.append(createSingle()).append(",");
         sb.replace(sb.length()-1, sb.length(), "]");
         resp.getWriter().write(sb.toString());
+        procedureCounter = 1;
+        multiContextCounter++;
     }
-    private static String createSingle() {
+    private String createSingle() {
+        MultiContextEntity mc = new MultiContextEntity(new DateTime("2013-06-25T01:15:52.458Z").toDate(),
+                new DateTime("2013-06-25T01:15:52.578Z").toDate());
+        ProcedureEntity pro = procedures[procedureCounter - 1];
+        pro.setId(procedureCounter);
+        mc.setId(multiContextCounter);
         StringBuilder sb = new StringBuilder();
         sb.append("{");
-        sb.append("id: ").append(idCounter).append(",");
-        sb.append("multiContext: 1,");
-        sb.append("timestamp: '2013-06-25 00:32:05,105',");
-        sb.append("duration: 'PT0.").append((int)(Math.random()*1000)).append("S'");
+        sb.append("id:").append(idCounter).append(",");
+        sb.append("procedure:").append(toJSON(pro)).append(",");
+        sb.append("multiContext:").append(toJSON(mc)).append(",");
+        sb.append("timestamp:").append(new DateTime().plusMillis(idCounter).getMillis()).append(",");
+        sb.append("duration:'").append((int)(Math.random()*1000)).append("'");
         sb.append("}");
+        idCounter++;
+        procedureCounter++;
         return sb.toString();
     }
-    private String toJSON(Object o) {
+    private  String toJSON(Object o) {
         try {
             StringWriter writer = new StringWriter();
             ObjectMapper mapper = new ObjectMapper();
