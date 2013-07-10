@@ -1,12 +1,9 @@
 var app = app || {};
 
-app.Measured = Backbone.Model.extend({
-
+app.Procedure = Backbone.Model.extend({
+	idAttribute: '_id',
+    urlRoot: '/rest/procedure/',
 	initialize: function(options){
 
 	},
-
-	idAttribute: 'id',
-	urlRoot:''
-
 });
