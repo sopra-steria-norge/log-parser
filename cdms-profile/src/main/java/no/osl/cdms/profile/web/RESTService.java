@@ -2,16 +2,18 @@ package no.osl.cdms.profile.web;
 
 import java.io.IOException;
 import java.io.StringWriter;
-
 import no.osl.cdms.profile.api.MultiContext;
 import no.osl.cdms.profile.log.MultiContextEntity;
 import no.osl.cdms.profile.log.ProcedureEntity;
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.Path;
+import javax.ws.rs.*;
+
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.map.MappingJsonFactory;
@@ -31,7 +33,7 @@ import org.joda.time.DateTime;
  |-> Create json data with [name: "name" and data[{x: , y:},{x: , y: }]]
  */
 
-@Path("rest")
+@Path("/")
 public class RESTService extends HttpServlet {
     static int idCounter = 1;
     static int procedureCounter = 1;
@@ -46,6 +48,36 @@ public class RESTService extends HttpServlet {
     DataRetriever dataRetriever;
 
     Logger logger = Logger.getLogger(getClass().getName());
+
+    @GET
+    @Path("percentile/{procedureId}")
+    @Produces("application/json")
+    public String getPercentiles(@PathParam("procedureId") String procedureId, @QueryParam("from") String from,
+                                 @QueryParam("to") String to) {
+        int[] percentages = {10,20,30,40,50,60,70,80,90}; // TODO do not hardcode this
+
+        int procedureIdInt = Integer.parseInt(procedureId);
+        String[] percentiles = dataRetriever.getPercentileByProcedure(procedureIdInt, from, to, percentages);
+
+        return toJSON(percentiles);
+    }
+
+    @GET
+    @Path("test")
+    @Produces("application/json")
+    public String test() {
+        return "hello, world";
+    }
+
+
+    @GET
+    @Path("timeMeasurementsAfterDate/{procedureId}")
+    @Produces("application/json")
+    public String getTimeMeasurement(@PathParam("procedureId") String procedureId, @QueryParam("from") String from) {
+        int procedureIdInt = Integer.parseInt(procedureId);
+        return toJSON(dataRetriever.getTimeMeasurementAfterDateByProcedure(procedureIdInt, from));
+    }
+
 //
 //    @GET
 //    @Path("multicontext")
@@ -97,5 +129,10 @@ public class RESTService extends HttpServlet {
             logger.fatal(null, ex);
             throw new IllegalArgumentException();
         }
+    }
+
+    public static void main (String[] args) {
+        double[] a = {0.1,0.2,0.3,0.4};
+
     }
 }
