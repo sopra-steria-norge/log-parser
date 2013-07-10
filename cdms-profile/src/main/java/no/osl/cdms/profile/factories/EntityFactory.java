@@ -63,8 +63,11 @@ public class EntityFactory {
     }
 
     public Procedure createProcedure(String name, String className, String methodName) {
+        if (name != null && name.equals("")) name = null;
+        if (className != null && className.equals("")) className = null;
+        if (methodName != null && methodName.equals("")) methodName = null;
         Procedure newProcedure = new ProcedureEntity(name, className, methodName);
-        Procedure existingProcedure = logRepository.getEqualProcedure(newProcedure);
+        Procedure existingProcedure = logRepository.getEqualPersistedProcedure(newProcedure);
 
         if (existingProcedure != null) return existingProcedure;
         return newProcedure;

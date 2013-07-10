@@ -1,21 +1,12 @@
 package no.osl.cdms.profile.log;
 
-import com.google.common.collect.Lists;
 import no.osl.cdms.profile.api.MultiContext;
-import no.osl.cdms.profile.api.TimeMeasurement;
 
 import javax.persistence.*;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 import java.util.Date;
-import java.util.List;
 
-/**
- * User: apalfi
- */
 @Entity
 @Table(name = "CDM_PROFILE_MULTICONTEXT")
-@XmlRootElement
 public class MultiContextEntity implements MultiContext{
 
     @Column(name = "MULTICONTEXT_ID")
@@ -30,11 +21,6 @@ public class MultiContextEntity implements MultiContext{
     @Column(name = "END_TIME")
     private Date end;
 
-    @XmlTransient
-    @OneToMany(mappedBy = "multiContext", targetEntity = TimeMeasurementEntity.class,
-            fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private List<TimeMeasurementEntity> timeMeasurements;
-
     public MultiContextEntity() {
 
     }
@@ -42,7 +28,6 @@ public class MultiContextEntity implements MultiContext{
     public MultiContextEntity(Date start, Date end) {
         this.start = start;
         this.end = end;
-        this.timeMeasurements = Lists.newLinkedList();
     }
 
     public int getId() {
@@ -67,17 +52,5 @@ public class MultiContextEntity implements MultiContext{
 
     public void setEnd(Date end) {
         this.end = end;
-    }
-
-    public List<TimeMeasurementEntity> getTimeMeasurements() {
-        return timeMeasurements;
-    }
-
-    public void setTimeMeasurements(List<TimeMeasurementEntity> timeMeasurements) {
-        this.timeMeasurements = timeMeasurements;
-    }
-
-    public void addTimeMeasurement(TimeMeasurement timeMeasurement) {
-        timeMeasurement.setMultiContext(this);
     }
 }

@@ -1,17 +1,12 @@
 package no.osl.cdms.profile.log;
 
 import no.osl.cdms.profile.api.TimeMeasurement;
-
 import javax.persistence.*;
-
 import org.joda.time.convert.ConverterManager;
 import org.joda.time.convert.DurationConverter;
 
 import java.util.Date;
 
-/**
- * User: apalfi
- */
 @Entity
 @Table(name = "CDM_PROFILE_TIMEMEASUREMENT")
 public class TimeMeasurementEntity implements TimeMeasurement {
@@ -62,7 +57,6 @@ public class TimeMeasurementEntity implements TimeMeasurement {
 
     public void setProcedure(ProcedureEntity procedure) {
         this.procedure = procedure;
-        procedure.getTimeMeasurements().add(this);
     }
 
     public MultiContextEntity getMultiContext() {
@@ -71,9 +65,6 @@ public class TimeMeasurementEntity implements TimeMeasurement {
 
     public void setMultiContext(MultiContextEntity multiContextMeasurement) {
         this.multiContext = multiContextMeasurement;
-        if (multiContextMeasurement != null){
-            multiContextMeasurement.getTimeMeasurements().add(this);
-        }
     }
 
     public Date getTimestamp() {

@@ -29,7 +29,7 @@ public class EntitiesTest {
 
     private ProcedureEntity procedureEntity;
     private MultiContextEntity multiContextEntity;
-    private TimeMeasurementEntity timeMeasurementEntity, timeMeasurementEntity2;
+    private TimeMeasurementEntity timeMeasurementEntity;
 
     @Before
     public void before() {
@@ -38,44 +38,18 @@ public class EntitiesTest {
                 new DateTime("2013-06-25T01:16:18.900Z").toDate());
         timeMeasurementEntity = new TimeMeasurementEntity(procedureEntity, multiContextEntity,
                 new DateTime("2013-06-25T01:16:18.847Z").toDate(), "PT0.017S");
-        timeMeasurementEntity2 = new TimeMeasurementEntity(procedureEntity, multiContextEntity,
-                new DateTime("2013-06-25T01:16:18.847Z").toDate(), "PT0.017S");
 
-        entityManager.persist(procedureEntity);
-        entityManager.persist(multiContextEntity);
-
-    }
-
-    @Test
-    public void persisting_procedure_should_cascade_persist() {
-        System.out.println("persisting_procedure_should_cascade_persist");
-        ProcedureEntity procedure = entityManager.find(ProcedureEntity.class, procedureEntity.getId());
-        assertTrue(procedure.getTimeMeasurements().size() == procedureEntity.getTimeMeasurements().size());
-        assertEquals(procedure.getTimeMeasurements().get(0), entityManager.find(TimeMeasurementEntity.class,
-                procedure.getTimeMeasurements().get(0).getId()));
-    }
-
-    @Test
-    public void persisting_multicontext_should_cascade_persist() {
-        System.out.println("persisting_multicontext_should_cascade_persist");
-        MultiContextEntity multiContext = entityManager.find(MultiContextEntity.class, multiContextEntity.getId());
-        assertTrue(multiContext.getTimeMeasurements().size() == multiContextEntity.getTimeMeasurements().size());
-        assertEquals(timeMeasurementEntity2, entityManager.find(TimeMeasurementEntity.class,
-                multiContext.getTimeMeasurements().get(1).getId()));
+        entityManager.persist(timeMeasurementEntity);
     }
 
     @Test
     public void persisting_timemeasurement_should_cascade_persist() {
         System.out.println("persisting_timemeasurement_should_cascade_persist");
-        ProcedureEntity procedure = new ProcedureEntity("name", "class", "method");
-        MultiContextEntity mce = new MultiContextEntity(new DateTime("2013-06-25T01:16:18.999Z").toDate(),
-                new DateTime("2013-06-25T01:16:18.999Z").toDate());
-        TimeMeasurementEntity tme = new TimeMeasurementEntity(procedure, mce,
-                new DateTime("2013-06-25T01:16:18.999Z").toDate(), "duration");
 
-        entityManager.persist(tme);
-        assertEquals(tme.getMultiContext(), entityManager.find(MultiContextEntity.class, mce.getId()));
-        assertEquals(tme.getProcedure(), entityManager.find(ProcedureEntity.class, procedure.getId()));
+        assertEquals(timeMeasurementEntity.getMultiContext(), entityManager.find(MultiContextEntity.class,
+                multiContextEntity.getId()));
+        assertEquals(timeMeasurementEntity.getProcedure(), entityManager.find(ProcedureEntity.class,
+                procedureEntity.getId()));
 
     }
 

@@ -1,12 +1,5 @@
 package no.osl.cdms.profile.api;
 
-import no.osl.cdms.profile.log.TimeMeasurementEntity;
-
-import java.util.List;
-
-/**
- * User: apalfi
- */
 public interface Procedure {
 
     int getId();
@@ -25,14 +18,8 @@ public interface Procedure {
 
     void setMethod(String method);
 
-    List<TimeMeasurementEntity> getTimeMeasurements();
-
-    void setTimeMeasurements(List<TimeMeasurementEntity> timeMeasurements);
-
     public boolean equals(Object obj);
 
     @Override
     public int hashCode();
-
-    void addTimeMeasurement(TimeMeasurement timeMeasurement);
 }

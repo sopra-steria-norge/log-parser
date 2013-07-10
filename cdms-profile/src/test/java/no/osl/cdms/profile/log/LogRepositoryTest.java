@@ -12,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import java.util.Date;
+
 import static junit.framework.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -27,8 +29,8 @@ public class LogRepositoryTest {
     private LogRepository logRepository;
 
     private ProcedureEntity procedureEntity1, procedureEntity2;
-    private TimeMeasurementEntity timeMeasurementEntity1, timeMeasurementEntity2;
-    private MultiContextEntity multiContextEntity1;
+    private TimeMeasurementEntity timeMeasurementEntity1, timeMeasurementEntity2, timeMeasurementEntity3;
+    private MultiContextEntity multiContextEntity1, multiContextEntity2;
 
     @Before
     public void before() {
@@ -38,39 +40,45 @@ public class LogRepositoryTest {
 
         multiContextEntity1 = new MultiContextEntity(new DateTime("2013-06-25T01:15:52.458Z").toDate(),
                 new DateTime("2013-06-25T01:15:52.700").toDate());
+        multiContextEntity2 = new MultiContextEntity(new DateTime("2011-06-25T01:15:52.458Z").toDate(),
+                new DateTime("2011-06-25T01:15:52.700").toDate());
+
         timeMeasurementEntity1 = new TimeMeasurementEntity(procedureEntity1, multiContextEntity1,
                 new DateTime("2013-06-25T01:15:52.458Z").toDate(), "PT0.017S");
         timeMeasurementEntity2 = new TimeMeasurementEntity(procedureEntity2, multiContextEntity1,
                 new DateTime("2013-06-25T01:15:52.458Z").toDate(), "PT0.107S");
+        timeMeasurementEntity3 = new TimeMeasurementEntity(procedureEntity1, multiContextEntity2,
+                new DateTime("2007-06-25T01:15:52.458Z").toDate(), "PT0.107S");
+
         entityManager.persist(timeMeasurementEntity1);
         entityManager.persist(timeMeasurementEntity2);
+        entityManager.persist(timeMeasurementEntity3);
 
 
     }
 
     @Test
-    public void saveProcedure_test() {
-        System.out.println("saveProcedure_test");
+    public void persistNewProcedure_test() {
+        System.out.println("persistNewProcedure_test");
         ProcedureEntity procedureEntity = new ProcedureEntity("testName", "testClass1", "testMethod1");
         logRepository.persistNewProcedure(procedureEntity);
         assertEquals(procedureEntity, entityManager.find(ProcedureEntity.class, procedureEntity.getId()));
     }
 
     @Test
-    public void saveMultiContext_test() {
-        System.out.println("saveMultiContext_test");
+    public void persistNewMultiContext_test() {
+        System.out.println("persistNewMultiContext_test");
         TimeMeasurementEntity tme = new TimeMeasurementEntity(procedureEntity1, multiContextEntity1,
                 new DateTime("2013-06-25T01:15:52.458Z").toDate(), "PT0.107S");
         MultiContextEntity multiContextEntity = new MultiContextEntity(new DateTime("2013-06-25T01:15:52.458Z").toDate(),
                 new DateTime("2013-06-25T01:15:52.458Z").toDate());
-        multiContextEntity.addTimeMeasurement(tme);
         logRepository.persistNewMultiContext(multiContextEntity);
         assertEquals(multiContextEntity, entityManager.find(MultiContextEntity.class, multiContextEntity.getId()));
     }
 
     @Test
-    public void saveTimeMeasurement_test() {
-        System.out.println("saveTimeMeasurement_test");
+    public void persistNewTimeMeasurement_test() {
+        System.out.println("persistNewTimeMeasurement_test");
         TimeMeasurementEntity tme = new TimeMeasurementEntity(procedureEntity1, multiContextEntity1,
                 new DateTime("2013-06-25T01:15:52.458Z").toDate(), "PT0.107S");
         logRepository.persistNewTimeMeasurement(tme);
@@ -96,4 +104,16 @@ public class LogRepositoryTest {
         assertEquals(logRepository.getTimeMeasurement(timeMeasurementEntity1.getId()), timeMeasurementEntity1);
         assertEquals(logRepository.getTimeMeasurement(timeMeasurementEntity2.getId()), timeMeasurementEntity2);
     }
+
+    @Test
+    public void getTimeMeasurementsAfterDateByProcedure_test() {
+        System.out.println("getTimeMeasurementsAfterDate_test");
+        Date date = new DateTime("2012-06-25T01:15:52.458Z").toDate();
+        assertTrue(logRepository.getTimeMeasurementsAfterDateByProcedure(date, procedureEntity1).size() == 1);
+        assertTrue(logRepository.getTimeMeasurementsAfterDateByProcedure(date, procedureEntity1).contains(timeMeasurementEntity1));
+        assertFalse(logRepository.getTimeMeasurementsAfterDateByProcedure(date, procedureEntity1).contains(timeMeasurementEntity3));
+
+    }
+
+
 }
