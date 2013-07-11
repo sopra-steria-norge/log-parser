@@ -76,11 +76,17 @@ public class RESTService extends HttpServlet {
         mc.setId(multiContextCounter);
         StringBuilder sb = new StringBuilder();
         sb.append("{");
-        sb.append("id:").append(idCounter).append(",");
-        sb.append("procedure:").append(toJSON(pro)).append(",");
-        sb.append("multiContext:").append(toJSON(mc)).append(",");
-        sb.append("timestamp:").append(new DateTime().plusMillis(idCounter).getMillis()).append(",");
-        sb.append("duration:'").append((int)(Math.random()*1000)).append("'");
+        sb.append("\"id\":").append(idCounter).append(",");
+        sb.append("\"procedure\":").append(toJSON(pro)).append(",");
+        sb.append("\"multiContext\":").append(toJSON(mc)).append(",");
+        sb.append("\"timestamp\":").append(new DateTime().getMillis()).append(",");
+        if(pro.getClassName().equals("Total")){
+            sb.append("\"duration\":").append((int)(Math.random()*1000+2000));
+        }
+        else{
+
+            sb.append("\"duration\":").append((int)(Math.random()*1000));
+        }
         sb.append("}");
         idCounter++;
         procedureCounter++;

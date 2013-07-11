@@ -1,51 +1,36 @@
 var app = app || {};
 
 app.GraphView = Backbone.View.extend({
-	el: '#graph',
 
-	initialize: function(){
-		this.render();
+	initialize: function(element, legend, height, width, series){
+		this.el = element;
+		this.leg = legend;
+		this.height = height;
+		this.width = width;
+		this.series = series;
+		this.graph = null;
 	},
 
 	render: function(){
-
-        var recSeries = ["Receive", [{x:0.5, y:0.008}, {x:0.8, y:0.012}, {x:0.9, y:0.014}, {x:0.95, y:0.017}, {x:1, y:0.05}]];
-        var stoSeries = ["Store", [{x:0.5, y:0.008}, {x:0.8, y:0.011}, {x:0.9, y:0.014}, {x:0.95, y:0.017}, {x:1, y:0.07}]];
-        var waitSeries = ["Wait", [{x:0.5, y:0.658}, {x:0.8, y:4.981}, {x:0.9, y:18.4668}, {x:0.95, y:50.22915}, {x:1, y:60}]];
 
         var palette = new Rickshaw.Color.Palette({scheme: 'spectrum2000'})
 
         var graph = new Rickshaw.Graph(
         {
-                element: this.el,
+                element: this.el[0],
                 renderer: 'area',
                 offset: 'stack',
-                width: 1000,
-                height: 800,
+                width: this.width,
+                height: this.height,
                 stroke: true,
                 preserve: true,
                 padding: { top: 0.06, right: 0.0, bottom: 0.08, left: 0.00 },
-                series:
-                [
-                	{
-                        data: recSeries[1],
-                        color: palette.color(),
-                        name: recSeries[0]
-                    },
-                    {
-                    	data: stoSeries[1],
-                    	color: palette.color(),
-                    	name: stoSeries[0]
-                    },
-                    {
-                    	name: waitSeries[0],
-                    	color: palette.color(),
-                    	data: waitSeries[1]
-                    }
-                ]
+                series: this.series
         } );
 
-        var x_axis = new Rickshaw.Graph.Axis.X(
+        this.graph = graph;
+
+        var x_axis = new Rickshaw.Graph.Axis.Time(
         {
         	graph: graph,
         	ticksTreatment: 'glow'
@@ -70,7 +55,7 @@ app.GraphView = Backbone.View.extend({
 
         var legend = new Rickshaw.Graph.Legend(
         {
-        	element: document.querySelector('#legend'),
+        	element: this.leg[0],
         	graph: graph
         });
 

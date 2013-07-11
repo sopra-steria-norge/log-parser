@@ -2,7 +2,7 @@ var app = app || {};
 
 app.TimeMeasurement = Backbone.RelationalModel.extend({
 	idAttribute: '_id',
-    urlRoot: '/rest/timemeasurement/',
+    urlRoot: '/rest/',
 	relations: [{
 		type: Backbone.HasOne,
 		key: 'procedureID',
@@ -22,16 +22,21 @@ app.TimeMeasurement = Backbone.RelationalModel.extend({
 		collectionType: 'app.MultiContexts',
 		reverseRelation: {
 			type: Backbone.HasMany,
-			key: 'timeMeasurement'
+			key: 'timeMeasurement',
 			includeInJSON: '_id'
 		}
 	}],
 
-	initialize: function(options){
-
+	defaults: {
+		id: 0,
+		procedure: null,
+		multicontext: null,
+		timestamp: 0,
+		duration: 0
 	},
 
-	url: function(){
+	initialize: function(options){
+		console.log(options)
+	},
 
-	}
 });

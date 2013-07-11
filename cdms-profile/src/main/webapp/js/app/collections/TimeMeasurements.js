@@ -1,5 +1,7 @@
 var app = app || {};
 
 app.TimeMeasurements = Backbone.Collection.extend({
-	model: app.Measured
+	model: app.TimeMeasurement,
+	url: "/rest/",
+
 });

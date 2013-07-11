@@ -23,27 +23,28 @@ section{
 
 }
 
-#graph_container {
+.graph_container {
 	position: relative;
 	display: inline-block;
 	border: 0px solid #aaaaaa;
 }
 
-#graph {
-	display: inline-block;
+.graph {
+	display: inline-block
+	float: right;
+	border: 0px solid #aaaaaa;
+	padding: 0px 0px 0px 0px;
 }
 
-#legend{
+.legend{
+	position: relative;
 	display: inline-block;
 	background: white;
 	color: black;
 }
-#legend container{
-	position: absolute;
-}
 
 .rickshaw_graph svg{
-	display:block;
+	display: inline-block;
 	overflow:visible;
 }
 
@@ -60,7 +61,6 @@ section{
 	opacity: 0.4;
 }
 
-
 .detail_swatch {
 	float: right;
 	display: inline-block;
@@ -71,7 +71,5 @@ section{
 
 #y_axis {
 	position: relative;
-	top: 0;
-	bottom: 0;
-	width: 0px;
+
 }
