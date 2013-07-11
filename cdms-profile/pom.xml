@@ -348,6 +348,11 @@
             <artifactId>spring-osgi-core</artifactId>
             <version>${org.springframework.osgi.spring-osgi-core.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-core-asl</artifactId>
+            <version>1.9.5</version>
+        </dependency>
     </dependencies>
 
 

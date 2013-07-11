@@ -4,6 +4,7 @@ import no.osl.cdms.profile.analyzer.Analyzer;
 import no.osl.cdms.profile.api.Procedure;
 import no.osl.cdms.profile.api.TimeMeasurement;
 import no.osl.cdms.profile.log.LogRepository;
+import no.osl.cdms.profile.log.ProcedureEntity;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,20 +22,34 @@ public class DataRetriever {
 
     }
 
-    public List<TimeMeasurement> getTimeMeasurementAfterDateByProcedure(int procedureId, String jodadatetime) {
-        List<TimeMeasurement> timeMeasurements = (List<TimeMeasurement>) getFromCache("getTimeMeasurementAfterDateByProcedure:"
-                + procedureId + ":" + jodadatetime);
+    public List<ProcedureEntity> getAllProcedures(){
+        List<ProcedureEntity> procedures = (List<ProcedureEntity>) getFromCache("getAllProcedures");
+        if (procedures == null) {
+            procedures = logRepository.getAllProcedures();
+        }
+        return procedures;
+    }
+
+    public List<TimeMeasurement> getTimeMeasurementBetweenDatesByProcedure(int procedureId, String jodadatetimeFrom,
+                                                               String jodadatetimeTo) throws IllegalArgumentException{
+        if (jodadatetimeTo == null) {
+            jodadatetimeTo = new DateTime().toString();
+        }
+
+        List<TimeMeasurement> timeMeasurements = (List<TimeMeasurement>)
+                getFromCache("getTimeMeasurementBetweenDatesByProcedure:"+ procedureId + ":" + jodadatetimeFrom + ":" +
+                jodadatetimeTo);
         if (timeMeasurements == null) {
             Procedure procedure = logRepository.getProcedure(procedureId);
-            return logRepository.getTimeMeasurementsByProcedure(new DateTime(jodadatetime).toDate(),
-                    new DateTime().toDate(), procedure);
+            return logRepository.getTimeMeasurementsByProcedure(new DateTime(jodadatetimeFrom).toDate(),
+                    new DateTime(jodadatetimeTo).toDate(), procedure);
         }
         return timeMeasurements;
 
     }
 
-    public String[] getPercentileByProcedure(int procedureId, String fromDate, String toDate, int[] percentages) {
-
+    public String[] getPercentileByProcedure(int procedureId, String fromDate, String toDate, int[] percentages)
+                                                                             throws IllegalArgumentException {
         String cacheQuery = "getPercentileByProcedure:" + fromDate + ":" + toDate;
         for(double d : percentages) {
             cacheQuery += ":" + d;

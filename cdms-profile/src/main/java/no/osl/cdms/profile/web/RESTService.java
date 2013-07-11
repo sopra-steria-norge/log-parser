@@ -2,16 +2,18 @@ package no.osl.cdms.profile.web;
 
 import java.io.IOException;
 import java.io.StringWriter;
-
 import no.osl.cdms.profile.api.MultiContext;
 import no.osl.cdms.profile.log.MultiContextEntity;
 import no.osl.cdms.profile.log.ProcedureEntity;
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.Path;
+import javax.ws.rs.*;
+
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.map.MappingJsonFactory;
@@ -31,7 +33,7 @@ import org.joda.time.DateTime;
  |-> Create json data with [name: "name" and data[{x: , y:},{x: , y: }]]
  */
 
-@Path("rest")
+@Path("/")
 public class RESTService extends HttpServlet {
     static int idCounter = 1;
     static int procedureCounter = 1;
@@ -46,6 +48,73 @@ public class RESTService extends HttpServlet {
     DataRetriever dataRetriever;
 
     Logger logger = Logger.getLogger(getClass().getName());
+
+
+    @GET
+    @Path("test")
+    @Produces("text/plain")
+    public String test() {
+        return "hello, world";
+    }
+
+    @GET
+    @Path("getProcedures")
+    @Produces("application/json")
+    public String getProcedures() {
+        return toJSON(dataRetriever.getAllProcedures());
+    }
+
+    @GET
+    @Path("getPercentiles/{procedureId}")
+    @Produces("application/json")
+    public String getPercentiles(@PathParam("procedureId") String procedureId, @QueryParam("from") String from,
+                                 @QueryParam("to") String to, @QueryParam("percentages") String percentages) {
+        int[] percentagesArray;
+        if (percentages == null) {
+            percentagesArray = new int[] {10,20,30,40,50,60,70,80,90,100};
+        } else {
+            String[] tmp = percentages.split(",");
+            percentagesArray = new int[tmp.length];
+            for (int i=0; i<tmp.length; i++) {
+                try {
+                    percentagesArray[i] = Integer.parseInt(tmp[i].replace(" ", ""));
+                } catch (NumberFormatException e) {
+                    logger.debug("Percentage '"+tmp[i]+"' from user input could not be parsed into int. Percentage ignored.");
+                }
+            }
+        }
+
+        try {
+            int procedureIdInt = Integer.parseInt(procedureId);
+            String[] percentiles = dataRetriever.getPercentileByProcedure(procedureIdInt, from, to, percentagesArray);
+            return toJSON(percentiles);
+
+        } catch (NumberFormatException e) {
+            logger.debug("procedureId '" + procedureId + "' from user input could not be parsed into int");
+            return "415 Unsupported Media Type";
+        } catch (IllegalArgumentException e) {
+            logger.debug("Timestamp '" + from + "' or '" + to +  "' from user input could not be parsed into Date");
+            return "415 Unsupported Media Type";
+        }
+    }
+
+    @GET
+    @Path("getTimeMeasurementsBetweenDates/{procedureId}")
+    @Produces("application/json")
+    public String getTimeMeasurementsBetweenDates(@PathParam("procedureId") String procedureId,
+                                                  @QueryParam("from") String from, @QueryParam("to") String to) {
+        try {
+            int procedureIdInt = Integer.parseInt(procedureId);
+            return toJSON(dataRetriever.getTimeMeasurementBetweenDatesByProcedure(procedureIdInt, from, to));
+        } catch (NumberFormatException e) {
+            logger.debug("procedureId '" + procedureId + "' from user input could not be parsed into int");
+            return "415 Unsupported Media Type";
+        } catch (IllegalArgumentException e) {
+            logger.debug("Timestamp '" + from + "' or '" + to +  "' from user input could not be parsed into Date");
+            return "415 Unsupported Media Type";
+        }
+    }
+
 //
 //    @GET
 //    @Path("multicontext")

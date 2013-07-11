@@ -76,4 +76,15 @@ public class LogRepository {
             return null;
         }
     }
+
+    public List<ProcedureEntity> getAllProcedures() {
+        TypedQuery<ProcedureEntity> query = entityManager.createQuery(
+                "SELECT a FROM ProcedureEntity a", ProcedureEntity.class);
+        try {
+            return query.getResultList();
+        } catch (javax.persistence.NoResultException e) {
+            return new java.util.ArrayList<ProcedureEntity>();
+        }
+
+    }
 }
