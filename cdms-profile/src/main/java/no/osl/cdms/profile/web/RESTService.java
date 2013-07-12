@@ -2,6 +2,8 @@ package no.osl.cdms.profile.web;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -146,9 +148,10 @@ public class RESTService extends HttpServlet{
         ProcedureEntity pro = procedures[procedureCounter - 1];
         pro.setId(procedureCounter);
         mc.setId(multiContextCounter);
-        TimeMeasurementEntity tm = new TimeMeasurementEntity(pro, mc, new DateTime().toDate(), "" + new Duration((int)Math.random()*1000).toString());
+        TimeMeasurementEntity tm = new TimeMeasurementEntity(pro, mc, new DateTime().toDate(),
+                new Duration((int)(Math.random()*1000)).toString());
         if(pro.getClassName().equals("Total")){
-            tm.setDuration((int) (Math.random() * 1000 + 2000) + "");
+            tm.setDuration(new Duration((int) (Math.random() * 1000 + 2000)).toString());
         }
         idCounter++;
         procedureCounter++;
@@ -160,6 +163,8 @@ public class RESTService extends HttpServlet{
             StringWriter writer = new StringWriter();
             ObjectMapper mapper = new ObjectMapper();
             JsonGenerator jsonGenerator = new MappingJsonFactory().createJsonGenerator(writer);
+            DateFormat myDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z',SSS");
+            mapper.setDateFormat(myDateFormat);
             mapper.writeValue(writer, o);
             return writer.toString();
         } catch (Exception ex) {
