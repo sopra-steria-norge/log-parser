@@ -61,6 +61,20 @@ $('.dropdown-toggle').dropdown();
 $('.nav-tabs').button();
 
 $(function() {
+	$('.nav').on('click', "li" , function(e){
+		var that = $(this);
+		$('.active').toggleClass('active');
+		that.toggleClass('active');
+		$('.applicationContainer').html('');
+		var pb = new PageBuilder({
+                url: 'rest/getLayout/'+that.data("pagename"),
+                container: $('.applicationContainer')
+        })
+	});
+});
+
+
+$(function() {
 	var date = new Date();
     $('#fromDateTimePicker')
     .datetimepicker({
