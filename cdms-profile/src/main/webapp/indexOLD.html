@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Profile</title>
+	<meta charset="utf-8">
+	<link type="text/css" rel="stylesheet" href="css/bootstrap.css">
+	<link type="text/css" rel="stylesheet" href="css/bootstrap-datetimepicker.min.css">
+	<link type="text/css" rel="stylesheet" href="css/rickshaw.css">
+	<link type="text/css" rel="stylesheet" href="css/style.css">
+
+</head>
+<body>
+	<div class="navbar">
+		<div class="navbar-inner">
+			<a class="brand" href="#home">Cdms-Profile</a>
+			<ul class="nav">
+				<li class="active"><a href="#home">Home</a></li>
+				<li><a href="#today">Today</a></li>
+				<li><a href="#3">This Week</a> </li>
+				<li><a href="#4">Last Two Weeks</a></li>
+			</ul>
+		</div>
+	</div>
+	<div class="content">
+		<form class=side_panel>
+			<h1>View Selection</h1>
+			<section>
+				<div class="legend" id="legend1"></div>
+			</section>
+			<div class="accordion" id="accordion">
+				<div class="accordion-group">
+					<div class="accordion-heading">
+						<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+							Data Selection
+						</a>
+					</div>
+					<div id="collapseOne" class="accordion-body collapse in">
+						<div class="accordion-inner">
+							<div class="dropdown">
+								<button class="btn dropdown-toggle" data-toggle="dropdown">Quick Selection<span class="caret"></span></button>
+								<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+									<li class="dropdown-submenu">
+										<a tabindex="-1" href="#">Last</a>
+										<ul class="dropdown-menu">
+											<li><a tabindex="-1" href="#">Hour</a></li>
+											<li><a tabindex="-1" href="#">6 Hours</a></li>
+											<li><a tabindex="-1" href="#">12 Hours</a></li>
+											<li><a tabindex="-1" href="#">Day</a></li>
+											<li><a tabindex="-1" href="#">Week</a></li>
+											<li><a tabindex="-1" href="#">Month</a></li>
+										</ul>
+									</li>
+									<li><a tabindex="-1" href="#">Percentile</a></li>
+								</ul>
+							</div>
+							<h6>From</h6>
+							<div id="fromDateTimePicker" class="input-append date">
+								<input data-format="dd/MM/yyyy hh:mm:ss" readonly type="text"></input>
+								<span class="add-on">
+									<i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar"></i>
+								</span>
+							</div>
+							<h6>To</h6>
+							<div id="toDateTimePicker" class="input-append date">
+								<input data-format="dd/MM/yyyy hh:mm:ss" readonly type="text"></input>
+								<span class="add-on">
+									<i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar"></i>
+								</span>
+							</div>
+							<button type="button" class="btn btn-success">Update Graph</button>
+						</div>
+					</div>
+				</div>
+				<div class="accordion-group">
+					<div class="accordion-heading">
+						<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+							Rendering options
+						</a>
+					</div>
+					<div id="collapseTwo" class="accordion-body collapse">
+						<div class="accordion-inner">
+							<h6>Rendering</h6>
+							<div id="renderer_options" class="options btn-group" data-toggle="buttons-radio">
+								<button type="button" class="btn active" name="renderer" id="area" value="area">Area</button>
+								<button type="button" class="btn" name="renderer" id="bar" value="bar">Bar</button>
+								<button type="button" class="btn" name="renderer" id="line" value="line">Line</button>
+							</div>
+							<h6>Offset</h6>
+							<div id="offset_options" class="options btn-group" data-toggle="buttons-radio">
+								<button type="button" class="btn active" name="offset" id="stack" value="zero">Stack</button>
+								<button type="button" class="btn" name="offset" id="stream" value="wiggle">Stream</button>
+								<button type="button" class="btn" name="offset" id="pct" value="expand">Percent</button>
+								<button type="button" class="btn" name="offset" id="value" value="value">Value</button>
+							</div>
+							<h6>Interpolation</h6>
+							<div id="interpolation_options" class="options btn-group" data-toggle="buttons-radio">
+								<button type="button" class="btn active" name="interpolation" id="cardinal" value="cardinal">Cardinal</button>
+								<button type="button" class="btn" name="interpolation" id="linear" value="linear">Linear</button>
+								<button type="button" class="btn" name="interpolation" id="step" value="step-before">Step</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+		<div class="graph_container">
+			<!--<div class="legend" id="legend1"><p>legend1</p></div>-->
+			<div class="graph" id="graph1"></div>
+		</div>
+
+	</div>
+	<script type="text/javascript" src="js/external/jquery-1.10.1.js"></script>
+	<script type="text/javascript" src="js/external/jquery-ui.js"></script>
+	<script type="text/javascript" src="js/external/d3.v2.js"></script>
+	<script type="text/javascript" src="js/external/rickshaw.js"></script>
+	<script type="text/javascript" src="js/external/underscore.js"></script>
+	<script type="text/javascript" src="js/external/backbone.js"></script>
+	<script type="text/javascript" src="js/external/backbone-relational.js"></script>
+	<script type="text/javascript" src="js/external/bootstrap.js"></script>
+	<script type="text/javascript" src="js/external/bootstrap-datetimepicker.min.js"></script>
+	<script type="text/javascript" src="js/external/moment.min.js"></script>
+
+	<script type="text/javascript" src="js/app/models/MultiContext.js"></script>
+	<script type="text/javascript" src="js/app/models/Procedure.js"></script>
+	<script type="text/javascript" src="js/app/models/TimeMeasurement.js"></script>
+	<script type="text/javascript" src="js/app/collections/MultiContexts.js"></script>
+	<script type="text/javascript" src="js/app/collections/Procedures.js"></script>
+	<script type="text/javascript" src="js/app/collections/TimeMeasurements.js"></script>
+	<script type="text/javascript" src="js/app/RenderController.js"></script>
+	<script type="text/javascript" src="js/app/views/GraphView.js"></script>
+	<script type="text/javascript" src="js/app/app.js"></script>
+
+</body>
+</html>

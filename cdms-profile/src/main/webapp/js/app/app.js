@@ -1,5 +1,13 @@
 var app = app || {};
 
+$(document).ready(function() {
+    var pb = new PageBuilder({
+        url: 'last24h',
+        container: $('.applicationContainer')
+    })
+});
+
+
 $(function(){
 
 	var multiContexts = new app.MultiContexts();
@@ -27,7 +35,9 @@ $(function(){
 					for (var i=0; i< view.series.length; i++){
 						if(tm.attributes.procedure.className === view.series[i].name){
 							view.series[i].data.push({x:tm.attributes.timestamp/1000 , y: tm.attributes.duration});
-
+						}
+						if(view.series[i].data.length > 50){
+							view.series[i].data.shift();
 						}
 					}
 				})
