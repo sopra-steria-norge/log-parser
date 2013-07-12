@@ -136,7 +136,7 @@ public class RESTService extends HttpServlet{
         List<TimeMeasurementEntity> tms = new ArrayList<TimeMeasurementEntity>();
         for (int i = 0; i < 6; i++) tms.add(createSingle());
 
-        resp.getWriter().write(toJSON(new DateTime(tms.get(0).getTimestamp()).toString()));
+        resp.getWriter().write(toJSON(tms));
         procedureCounter = 1;
         multiContextCounter++;
     }
