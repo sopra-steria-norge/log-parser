@@ -13,6 +13,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import java.util.Date;
+import java.util.List;
 
 import static junit.framework.Assert.*;
 
@@ -32,6 +33,7 @@ public class LogRepositoryTest {
     private TimeMeasurementEntity timeMeasurementEntity1, timeMeasurementEntity2, timeMeasurementEntity3;
     private TimeMeasurementEntity timeMeasurementEntity4;
     private MultiContextEntity multiContextEntity1, multiContextEntity2;
+    private LayoutEntity layoutEntity1, layoutEntity2;
 
     @Before
     public void before() {
@@ -53,12 +55,35 @@ public class LogRepositoryTest {
         timeMeasurementEntity4 = new TimeMeasurementEntity(procedureEntity1, multiContextEntity2,
                 new DateTime().plusDays(1).toDate(), "PT0.107S");
 
+        layoutEntity1 = new LayoutEntity("Layout 1", "layout 1 sin JSON");
+        layoutEntity2 = new LayoutEntity("Layout 2", "layout 2 sin JSON");
+
         entityManager.persist(timeMeasurementEntity1);
         entityManager.persist(timeMeasurementEntity2);
         entityManager.persist(timeMeasurementEntity3);
         entityManager.persist(timeMeasurementEntity4);
+        entityManager.persist(layoutEntity1);
+        entityManager.persist(layoutEntity2);
+    }
 
+    @Test
+    public void testLayoutEntity() {
+        boolean l1=false, l2=false;
+        List<LayoutEntity> layoutEntities = logRepository.getAllLayoutEntities();
+        for (LayoutEntity layoutEntity: layoutEntities) {
+            if (layoutEntity.equals(layoutEntity1)) l1 = true;
+            if (layoutEntity.equals(layoutEntity2)) l2 = true;
+        }
+        assertTrue(l1);
+        assertTrue(l2);
 
+        LayoutEntity fromDatabase = logRepository.getLayoutEntity(layoutEntity1.getId());
+        assertTrue(fromDatabase.equals(layoutEntity1));
+        assertFalse(fromDatabase.equals(layoutEntity2));
+
+        fromDatabase = logRepository.getLayoutEntity(layoutEntity2.getId());
+        assertTrue(fromDatabase.equals(layoutEntity2));
+        assertFalse(fromDatabase.equals(layoutEntity1));
     }
 
     @Test

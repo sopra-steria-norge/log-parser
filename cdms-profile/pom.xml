@@ -78,6 +78,7 @@
                         **/*ProcedureEntity.class,
                         **/*MultiContextEntity.class,
                         **/*TimeMeasurementEntity.class,
+                        **/*LayoutEntity.class,
                     </includes>
                     <addDefaultConstructor>true</addDefaultConstructor>
                     <enforcePropertyRestrictions>true</enforcePropertyRestrictions>

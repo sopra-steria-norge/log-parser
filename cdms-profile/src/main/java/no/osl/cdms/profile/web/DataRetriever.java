@@ -3,6 +3,7 @@ package no.osl.cdms.profile.web;
 import no.osl.cdms.profile.analyzer.Analyzer;
 import no.osl.cdms.profile.api.Procedure;
 import no.osl.cdms.profile.api.TimeMeasurement;
+import no.osl.cdms.profile.log.LayoutEntity;
 import no.osl.cdms.profile.log.LogRepository;
 import no.osl.cdms.profile.log.ProcedureEntity;
 import org.joda.time.DateTime;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class DataRetriever {
@@ -66,6 +68,18 @@ public class DataRetriever {
         return percentiles;
 
 
+    }
+
+    public List<LayoutEntity> getAllLayoutEntities() {
+         return logRepository.getAllLayoutEntities();
+    }
+
+    public Map<String, Integer> getAllLayoutEntityNames() {
+        return logRepository.getAllLayoutEntityNames();
+    }
+
+    public LayoutEntity getLayoutEntity(int id) {
+        return logRepository.getLayoutEntity(id);
     }
 
     private Object getFromCache(String query) {

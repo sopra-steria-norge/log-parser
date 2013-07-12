@@ -2,10 +2,14 @@ package no.osl.cdms.profile.web;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import no.osl.cdms.profile.api.MultiContext;
+
+import no.osl.cdms.profile.log.LayoutEntity;
 import no.osl.cdms.profile.log.MultiContextEntity;
 import no.osl.cdms.profile.log.ProcedureEntity;
-import java.util.Collection;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -49,6 +53,8 @@ public class RESTService extends HttpServlet {
 
     Logger logger = Logger.getLogger(getClass().getName());
 
+    private final String BAD_INPUT_ERROR_MESSAGE = "415 Unsupported Media Type";
+    private final String NOT_FOUND_ERROR_MESSAGE = "404 Not found";
 
     @GET
     @Path("test")
@@ -91,10 +97,10 @@ public class RESTService extends HttpServlet {
 
         } catch (NumberFormatException e) {
             logger.debug("procedureId '" + procedureId + "' from user input could not be parsed into int");
-            return "415 Unsupported Media Type";
+            return BAD_INPUT_ERROR_MESSAGE;
         } catch (IllegalArgumentException e) {
             logger.debug("Timestamp '" + from + "' or '" + to +  "' from user input could not be parsed into Date");
-            return "415 Unsupported Media Type";
+            return BAD_INPUT_ERROR_MESSAGE;
         }
     }
 
@@ -108,10 +114,57 @@ public class RESTService extends HttpServlet {
             return toJSON(dataRetriever.getTimeMeasurementBetweenDatesByProcedure(procedureIdInt, from, to));
         } catch (NumberFormatException e) {
             logger.debug("procedureId '" + procedureId + "' from user input could not be parsed into int");
-            return "415 Unsupported Media Type";
+            return BAD_INPUT_ERROR_MESSAGE;
         } catch (IllegalArgumentException e) {
             logger.debug("Timestamp '" + from + "' or '" + to +  "' from user input could not be parsed into Date");
-            return "415 Unsupported Media Type";
+            return BAD_INPUT_ERROR_MESSAGE;
+        }
+    }
+
+    /**
+     * Returns all LayoutEntity tables from the database.
+     */
+    @GET
+    @Path("getAllLayouts")
+    @Produces("application/json")
+    public String getAllLayouts() {
+        List<LayoutEntity> entities = dataRetriever.getAllLayoutEntities();
+        return toJSON(entities);
+    }
+
+    /**
+     * Returns a map from the database mapping all layout names into their respective IDs.
+     * The JSON layout descriptions are not included, and must be retrieved separately by
+     * getLayout(id). Alternatively, getAllLayouts can be called which does include
+     * the JSON layout descriptions.
+     */
+    @GET
+    @Path("getAllLayoutNames")
+    @Produces("application/json")
+    public String getAllLayoutNames() {
+        Map<String, Integer> names = dataRetriever.getAllLayoutEntityNames();
+        return toJSON(names);
+    }
+
+    /**
+     * Returns a LayoutEntity table by ID.
+     * @param id
+     * @return
+     */
+    @GET
+    @Path("getLayout/{id}")
+    @Produces("application/json")
+    public String getLayout(@PathParam("id") String id) {
+        try {
+            LayoutEntity entity = dataRetriever.getLayoutEntity(Integer.parseInt(id));
+            if (entity != null) {
+                return toJSON(entity);
+            } else {
+                return NOT_FOUND_ERROR_MESSAGE;
+            }
+        } catch (NumberFormatException e) {
+            logger.debug("LayoutElement ID '" + id + "' from user input could not be parsed into int");
+            return BAD_INPUT_ERROR_MESSAGE;
         }
     }
 
@@ -161,7 +214,10 @@ public class RESTService extends HttpServlet {
         procedureCounter++;
         return sb.toString();
     }
-    private  String toJSON(Object o) {
+    private String toJSON(Object o) {
+        if (o == null) {
+            return "{}";
+        }
         try {
             StringWriter writer = new StringWriter();
             ObjectMapper mapper = new ObjectMapper();
