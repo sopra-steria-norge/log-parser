@@ -128,8 +128,9 @@ public class RESTService extends HttpServlet{
     @Path("getAllLayouts")
     @Produces("application/json")
     public String getAllLayouts() {
-        List<LayoutEntity> entities = dataRetriever.getAllLayoutEntities();
-        return toJSON(entities);
+        return "This pretty layout";
+//        List<LayoutEntity> entities = dataRetriever.getAllLayoutEntities();
+//        return toJSON(entities);
     }
 
     /**
@@ -142,8 +143,9 @@ public class RESTService extends HttpServlet{
     @Path("getAllLayoutNames")
     @Produces("application/json")
     public String getAllLayoutNames() {
-        Map<String, Integer> names = dataRetriever.getAllLayoutEntityNames();
-        return toJSON(names);
+        return "All them layouts";
+//        Map<String, Integer> names = dataRetriever.getAllLayoutEntityNames();
+//        return toJSON(names);
     }
 
     /**
@@ -155,17 +157,19 @@ public class RESTService extends HttpServlet{
     @Path("getLayout/{id}")
     @Produces("application/json")
     public String getLayout(@PathParam("id") String id) {
-        try {
-            LayoutEntity entity = dataRetriever.getLayoutEntity(Integer.parseInt(id));
-            if (entity != null) {
-                return toJSON(entity);
-            } else {
-                throw new WebApplicationException(404);
-            }
-        } catch (NumberFormatException e) {
-            logger.debug("LayoutElement ID '" + id + "' from user input could not be parsed into int");
-            throw new WebApplicationException(415);
-        }
+        return "The prettiest: "+id;
+        
+//        try {
+//            LayoutEntity entity = dataRetriever.getLayoutEntity(Integer.parseInt(id));
+//            if (entity != null) {
+//                return toJSON(entity);
+//            } else {
+//                throw new WebApplicationException(404);
+//            }
+//        } catch (NumberFormatException e) {
+//            logger.debug("LayoutElement ID '" + id + "' from user input could not be parsed into int");
+//            throw new WebApplicationException(415);
+//        }
     }
 
 //
@@ -181,15 +185,16 @@ public class RESTService extends HttpServlet{
 //        System.out.println("Autowired: "+dataRetriever);
 //        String response = toJSON(dataRetriever.getMultiContextsAfterTimestamp(new DateTime().toString()));
 //        System.out.println("Serialized data: "+response);
-
-        StringBuilder sb = new StringBuilder();
-        sb.append("[");
-        List<TimeMeasurementEntity> tms = new ArrayList<TimeMeasurementEntity>();
-        for (int i = 0; i < 6; i++) tms.add(createSingle());
-
-        resp.getWriter().write(toJSON(tms));
-        procedureCounter = 1;
-        multiContextCounter++;
+        JaxRSThis jrt = new JaxRSThis(this);
+        resp.getWriter().write(jrt.invoke(req, resp));
+//        StringBuilder sb = new StringBuilder();
+//        sb.append("[");
+//        List<TimeMeasurementEntity> tms = new ArrayList<TimeMeasurementEntity>();
+//        for (int i = 0; i < 6; i++) tms.add(createSingle());
+//
+//        resp.getWriter().write(toJSON(tms));
+//        procedureCounter = 1;
+//        multiContextCounter++;
     }
     private TimeMeasurementEntity createSingle() {
         MultiContextEntity mc = new MultiContextEntity(new DateTime("2013-06-25T01:15:52.458Z").toDate(),
