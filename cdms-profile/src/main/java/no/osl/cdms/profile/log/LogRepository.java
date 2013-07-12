@@ -3,6 +3,7 @@ package no.osl.cdms.profile.log;
 import no.osl.cdms.profile.api.Procedure;
 import no.osl.cdms.profile.api.MultiContext;
 import no.osl.cdms.profile.api.TimeMeasurement;
+import org.joda.time.DateTime;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -44,13 +45,13 @@ public class LogRepository {
     }
 
 
-    public List<TimeMeasurement> getTimeMeasurementsByProcedure(Date fromDate, Date toDate, Procedure procedure) {
+    public List<TimeMeasurement> getTimeMeasurementsByProcedure(DateTime fromDate, DateTime toDate, Procedure procedure) {
         TypedQuery<TimeMeasurement> query = entityManager.createQuery(
                 "SELECT a FROM TimeMeasurementEntity a where a.procedure = :procedure AND a.timestamp >= :fromDate" +
                         " AND a.timestamp <= :toDate", TimeMeasurement.class);
         query.setParameter("procedure", procedure);
-        query.setParameter("fromDate", fromDate);
-        query.setParameter("toDate", toDate);
+        query.setParameter("fromDate", fromDate.toDate());
+        query.setParameter("toDate", toDate.toDate());
 
         return query.getResultList();
     }

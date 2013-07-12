@@ -32,26 +32,16 @@ public class DataRetriever {
         return procedures;
     }
 
-    public List<TimeMeasurement> getTimeMeasurementBetweenDatesByProcedure(int procedureId, String jodadatetimeFrom,
-                                                               String jodadatetimeTo) throws IllegalArgumentException{
-        if (jodadatetimeTo == null) {
-            jodadatetimeTo = new DateTime().toString();
+    public List<TimeMeasurement> getTimeMeasurementBetweenDatesByProcedure(int procedureId, DateTime fromDate,
+                                                               DateTime toDate){
+        if (toDate == null) {
+            toDate = new DateTime();
         }
-
-        List<TimeMeasurement> timeMeasurements = (List<TimeMeasurement>)
-                getFromCache("getTimeMeasurementBetweenDatesByProcedure:"+ procedureId + ":" + jodadatetimeFrom + ":" +
-                jodadatetimeTo);
-        if (timeMeasurements == null) {
-            Procedure procedure = logRepository.getProcedure(procedureId);
-            return logRepository.getTimeMeasurementsByProcedure(new DateTime(jodadatetimeFrom).toDate(),
-                    new DateTime(jodadatetimeTo).toDate(), procedure);
-        }
-        return timeMeasurements;
-
+        Procedure procedure = logRepository.getProcedure(procedureId);
+        return logRepository.getTimeMeasurementsByProcedure(fromDate, toDate, procedure);
     }
 
-    public String[] getPercentileByProcedure(int procedureId, String fromDate, String toDate, int[] percentages)
-                                                                             throws IllegalArgumentException {
+    public String[] getPercentileByProcedure(int procedureId, DateTime fromDate, DateTime toDate, int[] percentages) {
         String cacheQuery = "getPercentileByProcedure:" + fromDate + ":" + toDate;
         for(double d : percentages) {
             cacheQuery += ":" + d;
@@ -59,7 +49,7 @@ public class DataRetriever {
         String[] percentiles = (String[]) getFromCache(cacheQuery);
         if (percentiles == null) {
             Analyzer analyzer = new Analyzer(logRepository.getTimeMeasurementsByProcedure(
-                    new DateTime(fromDate).toDate(), new DateTime(toDate).toDate(), logRepository.getProcedure(procedureId)));
+                    new DateTime(fromDate), new DateTime(toDate), logRepository.getProcedure(procedureId)));
             percentiles = new String[percentages.length];
             for (int i = 0; i < percentages.length; i++) {
                 percentiles[i] = new Duration((long)analyzer.percentile("total", percentages[i])).toString();

@@ -12,14 +12,18 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 import no.osl.cdms.profile.api.Procedure;
 import no.osl.cdms.profile.api.TimeMeasurement;
 import no.osl.cdms.profile.factories.EntityFactory;
 import no.osl.cdms.profile.log.ProcedureEntity;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.joda.time.convert.ConverterManager;
 import org.joda.time.convert.DurationConverter;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 /**
  *
@@ -57,12 +61,14 @@ public class GuavaHelpers {
     }
 
     public static Date parseDateString(String string) {
-        Date date = null;
+
         try {
-            date = new SimpleDateFormat("yyyy-mm-dd kk:mm:ss,SSS", Locale.ENGLISH).parse(string);
+            Date date = new SimpleDateFormat("yyyy-mm-dd kk:mm:ss,SSS", Locale.ENGLISH).parse(string);
         } catch (ParseException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
+        DateTimeFormatter dtf = DateTimeFormat.forPattern("yyyy-MM-dd kk:mm:ss,SSS");
+        Date date = dtf.parseDateTime(string).toDate();
 
         return date;
     }

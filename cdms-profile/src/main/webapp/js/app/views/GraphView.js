@@ -49,7 +49,7 @@ app.GraphView = Backbone.View.extend({
         	graph: graph,
         	formatter: function(series,x,y) {
         		var swatch = '<span class="detail_swatch" style="background-color: ' + series.color + '"></span>';
-        		return swatch + series.name + "<br>x:" + parseFloat(x) + "<br>y:" + parseFloat(y);
+        		return swatch + series.name + "<br>Time:" + Date(x) + "<br>Duration:" + parseFloat(y);
         	}
         });
 
