@@ -63,7 +63,7 @@ public class DataRetrieverTest {
         expected.add(timeMeasurement2);
 
         List<TimeMeasurement> tm = dataRetriever.getTimeMeasurementBetweenDatesByProcedure(procedure.getId(),
-                "2011-06-25T01:15:52.458Z", "2013-06-25T01:15:52.458Z");
+                new DateTime("2011-06-25T01:15:52.458Z"), new DateTime("2013-06-25T01:15:52.458Z"));
         assertEquals(expected, tm);
 
     }
@@ -73,8 +73,8 @@ public class DataRetrieverTest {
         System.out.println("getPercentileByProcedure_test");
         int[] percentages = {0, 50, 87, 100};
 
-        String[] percentiles = dataRetriever.getPercentileByProcedure(procedure.getId(), "2002-06-25T01:15:52.458Z",
-                new DateTime().toString(), percentages);
+        String[] percentiles = dataRetriever.getPercentileByProcedure(procedure.getId(), new DateTime("2002-06-25T01:15:52.458Z"),
+                new DateTime(), percentages);
         String[] expected = {new Duration(107).toString(), new Duration(207).toString(),
                 new Duration(307).toString(), new Duration(307).toString()};
         for(int i = 0; i < percentages.length; i++) {

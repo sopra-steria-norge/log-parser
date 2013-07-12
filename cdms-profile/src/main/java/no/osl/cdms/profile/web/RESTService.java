@@ -2,39 +2,34 @@ package no.osl.cdms.profile.web;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import no.osl.cdms.profile.api.MultiContext;
+import java.util.ArrayList;
+import java.util.List;
+
+import no.osl.cdms.profile.api.TimeMeasurement;
 import no.osl.cdms.profile.log.MultiContextEntity;
 import no.osl.cdms.profile.log.ProcedureEntity;
-import java.util.Collection;
-
+import no.osl.cdms.profile.log.TimeMeasurementEntity;
+import org.joda.time.Duration;
 import org.springframework.beans.factory.annotation.Autowired;
-
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.*;
-
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.map.MappingJsonFactory;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.joda.time.DateTime;
 
-/**
- * Created with IntelliJ IDEA. User: ohelstro Date: 02.07.13 Time: 11:05 To
- * change this template use File | Settings | File Templates.
- */
+@Path("rest")
+public class RESTService extends HttpServlet{
 
-/*TODO:
- 1. Establish connection to db
- 2. Define queries
- 3. Write "get"-methods for each graph
- |-> Get info from db
- |-> Create json data with [name: "name" and data[{x: , y:},{x: , y: }]]
- */
+    @Autowired
+    DataRetriever dataRetriever;
 
-@Path("/")
-public class RESTService extends HttpServlet {
+    Logger logger = Logger.getLogger(getClass().getName());
+
     static int idCounter = 1;
     static int procedureCounter = 1;
     static int multiContextCounter = 1;
@@ -44,10 +39,6 @@ public class RESTService extends HttpServlet {
             new ProcedureEntity(null, "Wait", null),
             new ProcedureEntity(null, "Milestone", "execute"),
             new ProcedureEntity(null, "UpdateMessageFactory", "createUpdatesForPublishing")};
-    @Autowired
-    DataRetriever dataRetriever;
-
-    Logger logger = Logger.getLogger(getClass().getName());
 
 
     @GET
@@ -83,18 +74,29 @@ public class RESTService extends HttpServlet {
                 }
             }
         }
+        DateTime fromDate;
+        DateTime toDate;
+        try {
+            fromDate = new DateTime(from);
+            toDate = new DateTime(to);
+        } catch (IllegalArgumentException e) {
+            logger.debug("Illegal time format '" + from + "' or '" + to + "'");
+            throw new WebApplicationException(415);
+        }
 
         try {
             int procedureIdInt = Integer.parseInt(procedureId);
-            String[] percentiles = dataRetriever.getPercentileByProcedure(procedureIdInt, from, to, percentagesArray);
+
+
+            String[] percentiles = dataRetriever.getPercentileByProcedure(procedureIdInt, fromDate, toDate, percentagesArray);
             return toJSON(percentiles);
 
         } catch (NumberFormatException e) {
             logger.debug("procedureId '" + procedureId + "' from user input could not be parsed into int");
-            return "415 Unsupported Media Type";
+            throw new WebApplicationException(415);
         } catch (IllegalArgumentException e) {
             logger.debug("Timestamp '" + from + "' or '" + to +  "' from user input could not be parsed into Date");
-            return "415 Unsupported Media Type";
+            throw new WebApplicationException(415);
         }
     }
 
@@ -105,13 +107,13 @@ public class RESTService extends HttpServlet {
                                                   @QueryParam("from") String from, @QueryParam("to") String to) {
         try {
             int procedureIdInt = Integer.parseInt(procedureId);
-            return toJSON(dataRetriever.getTimeMeasurementBetweenDatesByProcedure(procedureIdInt, from, to));
+            return toJSON(dataRetriever.getTimeMeasurementBetweenDatesByProcedure(procedureIdInt, new DateTime(from), new DateTime(to)));
         } catch (NumberFormatException e) {
             logger.debug("procedureId '" + procedureId + "' from user input could not be parsed into int");
-            return "415 Unsupported Media Type";
+            throw new WebApplicationException(415);
         } catch (IllegalArgumentException e) {
-            logger.debug("Timestamp '" + from + "' or '" + to +  "' from user input could not be parsed into Date");
-            return "415 Unsupported Media Type";
+            logger.debug("Illegal time format '" + from + "' or '" + to + "'");
+            throw new WebApplicationException(415);
         }
     }
 
@@ -131,36 +133,28 @@ public class RESTService extends HttpServlet {
 
         StringBuilder sb = new StringBuilder();
         sb.append("[");
-        for (int i = 0; i < 6; i++)sb.append(createSingle()).append(",");
-        sb.replace(sb.length()-1, sb.length(), "]");
-        resp.getWriter().write(sb.toString());
+        List<TimeMeasurementEntity> tms = new ArrayList<TimeMeasurementEntity>();
+        for (int i = 0; i < 6; i++) tms.add(createSingle());
+
+        resp.getWriter().write(toJSON(new DateTime(tms.get(0).getTimestamp()).toString()));
         procedureCounter = 1;
         multiContextCounter++;
     }
-    private String createSingle() {
+    private TimeMeasurementEntity createSingle() {
         MultiContextEntity mc = new MultiContextEntity(new DateTime("2013-06-25T01:15:52.458Z").toDate(),
                 new DateTime("2013-06-25T01:15:52.578Z").toDate());
         ProcedureEntity pro = procedures[procedureCounter - 1];
         pro.setId(procedureCounter);
         mc.setId(multiContextCounter);
-        StringBuilder sb = new StringBuilder();
-        sb.append("{");
-        sb.append("\"id\":").append(idCounter).append(",");
-        sb.append("\"procedure\":").append(toJSON(pro)).append(",");
-        sb.append("\"multiContext\":").append(toJSON(mc)).append(",");
-        sb.append("\"timestamp\":").append(new DateTime().getMillis()).append(",");
+        TimeMeasurementEntity tm = new TimeMeasurementEntity(pro, mc, new DateTime().toDate(), "" + new Duration((int)Math.random()*1000).toString());
         if(pro.getClassName().equals("Total")){
-            sb.append("\"duration\":").append((int)(Math.random()*1000+2000));
+            tm.setDuration((int) (Math.random() * 1000 + 2000) + "");
         }
-        else{
-
-            sb.append("\"duration\":").append((int)(Math.random()*1000));
-        }
-        sb.append("}");
         idCounter++;
         procedureCounter++;
-        return sb.toString();
+        return tm;
     }
+
     private  String toJSON(Object o) {
         try {
             StringWriter writer = new StringWriter();

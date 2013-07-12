@@ -86,7 +86,7 @@ public class EntityFactory {
         return measured;
     }
 
-    public List<TimeMeasurement> createLocalContextTimemeasurement(Map<String, String> properties) {
+    public List<TimeMeasurement> createLocalContextTimeMeasurement(Map<String, String> properties) {
 //        DateTime timestamp = new DateTime(properties.get("timestamp"));
         String duration = properties.get("LocalThreadContext.duration");
         String[] id = GuavaHelpers.parseKey("LocalThreadContext.id", properties);
@@ -103,7 +103,7 @@ public class EntityFactory {
 
     public List<TimeMeasurement> createTimemeasurement(Map<String, String> properties) {
         if (properties.get("LocalThreadContext.id") != null) {
-            return createLocalContextTimemeasurement(properties);
+            return createLocalContextTimeMeasurement(properties);
         } else {
             return createMultiContext(properties);
         }
