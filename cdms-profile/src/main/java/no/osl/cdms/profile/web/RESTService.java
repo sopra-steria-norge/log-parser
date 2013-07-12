@@ -2,17 +2,22 @@ package no.osl.cdms.profile.web;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.List;
 
-import no.osl.cdms.profile.api.TimeMeasurement;
+import no.osl.cdms.profile.log.LayoutEntity;
 import no.osl.cdms.profile.log.MultiContextEntity;
 import no.osl.cdms.profile.log.ProcedureEntity;
+
+import java.util.List;
+import java.util.Map;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+
 import no.osl.cdms.profile.log.TimeMeasurementEntity;
 import org.joda.time.Duration;
 import org.springframework.beans.factory.annotation.Autowired;
 import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -39,7 +44,6 @@ public class RESTService extends HttpServlet{
             new ProcedureEntity(null, "Wait", null),
             new ProcedureEntity(null, "Milestone", "execute"),
             new ProcedureEntity(null, "UpdateMessageFactory", "createUpdatesForPublishing")};
-
 
     @GET
     @Path("test")
@@ -117,15 +121,51 @@ public class RESTService extends HttpServlet{
         }
     }
 
+    /**
+     * Returns all LayoutEntity tables from the database.
+     */
     @GET
-    @Path("getLayout/{page}")
+    @Path("getAllLayouts")
     @Produces("application/json")
-    public String getLayout(@PathParam("page") String page){
-        if (page.equals("24hours")){
-            return "{\"elements\":[{\"type\":\"div\",\"classes\":\"hero-unit\",\"elements\":[{\"type\":\"h1\",\"elements\":[{\"type\":\"p\",\"data\":{\"innerHTML\":\"Test\"}}],\"data\":{\"innerHTML\":\"JPB-JSONPageBuilder\"}},{\"type\":\"p\",\"data\":{\"innerHTML\":\"Alightweightandsmallframeworkfordefininghtmlinjson\"}}]},{\"type\":\"div\",\"classes\":\"row\",\"id\":\"\",\"elements\":[{\"type\":\"graph\",\"classes\":\"span4\",\"id\":\"\",\"data\":{\"graphOf\":[\"ICWThingy\"]}},{\"type\":\"graph\",\"classes\":\"span4\",\"id\":\"\",\"data\":{\"graphOf\":[\"TSATCalculator\"]}},{\"type\":\"graph\",\"classes\":\"span4\",\"id\":\"\",\"data\":{\"graphOf\":[\"ICWThingy\",\"TSATCalculator\"]}}]},{\"type\":\"div\",\"classes\":\"row\",\"id\":\"\",\"elements\":[{\"type\":\"percentileTable\",\"classes\":\"\",\"id\":\"\",\"data\":{\"percentiles\":{\"of\":[\"ICWThingy\",\"TSATCalculator\"],\"values\":[100,90,80,0],\"limits\":{\"ICWThingy\":[11,10,10,10],\"TSATCalculator\":[10,10,10,10]}},\"tablestyle\":\"tabletable-striped\",\"tableheaderstyle\":\"\",\"tablerowstyle\":\"\",\"tablecellstyle\":\"\"}}]}]}";
-        }
+    public String getAllLayouts() {
+        List<LayoutEntity> entities = dataRetriever.getAllLayoutEntities();
+        return toJSON(entities);
+    }
 
-        return "";
+    /**
+     * Returns a map from the database mapping all layout names into their respective IDs.
+     * The JSON layout descriptions are not included, and must be retrieved separately by
+     * getLayout(id). Alternatively, getAllLayouts can be called which does include
+     * the JSON layout descriptions.
+     */
+    @GET
+    @Path("getAllLayoutNames")
+    @Produces("application/json")
+    public String getAllLayoutNames() {
+        Map<String, Integer> names = dataRetriever.getAllLayoutEntityNames();
+        return toJSON(names);
+    }
+
+    /**
+     * Returns a LayoutEntity table by ID.
+     * @param id
+     * @return
+     */
+    @GET
+    @Path("getLayout/{id}")
+    @Produces("application/json")
+    public String getLayout(@PathParam("id") String id) {
+        try {
+            LayoutEntity entity = dataRetriever.getLayoutEntity(Integer.parseInt(id));
+            if (entity != null) {
+                return toJSON(entity);
+            } else {
+                throw new WebApplicationException(404);
+            }
+        } catch (NumberFormatException e) {
+            logger.debug("LayoutElement ID '" + id + "' from user input could not be parsed into int");
+            throw new WebApplicationException(415);
+        }
     }
 
 //
@@ -141,25 +181,15 @@ public class RESTService extends HttpServlet{
 //        System.out.println("Autowired: "+dataRetriever);
 //        String response = toJSON(dataRetriever.getMultiContextsAfterTimestamp(new DateTime().toString()));
 //        System.out.println("Serialized data: "+response);
-        resp.getWriter().write(req.getRequestURI());
-        if (req.getRequestURI().equals("/rest/getLayout/24hours")){
-            resp.getWriter().write(getLayout("24hours"));
 
-        }
-        else if(req.getRequestURI().equals("/rest/getLayout/week")){
-            resp.getWriter().write(getLayout("week"));
-        }
-        else{
-            StringBuilder sb = new StringBuilder();
-            sb.append("[");
-            List<TimeMeasurementEntity> tms = new ArrayList<TimeMeasurementEntity>();
-            for (int i = 0; i < 6; i++) tms.add(createSingle());
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+        List<TimeMeasurementEntity> tms = new ArrayList<TimeMeasurementEntity>();
+        for (int i = 0; i < 6; i++) tms.add(createSingle());
 
-            resp.getWriter().write(toJSON(new DateTime(tms.get(0).getTimestamp()).toString()));
-            procedureCounter = 1;
-            multiContextCounter++;
-
-        }
+        resp.getWriter().write(toJSON(tms));
+        procedureCounter = 1;
+        multiContextCounter++;
     }
     private TimeMeasurementEntity createSingle() {
         MultiContextEntity mc = new MultiContextEntity(new DateTime("2013-06-25T01:15:52.458Z").toDate(),
@@ -167,20 +197,26 @@ public class RESTService extends HttpServlet{
         ProcedureEntity pro = procedures[procedureCounter - 1];
         pro.setId(procedureCounter);
         mc.setId(multiContextCounter);
-        TimeMeasurementEntity tm = new TimeMeasurementEntity(pro, mc, new DateTime().toDate(), "" + new Duration((int)Math.random()*1000).toString());
+        TimeMeasurementEntity tm = new TimeMeasurementEntity(pro, mc, new DateTime().toDate(),
+                new Duration((int)(Math.random()*1000)).toString());
         if(pro.getClassName().equals("Total")){
-            tm.setDuration((int) (Math.random() * 1000 + 2000) + "");
+            tm.setDuration(new Duration((int) (Math.random() * 1000 + 2000)).toString());
         }
         idCounter++;
         procedureCounter++;
         return tm;
     }
 
-    private  String toJSON(Object o) {
+    private String toJSON(Object o) {
+        if (o == null) {
+            return "{}";
+        }
         try {
             StringWriter writer = new StringWriter();
             ObjectMapper mapper = new ObjectMapper();
             JsonGenerator jsonGenerator = new MappingJsonFactory().createJsonGenerator(writer);
+            DateFormat myDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z',SSS");
+            mapper.setDateFormat(myDateFormat);
             mapper.writeValue(writer, o);
             return writer.toString();
         } catch (Exception ex) {

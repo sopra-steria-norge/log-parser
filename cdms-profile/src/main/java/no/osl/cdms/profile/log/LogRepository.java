@@ -10,7 +10,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class LogRepository {
@@ -87,5 +89,37 @@ public class LogRepository {
             return new java.util.ArrayList<ProcedureEntity>();
         }
 
+    }
+
+    public Map<String, Integer> getAllLayoutEntityNames() {
+        List<LayoutEntity> layoutEntities = getAllLayoutEntities();
+        Map<String, Integer> names = new HashMap<String, Integer>();
+
+        for (LayoutEntity layoutEntity: layoutEntities) {
+            names.put(layoutEntity.getName(), layoutEntity.getId());
+        }
+
+        return names;
+    }
+
+    public List<LayoutEntity> getAllLayoutEntities() {
+        TypedQuery<LayoutEntity> query = entityManager.createQuery(
+                "SELECT a FROM LayoutEntity a", LayoutEntity.class);
+        try {
+            return query.getResultList();
+        } catch (javax.persistence.NoResultException e) {
+            return new java.util.ArrayList<LayoutEntity>();
+        }
+    }
+
+    public LayoutEntity getLayoutEntity(int id) {
+        TypedQuery<LayoutEntity> query = entityManager.createQuery(
+                "SELECT a FROM LayoutEntity a WHERE a.id = :id", LayoutEntity.class);
+        query.setParameter("id", id);
+        try {
+            return query.getSingleResult();
+        } catch (javax.persistence.NoResultException e) {
+            return null;
+        }
     }
 }

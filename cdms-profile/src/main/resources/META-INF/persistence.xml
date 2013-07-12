@@ -14,6 +14,7 @@
         <class>no.osl.cdms.profile.log.ProcedureEntity</class>
         <class>no.osl.cdms.profile.log.MultiContextEntity</class>
         <class>no.osl.cdms.profile.log.TimeMeasurementEntity</class>
+        <class>no.osl.cdms.profile.log.LayoutEntity</class>
 
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
 
@@ -38,6 +39,7 @@
         <class>no.osl.cdms.profile.log.ProcedureEntity</class>
         <class>no.osl.cdms.profile.log.MultiContextEntity</class>
         <class>no.osl.cdms.profile.log.TimeMeasurementEntity</class>
+        <class>no.osl.cdms.profile.log.LayoutEntity</class>
 
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
 
