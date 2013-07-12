@@ -13,7 +13,7 @@ app.GraphView = Backbone.View.extend({
 
 	render: function(){
 
-        var palette = new Rickshaw.Color.Palette({scheme: 'spectrum2000'})
+        var palette = new Rickshaw.Color.Palette()
 
         var graph = new Rickshaw.Graph(
         {

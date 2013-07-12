@@ -117,6 +117,17 @@ public class RESTService extends HttpServlet{
         }
     }
 
+    @GET
+    @Path("getLayout/{page}")
+    @Produces("application/json")
+    public String getLayout(@PathParam("page") String page){
+        if (page.equals("24hours")){
+            return "{\"elements\":[{\"type\":\"div\",\"classes\":\"hero-unit\",\"elements\":[{\"type\":\"h1\",\"elements\":[{\"type\":\"p\",\"data\":{\"innerHTML\":\"Test\"}}],\"data\":{\"innerHTML\":\"JPB-JSONPageBuilder\"}},{\"type\":\"p\",\"data\":{\"innerHTML\":\"Alightweightandsmallframeworkfordefininghtmlinjson\"}}]},{\"type\":\"div\",\"classes\":\"row\",\"id\":\"\",\"elements\":[{\"type\":\"graph\",\"classes\":\"span4\",\"id\":\"\",\"data\":{\"graphOf\":[\"ICWThingy\"]}},{\"type\":\"graph\",\"classes\":\"span4\",\"id\":\"\",\"data\":{\"graphOf\":[\"TSATCalculator\"]}},{\"type\":\"graph\",\"classes\":\"span4\",\"id\":\"\",\"data\":{\"graphOf\":[\"ICWThingy\",\"TSATCalculator\"]}}]},{\"type\":\"div\",\"classes\":\"row\",\"id\":\"\",\"elements\":[{\"type\":\"percentileTable\",\"classes\":\"\",\"id\":\"\",\"data\":{\"percentiles\":{\"of\":[\"ICWThingy\",\"TSATCalculator\"],\"values\":[100,90,80,0],\"limits\":{\"ICWThingy\":[11,10,10,10],\"TSATCalculator\":[10,10,10,10]}},\"tablestyle\":\"tabletable-striped\",\"tableheaderstyle\":\"\",\"tablerowstyle\":\"\",\"tablecellstyle\":\"\"}}]}]}";
+        }
+
+        return "";
+    }
+
 //
 //    @GET
 //    @Path("multicontext")
@@ -130,15 +141,25 @@ public class RESTService extends HttpServlet{
 //        System.out.println("Autowired: "+dataRetriever);
 //        String response = toJSON(dataRetriever.getMultiContextsAfterTimestamp(new DateTime().toString()));
 //        System.out.println("Serialized data: "+response);
+        resp.getWriter().write(req.getRequestURI());
+        if (req.getRequestURI().equals("/rest/getLayout/24hours")){
+            resp.getWriter().write(getLayout("24hours"));
 
-        StringBuilder sb = new StringBuilder();
-        sb.append("[");
-        List<TimeMeasurementEntity> tms = new ArrayList<TimeMeasurementEntity>();
-        for (int i = 0; i < 6; i++) tms.add(createSingle());
+        }
+        else if(req.getRequestURI().equals("/rest/getLayout/week")){
+            resp.getWriter().write(getLayout("week"));
+        }
+        else{
+            StringBuilder sb = new StringBuilder();
+            sb.append("[");
+            List<TimeMeasurementEntity> tms = new ArrayList<TimeMeasurementEntity>();
+            for (int i = 0; i < 6; i++) tms.add(createSingle());
 
-        resp.getWriter().write(toJSON(new DateTime(tms.get(0).getTimestamp()).toString()));
-        procedureCounter = 1;
-        multiContextCounter++;
+            resp.getWriter().write(toJSON(new DateTime(tms.get(0).getTimestamp()).toString()));
+            procedureCounter = 1;
+            multiContextCounter++;
+
+        }
     }
     private TimeMeasurementEntity createSingle() {
         MultiContextEntity mc = new MultiContextEntity(new DateTime("2013-06-25T01:15:52.458Z").toDate(),
