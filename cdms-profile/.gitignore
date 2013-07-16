@@ -1,4 +1,5 @@
 target
+logs
 *.class
 cdms-profile.iml
 *RealParserTest.java

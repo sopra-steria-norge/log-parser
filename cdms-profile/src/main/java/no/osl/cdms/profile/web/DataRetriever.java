@@ -11,6 +11,7 @@ import org.joda.time.Duration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,11 +26,7 @@ public class DataRetriever {
     }
 
     public List<ProcedureEntity> getAllProcedures(){
-        List<ProcedureEntity> procedures = (List<ProcedureEntity>) getFromCache("getAllProcedures");
-        if (procedures == null) {
-            procedures = logRepository.getAllProcedures();
-        }
-        return procedures;
+        return logRepository.getAllProcedures();
     }
 
     public List<TimeMeasurement> getTimeMeasurementBetweenDatesByProcedure(int procedureId, DateTime fromDate,
@@ -42,11 +39,11 @@ public class DataRetriever {
     }
 
     public String[] getPercentileByProcedure(int procedureId, DateTime fromDate, DateTime toDate, int[] percentages) {
-        String cacheQuery = "getPercentileByProcedure:" + fromDate + ":" + toDate;
+        /*String cacheQuery = "getPercentileByProcedure:" + fromDate + ":" + toDate;
         for(double d : percentages) {
             cacheQuery += ":" + d;
-        }
-        String[] percentiles = (String[]) getFromCache(cacheQuery);
+        }*/
+        String[] percentiles = null;//(String[]) getFromCache(cacheQuery);
         if (percentiles == null) {
             Analyzer analyzer = new Analyzer(logRepository.getTimeMeasurementsByProcedure(
                     new DateTime(fromDate), new DateTime(toDate), logRepository.getProcedure(procedureId)));
@@ -55,9 +52,8 @@ public class DataRetriever {
                 percentiles[i] = new Duration((long)analyzer.percentile("total", percentages[i])).toString();
             }
         }
+
         return percentiles;
-
-
     }
 
     public List<LayoutEntity> getAllLayoutEntities() {
@@ -71,10 +67,5 @@ public class DataRetriever {
     public LayoutEntity getLayoutEntity(int id) {
         return logRepository.getLayoutEntity(id);
     }
-
-    private Object getFromCache(String query) {
-        return null;
-    }
-
 
 }
