@@ -21,13 +21,13 @@ var RenderController = function(args)
 			$(this.offset).find('button').prop('disabled', false); // enables all offset radio buttons
 			$(this.interpolation).find('button').prop('disabled', false); // enables all interpolation radio buttons
 
-        	if(e.srcElement.value == 'area')
+        	if(e.srcElement.value === 'area')
         	{
 				$(this.offset).find('#stack').click();
 				$(this.interpolation).find('#cardinal').click();
 
         	}
-        	else if( e.srcElement.value == 'bar')
+        	else if( e.srcElement.value === 'bar')
         	{
                 $(this.offset).find('#stack').click();
 
@@ -35,7 +35,7 @@ var RenderController = function(args)
                 $(this.interpolation).find('button').prop('disabled', true);
 
         	}
-        	else if(e.srcElement.value == 'line')
+        	else if(e.srcElement.value === 'line')
         	{
 				$(this.offset).find('#value').click();
 				$(this.interpolation).find('#cardinal').click();
@@ -54,7 +54,7 @@ var RenderController = function(args)
         {
         	this.config.offset = e.srcElement.value;
         	this.config.unstack = false;
-			if(e.srcElement.value == 'value')
+			if(e.srcElement.value === 'value')
 			{
 				this.config.unstack = true;
 			}

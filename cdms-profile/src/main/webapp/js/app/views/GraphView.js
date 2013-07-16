@@ -2,12 +2,12 @@ var app = app || {};
 
 app.GraphView = Backbone.View.extend({
 
-	initialize: function(element, legend, height, width, series){
+	initialize: function(element, legend, height, width){
 		this.el = element;
 		this.leg = legend;
 		this.height = height;
 		this.width = width;
-		this.series = series;
+		this.series = [{name:"hei", color:"green" , data:[{x:2, y:2}, {x:3, y:4}]}];
 		this.graph = null;
 	},
 
@@ -78,12 +78,12 @@ app.GraphView = Backbone.View.extend({
         	graph: graph,
         	legend: legend
         });
-
-        var renderController = new RenderController(
-        {
-        	graph: graph,
-        	element: $('.options')
-        });
+//
+//        var renderController = new RenderController(
+//        {
+//        	graph: graph,
+//        	element: $('.options')
+//        });
 
 
         graph.render();

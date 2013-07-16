@@ -95,6 +95,7 @@ public class JaxRSThis {
     }
 
     private String toJSON(Object o) {
+        if (o instanceof String)return (String)o;
         if (o == null) {
             return "{}";
         }

@@ -2,9 +2,9 @@ var app = app || {};
 
 $(document).ready(function() {
     var pb = new PageBuilder({
-        url: 'rest/',
+        url: 'rest/getLayout/home/',
         container: $('.applicationContainer')
-    })
+    });
 });
 
 
@@ -56,38 +56,51 @@ $(document).ready(function() {
 //});
 
 
+$('.dropdown-toggle').dropdown();
+$('.nav-tabs').button();
 
-//$('.dropdown-toggle').dropdown();
-//$('.nav-tabs').button();
-//
-//$(function() {
-//	var date = new Date();
-//    $('#fromDateTimePicker')
-//    .datetimepicker({
-//        	language: 'en',
-//        	endDate: date,
-//        	todayBtn: true,
-//        	maskInput: true,
-//        	pickerPosition: "bottom-left",
-//        	minuteStep: 3
-//    })
-//    .on('changeDate', function(e){
-//    	console.log(e.date);
-//    })
-//});
-//
-//$(function() {
-//	var date = new Date();
-//    $('#toDateTimePicker')
-//    .datetimepicker({
-//    	language: 'en',
-//    	endDate: date,
-//    	todayBtn: true,
-//    	maskInput: true,
-//    	pickerPosition: "bottom-left",
-//    	minuteStep: 3
-//	})
-//	.on('changeDate', function(e){
-//		console.log(e.date);
-//	})
-//});
+$(function() {
+	$('.nav').on('click', "li" , function(e){
+		var that = $(this);
+		$('.active').toggleClass('active');
+		that.toggleClass('active');
+		$('.applicationContainer').html('');
+		var pb = new PageBuilder({
+                url: 'rest/getLayout/'+that.data("pagename"),
+                container: $('.applicationContainer')
+        })
+	});
+});
+
+
+$(function() {
+	var date = new Date();
+    $('#fromDateTimePicker')
+    .datetimepicker({
+        	language: 'en',
+        	endDate: date,
+        	todayBtn: true,
+        	maskInput: true,
+        	pickerPosition: "bottom-left",
+        	minuteStep: 3
+    })
+    .on('changeDate', function(e){
+    	console.log(e.date);
+    })
+});
+
+$(function() {
+	var date = new Date();
+    $('#toDateTimePicker')
+    .datetimepicker({
+    	language: 'en',
+    	endDate: date,
+    	todayBtn: true,
+    	maskInput: true,
+    	pickerPosition: "bottom-left",
+    	minuteStep: 3
+	})
+	.on('changeDate', function(e){
+		console.log(e.date);
+	})
+});

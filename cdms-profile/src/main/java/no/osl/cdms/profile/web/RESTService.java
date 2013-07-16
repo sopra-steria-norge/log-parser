@@ -82,7 +82,11 @@ public class RESTService extends HttpServlet{
         DateTime toDate;
         try {
             fromDate = new DateTime(from);
-            toDate = new DateTime(to);
+            if (to != null) {
+                toDate = new DateTime(to);
+            } else {
+                toDate = new DateTime();
+            }
         } catch (IllegalArgumentException e) {
             logger.debug("Illegal time format '" + from + "' or '" + to + "'");
             throw new WebApplicationException(415);
@@ -111,7 +115,14 @@ public class RESTService extends HttpServlet{
                                                   @QueryParam("from") String from, @QueryParam("to") String to) {
         try {
             int procedureIdInt = Integer.parseInt(procedureId);
-            return toJSON(dataRetriever.getTimeMeasurementBetweenDatesByProcedure(procedureIdInt, new DateTime(from), new DateTime(to)));
+            DateTime fromDate = new DateTime(from);
+            DateTime toDate;
+            if (to != null) {
+                toDate = new DateTime(to);
+            } else {
+                toDate = new DateTime();
+            }
+            return toJSON(dataRetriever.getTimeMeasurementBetweenDatesByProcedure(procedureIdInt, fromDate, toDate));
         } catch (NumberFormatException e) {
             logger.debug("procedureId '" + procedureId + "' from user input could not be parsed into int");
             throw new WebApplicationException(415);
@@ -158,7 +169,12 @@ public class RESTService extends HttpServlet{
     @Produces("application/json")
     public String getLayout(@PathParam("id") String id) {
         return "The prettiest: "+id;
-        
+
+//        return "{\"elements\":[{\"type\":\"h1\",\"data\":{\"innerHTML\":\"hello\"}}," +
+//                "{\"type\":\"legend\", \"classes\":\"legend\", \"id\":\"legend1\"},"+
+//                "{\"type\":\"graph\", \"classes\":\"graph\", \"id\":\"graph1\", \"legendId\":\"legend1\"}]}";
+
+
 //        try {
 //            LayoutEntity entity = dataRetriever.getLayoutEntity(Integer.parseInt(id));
 //            if (entity != null) {
