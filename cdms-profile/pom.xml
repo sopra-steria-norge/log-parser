@@ -210,7 +210,6 @@
         <dependency>
             <groupId>com.oracle</groupId>
             <artifactId>ojdbc6</artifactId>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>net.sf.ehcache</groupId>

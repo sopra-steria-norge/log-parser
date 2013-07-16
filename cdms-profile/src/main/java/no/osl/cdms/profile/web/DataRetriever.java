@@ -3,6 +3,7 @@ package no.osl.cdms.profile.web;
 import no.osl.cdms.profile.analyzer.Analyzer;
 import no.osl.cdms.profile.api.Procedure;
 import no.osl.cdms.profile.api.TimeMeasurement;
+import no.osl.cdms.profile.jmx.DataRetrieverMBean;
 import no.osl.cdms.profile.log.LayoutEntity;
 import no.osl.cdms.profile.log.LogRepository;
 import no.osl.cdms.profile.log.ProcedureEntity;
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-public class DataRetriever {
+public class DataRetriever implements DataRetrieverMBean{
 
     @Autowired
     private LogRepository logRepository;
