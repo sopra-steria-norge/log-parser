@@ -27,8 +27,8 @@ import org.codehaus.jackson.map.MappingJsonFactory;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.joda.time.DateTime;
 
-@Path("rest")
-public class RESTService extends HttpServlet{
+@Path("/")
+public class RESTService {
 
     @Autowired
     DataRetriever dataRetriever;
@@ -196,22 +196,22 @@ public class RESTService extends HttpServlet{
 //        List<MultiContext> result = dataRetriever.getMultiContextsAfterTimestamp(timestamp);
 //        return result;
 //    }
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-//        System.out.println("Autowired: "+dataRetriever);
-//        String response = toJSON(dataRetriever.getMultiContextsAfterTimestamp(new DateTime().toString()));
-//        System.out.println("Serialized data: "+response);
-        JaxRSThis jrt = new JaxRSThis(this);
-        resp.getWriter().write(jrt.invoke(req, resp));
-//        StringBuilder sb = new StringBuilder();
-//        sb.append("[");
-//        List<TimeMeasurementEntity> tms = new ArrayList<TimeMeasurementEntity>();
-//        for (int i = 0; i < 6; i++) tms.add(createSingle());
-//
-//        resp.getWriter().write(toJSON(tms));
-//        procedureCounter = 1;
-//        multiContextCounter++;
-    }
+//    @Override
+//    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+////        System.out.println("Autowired: "+dataRetriever);
+////        String response = toJSON(dataRetriever.getMultiContextsAfterTimestamp(new DateTime().toString()));
+////        System.out.println("Serialized data: "+response);
+//        JaxRSThis jrt = new JaxRSThis(this);
+//        resp.getWriter().write(jrt.invoke(req, resp));
+////        StringBuilder sb = new StringBuilder();
+////        sb.append("[");
+////        List<TimeMeasurementEntity> tms = new ArrayList<TimeMeasurementEntity>();
+////        for (int i = 0; i < 6; i++) tms.add(createSingle());
+////
+////        resp.getWriter().write(toJSON(tms));
+////        procedureCounter = 1;
+////        multiContextCounter++;
+//    }
     private TimeMeasurementEntity createSingle() {
         MultiContextEntity mc = new MultiContextEntity(new DateTime("2013-06-25T01:15:52.458Z").toDate(),
                 new DateTime("2013-06-25T01:15:52.578Z").toDate());

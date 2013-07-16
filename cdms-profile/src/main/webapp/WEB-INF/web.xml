@@ -4,20 +4,24 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" 
     version="2.5">
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:/META-INF/spring/*.xml
+        </param-value>
+    </context-param>
+
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener
+        </listener-class>
+    </listener>
+
     <servlet>
-        <servlet-name>REST</servlet-name>
-        <servlet-class>no.osl.cdms.profile.web.RESTService</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>JMX</servlet-name>
-        <servlet-class>no.osl.cdms.profile.web.JMXService</servlet-class>
+        <servlet-name>Rest</servlet-name>
+        <servlet-class>org.apache.cxf.transport.servlet.CXFServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>
-        <servlet-name>REST</servlet-name>
-        <url-pattern>/rest/*</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>JMX</servlet-name>
-        <url-pattern>/jmx/*</url-pattern>
+        <servlet-name>Rest</servlet-name>
+        <url-pattern>/*</url-pattern>
     </servlet-mapping>
 </web-app>

@@ -19,7 +19,7 @@ import static junit.framework.Assert.assertTrue;
  * User: apalfi
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(value = {"classpath:META-INF/spring/cdms-profile-ctx.xml",
+@ContextConfiguration(value = {"classpath:test-cdms-profile-ctx.xml",
         "classpath:test-cdms-profile-infra-ctx.xml"})
 @Transactional
 public class EntitiesTest {
