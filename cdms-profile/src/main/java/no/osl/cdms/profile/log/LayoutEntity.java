@@ -6,6 +6,7 @@ import javax.persistence.*;
 @Table(name = "CDM_PROFILE_LAYOUT")
 public class LayoutEntity {
 
+    @Id
     @Column(name = "NAME")
     private String name;
 

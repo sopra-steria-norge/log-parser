@@ -72,11 +72,11 @@ public class LogRepositoryTest {
         assertTrue(l1);
         assertTrue(l2);
 
-        LayoutEntity fromDatabase = logRepository.getLayoutEntity(layoutEntity1.getId());
+        LayoutEntity fromDatabase = logRepository.getLayoutEntity(layoutEntity1.getName());
         assertTrue(fromDatabase.equals(layoutEntity1));
         assertFalse(fromDatabase.equals(layoutEntity2));
 
-        fromDatabase = logRepository.getLayoutEntity(layoutEntity2.getId());
+        fromDatabase = logRepository.getLayoutEntity(layoutEntity2.getName());
         assertTrue(fromDatabase.equals(layoutEntity2));
         assertFalse(fromDatabase.equals(layoutEntity1));
     }
