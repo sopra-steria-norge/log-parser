@@ -19,9 +19,13 @@ PageBuilder.extensions.graph = function(container, json) {
     	legend: {
     		show: true,
     	},
+    	grid: {
+    		hoverable: true
+    	},
     	xaxis: {
     		mode: 'time'
-    	}
+    	},
+    	tooltip: true
     };
 };
 PageBuilder.extensions.graph.prototype.render = function() {
