@@ -9,7 +9,8 @@ PageBuilder.extensions.graph = function(container, json) {
     this.graphOptions = {
     	series: {
     		lines: {
-    			show: true
+    			show: true,
+    			fill: true
     		},
     		points: {
     			show: true
@@ -17,7 +18,9 @@ PageBuilder.extensions.graph = function(container, json) {
     	},
     	legend: {
     		show: true,
-
+    	},
+    	xaxis: {
+    		mode: 'time'
     	}
     };
 };
@@ -72,8 +75,12 @@ PageBuilder.extensions.graph.prototype.startUpdate = function() {
         }
 
 		this.series[0].data.push(data);
+		if(this.series[0].data.length > 50)
+		{
+			this.series[0].data.shift();
+		}
 		this.draw = $.plot(this.draw.getPlaceholder(), this.series, this.graphOptions )
-		console.log(this.series[0].data.length)
+
     }.bind(this), 100);
 };
 PageBuilder.extensions.graph.prototype.createResizeHandler = function() {
