@@ -10,17 +10,17 @@
                            http://cxf.apache.org/jaxrs
                            http://cxf.apache.org/schemas/jaxrs.xsd">
 
-    <!--&lt;!&ndash; JAX &ndash;&gt;-->
-    <!--<jaxrs:server id="cxfServer" address="/services">-->
-        <!--<jaxrs:serviceBeans>-->
-            <!--<ref bean="GraphWebservice"/>-->
-        <!--</jaxrs:serviceBeans>-->
-    <!--</jaxrs:server>-->
+    <jaxrs:server id="restService" address="/rest">
+        <jaxrs:serviceBeans>
+            <ref bean="serviceBean"/>
+        </jaxrs:serviceBeans>
+    </jaxrs:server>
+
+    <bean id="serviceBean" class="no.osl.cdms.profile.web.RESTService"/>
 
     <!-- SPRING -->
     <context:component-scan base-package="no.osl.cdms.profile" />
     <context:annotation-config/>
-    <!--<bean id="GraphWebservice" class="no.osl.cdms.profile.web.GraphWebservice"/>-->
 
 
 </beans>
