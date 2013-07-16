@@ -56,7 +56,6 @@ $(document).ready(function() {
 //});
 
 
-
 $('.dropdown-toggle').dropdown();
 $('.nav-tabs').button();
 
