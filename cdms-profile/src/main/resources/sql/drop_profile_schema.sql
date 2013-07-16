@@ -6,4 +6,3 @@ drop table CDM_PROFILE_LAYOUT cascade constraints;
 drop sequence TIMEMEASUREMENT_SEQ;
 drop sequence PROCEDURE_SEQ;
 drop sequence MULTICONTEXT_SEQ;
-drop sequence LAYOUT_SEQ;

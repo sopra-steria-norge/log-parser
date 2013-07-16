@@ -53,14 +53,14 @@ public class RESTService {
     }
 
     @GET
-    @Path("getProcedures")
+    @Path("procedure")
     @Produces("application/json")
     public String getProcedures() {
         return toJSON(dataRetriever.getAllProcedures());
     }
 
     @GET
-    @Path("getPercentiles/{procedureId}")
+    @Path("percentile/{procedureId}")
     @Produces("application/json")
     public String getPercentiles(@PathParam("procedureId") String procedureId, @QueryParam("from") String from,
                                  @QueryParam("to") String to, @QueryParam("percentages") String percentages) {
@@ -93,8 +93,11 @@ public class RESTService {
         }
 
         try {
-            int procedureIdInt = Integer.parseInt(procedureId);
+            if (procedureId == null) {
+                return toJSON(dataRetriever.getPercentile(fromDate,toDate,percentagesArray));
+            }
 
+            int procedureIdInt = Integer.parseInt(procedureId);
 
             String[] percentiles = dataRetriever.getPercentileByProcedure(procedureIdInt, fromDate, toDate, percentagesArray);
             return toJSON(percentiles);
@@ -109,9 +112,9 @@ public class RESTService {
     }
 
     @GET
-    @Path("getTimeMeasurementsBetweenDates/{procedureId}")
+    @Path("timeMeasurement/{procedureId}")
     @Produces("application/json")
-    public String getTimeMeasurementsBetweenDates(@PathParam("procedureId") String procedureId,
+    public String getTimeMeasurements(@PathParam("procedureId") String procedureId,
                                                   @QueryParam("from") String from, @QueryParam("to") String to) {
         try {
             int procedureIdInt = Integer.parseInt(procedureId);
@@ -129,63 +132,32 @@ public class RESTService {
         } catch (IllegalArgumentException e) {
             logger.debug("Illegal time format '" + from + "' or '" + to + "'");
             throw new WebApplicationException(415);
+        } catch (NullPointerException e) {
+            throw new WebApplicationException(415);
         }
     }
 
-    /**
-     * Returns all LayoutEntity tables from the database.
-     */
     @GET
-    @Path("getAllLayouts")
+    @Path("layout/{name}")
     @Produces("application/json")
-    public String getAllLayouts() {
-        return "This pretty layout";
-//        List<LayoutEntity> entities = dataRetriever.getAllLayoutEntities();
-//        return toJSON(entities);
-    }
-
-    /**
-     * Returns a map from the database mapping all layout names into their respective IDs.
-     * The JSON layout descriptions are not included, and must be retrieved separately by
-     * getLayout(id). Alternatively, getAllLayouts can be called which does include
-     * the JSON layout descriptions.
-     */
-    @GET
-    @Path("getAllLayoutNames")
-    @Produces("application/json")
-    public String getAllLayoutNames() {
-        return "All them layouts";
-//        Map<String, Integer> names = dataRetriever.getAllLayoutEntityNames();
-//        return toJSON(names);
-    }
-
-    /**
-     * Returns a LayoutEntity table by ID.
-     * @param id
-     * @return
-     */
-    @GET
-    @Path("getLayout/{id}")
-    @Produces("application/json")
-    public String getLayout(@PathParam("id") String id) {
-        return "The prettiest: "+id;
-
+    public String getLayout(@PathParam("id") String name) {
 //        return "{\"elements\":[{\"type\":\"h1\",\"data\":{\"innerHTML\":\"hello\"}}," +
 //                "{\"type\":\"legend\", \"classes\":\"legend\", \"id\":\"legend1\"},"+
 //                "{\"type\":\"graph\", \"classes\":\"graph\", \"id\":\"graph1\", \"legendId\":\"legend1\"}]}";
 
+        if (name == null) {
+            List<String> names = dataRetriever.getAllLayoutEntityNames();
+            if (names == null || names.size() == 0) {
+                throw new WebApplicationException(404);
+            }
+            return toJSON(names);
+        }
 
-//        try {
-//            LayoutEntity entity = dataRetriever.getLayoutEntity(Integer.parseInt(id));
-//            if (entity != null) {
-//                return toJSON(entity);
-//            } else {
-//                throw new WebApplicationException(404);
-//            }
-//        } catch (NumberFormatException e) {
-//            logger.debug("LayoutElement ID '" + id + "' from user input could not be parsed into int");
-//            throw new WebApplicationException(415);
-//        }
+        LayoutEntity entity = dataRetriever.getLayoutEntity(name);
+        if (entity == null) {
+            throw new WebApplicationException(404);
+        }
+        return toJSON(entity);
     }
 
 //

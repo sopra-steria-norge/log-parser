@@ -56,16 +56,28 @@ public class DataRetriever {
         return percentiles;
     }
 
+    public Map<Procedure, String[]> getPercentile(DateTime fromDate, DateTime toDate, int[] percentages) {
+        Map<Procedure, String[]> percentileMap = new HashMap<Procedure, String[]>();
+        List<ProcedureEntity> procedures = logRepository.getAllProcedures();
+
+        String[] percentiles;
+        for (Procedure procedure: procedures) {
+            percentiles = getPercentileByProcedure(procedure.getId(), fromDate, toDate, percentages);
+            percentileMap.put(procedure, percentiles);
+        }
+        return percentileMap;
+    }
+
     public List<LayoutEntity> getAllLayoutEntities() {
          return logRepository.getAllLayoutEntities();
     }
 
-    public Map<String, Integer> getAllLayoutEntityNames() {
+    public List<String> getAllLayoutEntityNames() {
         return logRepository.getAllLayoutEntityNames();
     }
 
-    public LayoutEntity getLayoutEntity(int id) {
-        return logRepository.getLayoutEntity(id);
+    public LayoutEntity getLayoutEntity(String name) {
+        return logRepository.getLayoutEntity(name);
     }
 
 }

@@ -9,10 +9,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Repository
 public class LogRepository {
@@ -91,12 +88,12 @@ public class LogRepository {
 
     }
 
-    public Map<String, Integer> getAllLayoutEntityNames() {
+    public List<String> getAllLayoutEntityNames() {
         List<LayoutEntity> layoutEntities = getAllLayoutEntities();
-        Map<String, Integer> names = new HashMap<String, Integer>();
+        List<String> names = new ArrayList<String>();
 
         for (LayoutEntity layoutEntity: layoutEntities) {
-            names.put(layoutEntity.getName(), layoutEntity.getId());
+            names.add(layoutEntity.getName());
         }
 
         return names;
@@ -112,10 +109,10 @@ public class LogRepository {
         }
     }
 
-    public LayoutEntity getLayoutEntity(int id) {
+    public LayoutEntity getLayoutEntity(String name) {
         TypedQuery<LayoutEntity> query = entityManager.createQuery(
-                "SELECT a FROM LayoutEntity a WHERE a.id = :id", LayoutEntity.class);
-        query.setParameter("id", id);
+                "SELECT a FROM LayoutEntity a WHERE a.name = :name", LayoutEntity.class);
+        query.setParameter("name", name);
         try {
             return query.getSingleResult();
         } catch (javax.persistence.NoResultException e) {
