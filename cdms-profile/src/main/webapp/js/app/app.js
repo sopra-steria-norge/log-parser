@@ -2,9 +2,9 @@ var app = app || {};
 
 $(document).ready(function() {
     var pb = new PageBuilder({
-        url: 'rest/',
+        url: 'rest/getLayout/home/',
         container: $('.applicationContainer')
-    })
+    });
 });
 
 

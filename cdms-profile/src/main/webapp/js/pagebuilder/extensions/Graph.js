@@ -6,8 +6,9 @@
         var myDiv = document.createElement('div');
         PageBuilder.setAttribute(myDiv, 'class', json.classes);
         PageBuilder.setAttribute(myDiv, 'id', json.id);
-        myDiv.innerHTML = 'This is my graph';
         container.append(myDiv);
+        var view = new app.GraphView($('#'+json.id), $('#'+json.legendId));
+        view.render();
     }
     PageBuilder.extensions.graph = graph;
 })();

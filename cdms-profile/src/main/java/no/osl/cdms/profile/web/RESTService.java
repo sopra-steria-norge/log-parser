@@ -158,7 +158,12 @@ public class RESTService extends HttpServlet{
     @Produces("application/json")
     public String getLayout(@PathParam("id") String id) {
         return "The prettiest: "+id;
-        
+
+//        return "{\"elements\":[{\"type\":\"h1\",\"data\":{\"innerHTML\":\"hello\"}}," +
+//                "{\"type\":\"legend\", \"classes\":\"legend\", \"id\":\"legend1\"},"+
+//                "{\"type\":\"graph\", \"classes\":\"graph\", \"id\":\"graph1\", \"legendId\":\"legend1\"}]}";
+
+
 //        try {
 //            LayoutEntity entity = dataRetriever.getLayoutEntity(Integer.parseInt(id));
 //            if (entity != null) {
