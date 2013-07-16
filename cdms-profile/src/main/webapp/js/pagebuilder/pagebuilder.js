@@ -11,14 +11,12 @@ function PageBuilder(settings) {
             $.get({
                 url: this.settings.url,
                 success: function(resp) {
-                	console.debug(resp);
                     PageBuilder.build(this.settings.container, JSON.parse(resp));
                 }.bind(this)
             });
         } else {
             PageBuilder.build(this.container, this.json);
         }
-
     };
     this.init();
 }
@@ -30,14 +28,13 @@ PageBuilder.build = function(container, json) {
         var child = json.elements[childId];
         PageBuilder.render(container, child);
     }
-
 };
 PageBuilder.render = function(container, json) {
     var renderer = PageBuilder.extensions[json.type];
     if (typeof renderer === 'undefined') {
         renderer = PageBuilder.extensions.default;
     }
-    renderer(container, json);
+    new renderer(container, json).render();
 };
 PageBuilder.setAttribute = function(node, attributeName, attributeValue) {
     function check(s) {
@@ -49,6 +46,12 @@ PageBuilder.setAttribute = function(node, attributeName, attributeValue) {
 };
 PageBuilder.extensions = {};
 PageBuilder.extensions.default = function(container, json) {
+    this.container = container;
+    this.json = json;
+};
+PageBuilder.extensions.default.prototype.render = function() {
+    var container = this.container;
+    var json = this.json;
     var type = document.createElement(json.type);
     PageBuilder.setAttribute(type, 'class', json.classes);
     PageBuilder.setAttribute(type, 'id', json.id);

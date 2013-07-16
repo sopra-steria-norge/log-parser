@@ -1,75 +1,10 @@
-section{
-	border: none;
-	border-top: 1px solid #aaaaaa;
-	padding: 0px 0px 20px 0px;
+body {
+    padding-top: 4em;
+    padding-bottom: 3em;
 }
-
-
-.side_panel{
-	padding: 0px 20px 20px 40px;
-	width: 290px;
-	display: inline-block;
-	vertical-align: top;
+div.span12>table {
+    width: 100%;
 }
-
-.side_panel h1{
-	font-size: 20px;
-}
-
-.side_panel label{
-	font-size: 12px;
-	margin: 0px 0px 0px 0px;
-	display: inline-block;
-
-}
-
-.graph_container {
-	position: relative;
-	display: inline-block;
-	border: 0px solid #aaaaaa;
-}
-
-.graph {
-	display: inline-block
-	float: right;
-	border: 0px solid #aaaaaa;
-	padding: 0px 0px 0px 0px;
-}
-
-.legend{
-	position: relative;
-	display: inline-block;
-	background: white;
-	color: black;
-}
-
-.rickshaw_graph svg{
-	display: inline-block;
-	overflow:visible;
-}
-
-.rickshaw_legend{
-	font-size: 14px;
-	opacity: 1.0;
-}
-
-.rickshaw_legend .action{
-	font-size: 16px;
-	opacity: 1.0;
-}
-.rickshaw_legend .action:hover {
-	opacity: 0.4;
-}
-
-.detail_swatch {
-	float: right;
-	display: inline-block;
-	width: 10px;
-	height: 10px;
-	margin: 0 4px 0 0
-}
-
-#y_axis {
-	position: relative;
-
+svg {
+    border: #000000 solid 1px;
 }
