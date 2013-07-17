@@ -8,7 +8,7 @@
     <persistence-unit name="cdmsProfilePersistenceUnit" transaction-type="JTA">
         <provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider>
 
-        <jta-data-source>osgi:service/javax.sql.DataSource/(osgi.jndi.service.name=jdbc/cdms)</jta-data-source>
+        <jta-data-source>osgi:service/javax.sql.DataSource/(osgi.jndi.service.name=jdbc/profile)</jta-data-source>
 
         <!-- Keep this list sorted -->
         <class>no.osl.cdms.profile.log.ProcedureEntity</class>
@@ -25,9 +25,7 @@
             <property name="openjpa.Log" value="commons" />
 
             <property name="openjpa.QueryCache" value="false"/>
-            <property name="openjpa.DataCacheManager" value="net.sf.ehcache.openjpa.datacache.EhCacheDataCacheManager"/>
-            <property name="openjpa.DataCache" value="net.sf.ehcache.openjpa.datacache.EhCacheDataCache"/>
-            <property name="openjpa.RemoteCommitProvider" value="net.sf.ehcache.openjpa.datacache.NoOpRemoteCommitProvider"/>
+            <property name="openjpa.DataCache" value="false"/>
         </properties>
 
     </persistence-unit>

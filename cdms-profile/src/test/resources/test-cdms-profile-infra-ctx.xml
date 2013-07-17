@@ -5,7 +5,7 @@
 
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
         <property name="persistenceUnitName" value="cdmsProfilePersistenceUnitTest"/>
-        <property name="dataSource" ref="cdmsDataSource"/>
+        <property name="dataSource" ref="profileDataSource"/>
         <property name="jpaVendorAdapter" ref="jpaAdapterOracle" />
     </bean>
 
@@ -26,7 +26,7 @@
 
     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
         <property name="entityManagerFactory" ref="entityManagerFactory" />
-        <property name="dataSource" ref="cdmsDataSource" />
+        <property name="dataSource" ref="profileDataSource" />
     </bean>
 
 </beans>
