@@ -25,7 +25,10 @@ PageBuilder.extensions.graph = function(container, json) {
     	xaxis: {
     		mode: 'time'
     	},
-    	tooltip: true
+    	tooltip: true,
+    	tooltipOpts: {
+    		content: function(label, xval, yval){return ""+label + "<br>X: "+ moment.utc(xval).format() + "<br>Y: " + yval}
+    	}
     };
 };
 PageBuilder.extensions.graph.prototype.render = function() {
@@ -69,11 +72,11 @@ PageBuilder.extensions.graph.prototype.drawGraph = function(svgcontainer) {
 };
 PageBuilder.extensions.graph.prototype.startUpdate = function() {
     setInterval(function() {
-        this.prev += 1;
+        this.prev += 1000;
         if (this.type < 0.33) {
             var data = [this.prev, Math.floor(Math.random() * 40) + 120];
         } else if (this.type < 0.66) {
-            var data = [this.prev, this.prev];
+            var data = [Math.cos(this.prev/Math.PI), Math.sin(this.prev/Math.PI)];
         } else {
             var data = [this.prev, Math.sin(this.prev / Math.PI)];
         }
