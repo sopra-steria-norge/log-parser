@@ -10,6 +10,7 @@ import no.osl.cdms.profile.factories.EntityFactory;
 import no.osl.cdms.profile.log.LogRepository;
 import no.osl.cdms.profile.log.ProcedureEntity;
 import no.osl.cdms.profile.utilities.GuavaHelpers;
+import org.joda.time.DateTime;
 import org.joda.time.convert.ConverterManager;
 import org.joda.time.convert.DurationConverter;
 import org.junit.After;
@@ -273,5 +274,16 @@ public class AnalyzerTest {
         assertNull(buckets[2]);
         assertNotNull(buckets[3]);
 
+        long duration = 0;
+        int count = 0;
+        for (TimeMeasurement t : tms) {
+            DateTime time = new DateTime(t.getTimestamp());
+            if (time.getYear() == 2013 && time.getMonthOfYear() == 6 && t.getProcedure().getId() == id3 ) {
+                duration += converter.getDurationMillis(t.getDuration());
+                count++;
+            }
+        }
+        duration /= count;
+        assertEquals(duration, buckets[0].getDuration());
     }
 }
