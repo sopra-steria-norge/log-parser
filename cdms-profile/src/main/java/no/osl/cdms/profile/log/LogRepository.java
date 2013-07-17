@@ -45,7 +45,7 @@ public class LogRepository {
     public List<TimeMeasurement> getTimeMeasurementsByProcedure(DateTime fromDate, DateTime toDate, Procedure procedure) {
         TypedQuery<TimeMeasurement> query = entityManager.createQuery(
                 "SELECT a FROM TimeMeasurementEntity a where a.procedure = :procedure AND a.timestamp >= :fromDate" +
-                        " AND a.timestamp <= :toDate ORDER BY a.timestamp ASC", TimeMeasurement.class);
+                        " AND a.timestamp <= :toDate", TimeMeasurement.class);
         query.setParameter("procedure", procedure);
         query.setParameter("fromDate", fromDate.toDate());
         query.setParameter("toDate", toDate.toDate());
