@@ -19,55 +19,139 @@
         <defaultGoal>install</defaultGoal>
         <plugins>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>sql-maven-plugin</artifactId>
-                <version>1.5</version>
-
-                <dependencies>
-                    <dependency>
-                        <groupId>com.oracle</groupId>
-                        <artifactId>ojdbc6</artifactId>
-                        <version>${oracle.jdbc.version}</version>
-                    </dependency>
-                </dependencies>
-
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
                 <configuration>
-                    <driver>oracle.jdbc.driver.OracleDriver</driver>
-                    <url>${env.TOPS_DB_CONNECTION_URL}</url>
-                    <username>${env.TOPS_DB_USERNAME}</username>
-                    <password>${env.TOPS_DB_PASSWORD}</password>
+                    <archive>
+                        <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
+                    </archive>
                 </configuration>
+            </plugin>
 
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <extensions>true</extensions>
                 <executions>
                     <execution>
-                        <id>drop-db</id>
-                        <phase>compile</phase>
+                        <id>bundle-manifest</id>
+                        <phase>process-classes</phase>
                         <goals>
-                            <goal>execute</goal>
+                            <goal>manifest</goal>
                         </goals>
                         <configuration>
-                            <autocommit>true</autocommit>
-                            <srcFiles>
-                                <srcFile>src/main/resources/sql/drop_profile_schema.sql</srcFile>
-                            </srcFiles>
-                            <onError>continue</onError>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>create-db</id>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>execute</goal>
-                        </goals>
-                        <configuration>
-                            <autocommit>true</autocommit>
-                            <srcFiles>
-                                <srcFile>src/main/resources/sql/create_profile_schema.sql</srcFile>
-                            </srcFiles>
+                            <supportedProjectTypes>
+                                <supportedProjectType>jar</supportedProjectType>
+                            </supportedProjectTypes>
+                            <instructions>
+                                <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+                                <Export-Package>!*</Export-Package>
+                                <Import-Package>
+                                    *,
+                                    java.util,
+                                    java.sql,
+                                    javax.persistence.spi,
+                                    javax.persistence,
+                                    javax.persistence.criteria,
+                                    javax.persistence.metamodel,
+                                    javax.xml.bind.annotation,
+                                    javax.ws.rs,
+                                    javax.ws.rs.core,
+                                    javax.jws,
+                                    META-INF.cxf,
+                                    META-INF.cxf.osgi,
+
+                                    org.apache.commons.lang.builder; version="2.4",
+
+                                    org.aopalliance.aop,
+                                    org.springframework.aop,
+                                    org.springframework.aop.framework,
+                                    org.springframework.orm.jpa,
+                                    org.springframework.orm.jpa.vendor,
+                                    org.springframework.beans.factory.config,
+                                    org.springframework.beans.factory.annotation,
+                                    org.springframework.osgi.web.context.support,
+                                    org.springframework.security.core.userdetails.memory,
+                                    org.springframework.security.web.authentication,
+                                    org.springframework.security.authentication,
+                                    org.springframework.security.core.userdetails,
+                                    org.springframework.stereotype,
+                                    org.springframework.web.context,
+                                    org.springframework.web.filter,
+                                    org.springframework.web.servlet,
+
+                                    org.apache.openjpa.jdbc.sql; version="[2.0, 3)",
+                                    org.apache.openjpa.jdbc.kernel; version="[2.0, 3)",
+                                    org.apache.openjpa.jdbc.conf; version="[2.0, 3)",
+                                    org.apache.openjpa.kernel; version="[2.0, 3)",
+                                    org.apache.openjpa.lib.util; version="[2.0, 3)",
+                                    org.apache.openjpa.lib.util.concurrent; version="[2.0, 3)",
+                                    org.apache.openjpa.lib.conf; version="[2.0, 3)",
+                                    org.apache.openjpa.util; version="[2.0, 3)",
+                                    org.apache.openjpa.enhance; version="[2.0, 3)",
+                                    org.apache.openjpa.event; version="[2.0, 3)",
+                                    org.apache.openjpa.conf; version="[2.0, 3)",
+                                    org.apache.openjpa.persistence; version="[2.0, 3)",
+                                    org.apache.openjpa.persistence.criteria; version="[2.0, 3)",
+                                    org.apache.openjpa.persistence.query; version="[2.0, 3)",
+                                    org.apache.openjpa.datacache; version="[2.0, 3)",
+                                    org.apache.openjpa.ee; version="[2.0, 3)",
+                                    org.apache.openjpa.kernel.exps; version="[2.0, 3)",
+
+                                    org.springframework.jdbc.datasource,
+                                    org.springframework.transaction.annotation,
+
+                                    javax.sql,
+                                    org.slf4j,
+                                    org.apache.log4j,
+                                    net.sf.log4jdbc,
+
+                                    oracle.jdbc.driver,
+                                    oracle.jdbc.xa.client,
+                                    oracle.jdbc,
+                                    oracle.jdbc.internal,
+
+                                    org.apache.commons.dbcp,
+
+                                    org.codehaus.jackson,
+                                    org.codehaus.jackson.map,
+
+                                    net.sf.cglib.proxy,
+                                    net.sf.cglib.core,
+                                    net.sf.cglib.reflect,
+                                </Import-Package>
+                                <Web-ContextPath>profile</Web-ContextPath>
+                                <Webapp-Context>profile</Webapp-Context>
+                                <Require-Bundle>org.apache.cxf.bundle</Require-Bundle>
+                            </instructions>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-resource</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/webapp/</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                            <outputDirectory>target/classes</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
             <plugin>
                 <groupId>org.apache.openjpa</groupId>
                 <artifactId>openjpa-maven-plugin</artifactId>
@@ -106,6 +190,7 @@
                     </dependency>
                 </dependencies>
             </plugin>
+
             <plugin>
                 <artifactId>maven-clean-plugin</artifactId>
                 <version>2.5</version>
@@ -122,21 +207,69 @@
                     </filesets>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.mortbay.jetty</groupId>
-                <artifactId>jetty-maven-plugin</artifactId>
-                <version>${jetty.version}</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-maven-plugin</artifactId>
-                <version>${camel.version}</version>
-                <configuration>
-                    <applicationContextUri>META-INF/spring/*.xml</applicationContextUri>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>createDB</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>sql-maven-plugin</artifactId>
+                        <version>1.5</version>
+
+                        <dependencies>
+                            <dependency>
+                                <groupId>com.oracle</groupId>
+                                <artifactId>ojdbc6</artifactId>
+                                <version>${oracle.jdbc.version}</version>
+                            </dependency>
+                        </dependencies>
+
+                        <configuration>
+                            <driver>oracle.jdbc.driver.OracleDriver</driver>
+                            <url>${env.TOPS_DB_CONNECTION_URL}</url>
+                            <username>${env.TOPS_DB_USERNAME}</username>
+                            <password>${env.TOPS_DB_PASSWORD}</password>
+                        </configuration>
+
+                        <executions>
+                            <execution>
+                                <id>drop-db</id>
+                                <phase>compile</phase>
+                                <goals>
+                                    <goal>execute</goal>
+                                </goals>
+                                <configuration>
+                                    <autocommit>true</autocommit>
+                                    <srcFiles>
+                                        <srcFile>src/main/resources/sql/drop_profile_schema.sql</srcFile>
+                                    </srcFiles>
+                                    <onError>continue</onError>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>create-db</id>
+                                <phase>compile</phase>
+                                <goals>
+                                    <goal>execute</goal>
+                                </goals>
+                                <configuration>
+                                    <autocommit>true</autocommit>
+                                    <srcFiles>
+                                        <srcFile>src/main/resources/sql/create_profile_schema.sql</srcFile>
+                                    </srcFiles>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+    </profiles>
 
 
     <dependencies>
@@ -396,16 +529,6 @@
             <url>https://repository.jboss.org/nexus/content/repositories/releases</url>
         </repository>
     </repositories>
-    <reporting>
-        <plugins>
-            <!-- Test coverage -->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>cobertura-maven-plugin</artifactId>
-                <version>2.5.2</version>
-            </plugin>
-        </plugins>
-    </reporting>
     <properties>
         <commons.io.version>1.3.2</commons.io.version>
         <org.springframework.version>3.0.2.RELEASE</org.springframework.version>
