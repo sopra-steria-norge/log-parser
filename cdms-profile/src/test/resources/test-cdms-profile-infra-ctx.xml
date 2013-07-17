@@ -9,7 +9,7 @@
         <property name="jpaVendorAdapter" ref="jpaAdapterOracle" />
     </bean>
 
-    <bean id="cdmsDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+    <bean id="profileDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
         <property name="url" value="#{T(java.lang.System).getenv('TOPS_DB_CONNECTION_URL')}" />
         <property name="username" value="#{T(java.lang.System).getenv('TOPS_DB_USERNAME')}" />
