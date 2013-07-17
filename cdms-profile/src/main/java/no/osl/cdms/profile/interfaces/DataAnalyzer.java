@@ -4,6 +4,8 @@
  */
 package no.osl.cdms.profile.interfaces;
 
+import no.osl.cdms.profile.analyzer.TimeMeasurementBucket;
+import no.osl.cdms.profile.api.Procedure;
 import org.springframework.stereotype.Component;
 
 /**
@@ -12,8 +14,9 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public interface DataAnalyzer {
-    public double average(String id);
-    public double stddev(String id);
-    public double percentile(String id, int percent);
-    public int[] buckets(String id, int NOFBuckets);
+    public double average(int id);
+    public double stddev(int id);
+    public double percentile(int id, int percent);
+    public int[] buckets(int id, int NOFBuckets);
+    public TimeMeasurementBucket[] splitIntoBuckets(int id, int nBuckets);
 }
