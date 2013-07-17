@@ -1,13 +1,11 @@
 package no.osl.cdms.profile.web;
 
-import no.osl.cdms.profile.api.Procedure;
 import no.osl.cdms.profile.api.TimeMeasurement;
 import no.osl.cdms.profile.log.LogRepository;
 import no.osl.cdms.profile.log.ProcedureEntity;
 import no.osl.cdms.profile.log.TimeMeasurementEntity;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
-import org.joda.time.Period;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,7 +15,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -62,7 +59,7 @@ public class DataRetrieverTest {
         expected.add(timeMeasurement);
         expected.add(timeMeasurement2);
 
-        List<TimeMeasurement> tm = dataRetriever.getTimeMeasurementBetweenDatesByProcedure(procedure.getId(),
+        List<TimeMeasurement> tm = dataRetriever.getTimeMeasurements(procedure.getId(),
                 new DateTime("2011-06-25T01:15:52.458Z"), new DateTime("2013-06-25T01:15:52.458Z"));
         assertEquals(expected, tm);
 

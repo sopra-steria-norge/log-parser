@@ -1,6 +1,5 @@
 package no.osl.cdms.profile.web;
 
-import java.io.IOException;
 import java.io.StringWriter;
 
 import no.osl.cdms.profile.log.LayoutEntity;
@@ -8,19 +7,15 @@ import no.osl.cdms.profile.log.MultiContextEntity;
 import no.osl.cdms.profile.log.ProcedureEntity;
 
 import java.util.List;
-import java.util.Map;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 
 import no.osl.cdms.profile.log.TimeMeasurementEntity;
 import org.joda.time.Duration;
 import org.springframework.beans.factory.annotation.Autowired;
 import javax.ws.rs.*;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.map.MappingJsonFactory;
@@ -115,26 +110,38 @@ public class RESTService {
     @Path("timeMeasurement/{procedureId}")
     @Produces("application/json")
     public String getTimeMeasurements(@PathParam("procedureId") String procedureId,
-                                                  @QueryParam("from") String from, @QueryParam("to") String to) {
+                                                  @QueryParam("from") String from, @QueryParam("to") String to,
+                                                  @QueryParam("buckets") String buckets) {
+        int procedureIdInt, bucketsInt;
         try {
-            int procedureIdInt = Integer.parseInt(procedureId);
-            DateTime fromDate = new DateTime(from);
-            DateTime toDate;
+            procedureIdInt = Integer.parseInt(procedureId);
+        } catch (NumberFormatException e) {
+            logger.debug("procedureId '" + procedureId + "' from user input could not be parsed into int");
+            throw new WebApplicationException(415);
+        }
+
+        try{
+            bucketsInt = Integer.parseInt(buckets);
+        } catch (NumberFormatException e) {
+            logger.debug("buckets '" + buckets + "' from user input could not be parsed into int");
+            throw new WebApplicationException(415);
+        }
+
+        DateTime fromDate, toDate;
+        try {
+            fromDate = new DateTime(from);
             if (to != null) {
                 toDate = new DateTime(to);
             } else {
                 toDate = new DateTime();
             }
-            return toJSON(dataRetriever.getTimeMeasurementBetweenDatesByProcedure(procedureIdInt, fromDate, toDate));
-        } catch (NumberFormatException e) {
-            logger.debug("procedureId '" + procedureId + "' from user input could not be parsed into int");
-            throw new WebApplicationException(415);
         } catch (IllegalArgumentException e) {
             logger.debug("Illegal time format '" + from + "' or '" + to + "'");
             throw new WebApplicationException(415);
         } catch (NullPointerException e) {
             throw new WebApplicationException(415);
         }
+        return toJSON(dataRetriever.getTimeMeasurementBuckets(procedureIdInt, fromDate, toDate, bucketsInt));
     }
 
     @GET

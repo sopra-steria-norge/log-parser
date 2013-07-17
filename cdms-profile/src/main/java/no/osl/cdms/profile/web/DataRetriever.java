@@ -1,6 +1,7 @@
 package no.osl.cdms.profile.web;
 
 import no.osl.cdms.profile.analyzer.Analyzer;
+import no.osl.cdms.profile.analyzer.TimeMeasurementBucket;
 import no.osl.cdms.profile.api.Procedure;
 import no.osl.cdms.profile.api.TimeMeasurement;
 import no.osl.cdms.profile.jmx.DataRetrieverMBean;
@@ -30,8 +31,16 @@ public class DataRetriever implements DataRetrieverMBean{
         return logRepository.getAllProcedures();
     }
 
-    public List<TimeMeasurement> getTimeMeasurementBetweenDatesByProcedure(int procedureId, DateTime fromDate,
-                                                               DateTime toDate){
+    public TimeMeasurementBucket[] getTimeMeasurementBuckets(int procedureId, DateTime fromDate, DateTime toDate, int buckets){
+        List<TimeMeasurement> timeMeasurements = getTimeMeasurements(procedureId, fromDate, toDate);
+        if (buckets > 0) {
+            return new Analyzer(timeMeasurements).splitIntoBuckets(procedureId, buckets);
+        } else {
+            return null;
+        }
+    }
+
+    public List<TimeMeasurement> getTimeMeasurements(int procedureId, DateTime fromDate, DateTime toDate){
         if (toDate == null) {
             toDate = new DateTime();
         }
@@ -50,7 +59,7 @@ public class DataRetriever implements DataRetrieverMBean{
                     new DateTime(fromDate), new DateTime(toDate), logRepository.getProcedure(procedureId)));
             percentiles = new String[percentages.length];
             for (int i = 0; i < percentages.length; i++) {
-                percentiles[i] = new Duration((long)analyzer.percentile("total", percentages[i])).toString();
+                percentiles[i] = new Duration((long)analyzer.percentile(procedureId, percentages[i])).toString();
             }
         }
 

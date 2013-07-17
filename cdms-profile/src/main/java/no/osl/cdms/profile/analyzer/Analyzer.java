@@ -4,6 +4,7 @@
  */
 package no.osl.cdms.profile.analyzer;
 
+import no.osl.cdms.profile.api.Procedure;
 import no.osl.cdms.profile.interfaces.DataAnalyzer;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Lists;
@@ -22,7 +23,7 @@ import org.joda.time.convert.DurationConverter;
  */
 public class Analyzer implements DataAnalyzer {
     private static DurationConverter converter = ConverterManager.getInstance().getDurationConverter("PT0.123S");
-    private Multimap<String, TimeMeasurement> map;
+    private Multimap<Integer, TimeMeasurement> map;
 
     public Analyzer(final List<TimeMeasurement> times) {
         this.map = ArrayListMultimap.create();
@@ -34,17 +35,18 @@ public class Analyzer implements DataAnalyzer {
             times = Lists.newArrayList();
         }
         for (TimeMeasurement tm : times) {
-            map.put("total", tm);
-            map.put(tm.getProcedure().getClassName(), tm);
-            map.put(tm.getProcedure().getClassName()+"."+tm.getProcedure().getMethod(), tm);
+            map.put(tm.getProcedure().getId(), tm);
+//            map.put(tm.getProcedure().getClassName(), tm);
+//            map.put(tm.getProcedure().getClassName()+"."+tm.getProcedure().getMethod(), tm);
         }
-        for (String key : map.keySet()) {
+//        for (String key : map.keySet()) {
+        for (int key : map.keySet()) {
             Collections.sort(new ArrayList(map.get(key)));
         }
     }
 
     @Override
-    public double average(String id) {
+    public double average(int id) {
         Collection<TimeMeasurement> col = map.get(id);
         if (col.isEmpty()) {
             return 0;
@@ -57,7 +59,7 @@ public class Analyzer implements DataAnalyzer {
     }
 
     @Override
-    public double stddev(String id) {
+    public double stddev(int id) {
         Collection<TimeMeasurement> col = map.get(id);
         if (col.isEmpty()) {
             return 0;
@@ -72,7 +74,7 @@ public class Analyzer implements DataAnalyzer {
     }
 
     @Override
-    public double percentile(String id, int k) {
+    public double percentile(int id, int k) {
         Collection<TimeMeasurement> col = map.get(id);
         if (col.isEmpty()) {
             return 0;
@@ -90,7 +92,7 @@ public class Analyzer implements DataAnalyzer {
     }
 
     @Override
-    public int[] buckets(String id, int NOFBuckets) {
+    public int[] buckets(int id, int NOFBuckets) {
         Collection<TimeMeasurement> col = map.get(id);
         int[] out = new int[NOFBuckets];
         if (col.isEmpty()) {
@@ -104,5 +106,29 @@ public class Analyzer implements DataAnalyzer {
             out[(int) ((converter.getDurationMillis(tm.getDuration()) - min) / bucketSize)]++;
         }
         return out;
+    }
+
+    @Override
+    public TimeMeasurementBucket[] splitIntoBuckets(int id, int nBuckets) {
+        ArrayList<TimeMeasurement> timeMeasurements = new ArrayList(map.get(id));
+        TimeMeasurementBucket[] buckets;
+
+        buckets = new TimeMeasurementBucket[nBuckets];
+
+        long first = timeMeasurements.get(0).getTimestamp().getTime();
+        long last = timeMeasurements.get(timeMeasurements.size()-1).getTimestamp().getTime();
+        double timeInterval = (double)((last - first + 1)) / (double)nBuckets;
+        int index;
+        for (TimeMeasurement tm : timeMeasurements) {
+            try {
+                index = (int) ((tm.getTimestamp().getTime() - first) / timeInterval);
+            } catch (ArithmeticException e) {
+                index = 0;
+            }
+
+            if (buckets[index] == null) buckets[index] = new TimeMeasurementBucket();
+            buckets[index].addTimeMeasurement(tm);
+        }
+        return buckets;
     }
 }
