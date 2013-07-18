@@ -14,7 +14,7 @@ public interface DataRetrieverMBean {
 
     public List<ProcedureEntity> getAllProcedures();
 
-    public TimeMeasurementBucket[] getTimeMeasurementBuckets(int procedureId, DateTime fromDate, DateTime toDate, int buckets);
+    public List<TimeMeasurement> getTimeMeasurements(int procedureId, DateTime fromDate, DateTime toDate, int buckets);
 
     public List<TimeMeasurement> getTimeMeasurements(int procedureId, DateTime fromDate, DateTime toDate);
 

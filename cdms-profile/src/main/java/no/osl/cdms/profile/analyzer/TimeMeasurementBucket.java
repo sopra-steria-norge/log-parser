@@ -1,27 +1,27 @@
 package no.osl.cdms.profile.analyzer;
 
-import no.osl.cdms.profile.api.Procedure;
 import no.osl.cdms.profile.api.TimeMeasurement;
-import org.apache.log4j.Logger;
-import org.joda.time.DateTime;
+import no.osl.cdms.profile.log.MultiContextEntity;
+import no.osl.cdms.profile.log.ProcedureEntity;
+import org.joda.time.Period;
 import org.joda.time.convert.ConverterManager;
 import org.joda.time.convert.DurationConverter;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-public class TimeMeasurementBucket {
+public class TimeMeasurementBucket implements TimeMeasurement {
 
-    Logger logger = Logger.getLogger(getClass().getName());
-
-    private Procedure procedure;
-    private DateTime timestamp;
-    private long duration;
+    private ProcedureEntity procedure;
+    private Date timestamp;
+    private String duration;
+    private int id;
 
     private DurationConverter converter = ConverterManager.getInstance().getDurationConverter("PT0.123S");
 
     private List<TimeMeasurement> timeMeasurements;
-    private boolean compressed = false;
+    private boolean compressed;
 
     public TimeMeasurementBucket() {
         timeMeasurements = new ArrayList<TimeMeasurement>();
@@ -31,6 +31,7 @@ public class TimeMeasurementBucket {
     /**
      * Adds a TimeMeasurement to the bucket.
      * The TimeMeasurements are expected to have the same procedure.
+     * MultiContext is ignored.
      * @param timeMeasurementEntity
      */
     public void addTimeMeasurement(TimeMeasurement timeMeasurementEntity) {
@@ -42,34 +43,88 @@ public class TimeMeasurementBucket {
         if (timeMeasurements == null || timeMeasurements.size() == 0) {
             return;
         }
-        procedure = timeMeasurements.get(0).getProcedure();
-        timestamp = new DateTime(timeMeasurements.get(0).getTimestamp());
+        TimeMeasurement timeMeasurement = timeMeasurements.get(0);
+        this.procedure = timeMeasurement.getProcedure();
+        this.timestamp = timeMeasurement.getTimestamp();
+        this.id = timeMeasurement.getId();
 
         long durationSum = 0;
-        for (TimeMeasurement timeMeasurement: timeMeasurements) {
-            durationSum += converter.getDurationMillis(timeMeasurement.getDuration());
+        for (TimeMeasurement tm: timeMeasurements) {
+            durationSum += converter.getDurationMillis(tm.getDuration());
         }
-        duration = durationSum / timeMeasurements.size();
+        duration = new Period(durationSum / timeMeasurements.size()).toString();
         compressed = true;
     }
 
-    public Procedure getProcedure() {
+    @Override
+    public int getId() {
+        if (!compressed) compress();
+        return id;
+    }
+
+    @Override
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    @Override
+    public ProcedureEntity getProcedure() {
         if (!compressed) compress();
         return procedure;
     }
 
-    public DateTime getTimestamp() {
+    @Override
+    public void setProcedure(ProcedureEntity procedure) {
+        this.procedure = procedure;
+    }
+
+    /**
+     * @return null
+     */
+    @Override
+    public MultiContextEntity getMultiContext() {
+        return null;
+    }
+
+    /**
+     * This setter is ignored: TimeMeasurementBuckets does not use MultiContexts.
+     * @param multiContextMeasurement
+     */
+    @Override
+    public void setMultiContext(MultiContextEntity multiContextMeasurement) {
+        return;
+    }
+
+    @Override
+    public Date getTimestamp() {
         if (!compressed) compress();
         return timestamp;
     }
 
-    public long getDuration() {
+    @Override
+    public void setTimestamp(Date timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    @Override
+    public String getDuration() {
         if (!compressed) compress();
         return duration;
     }
 
     @Override
+    public void setDuration(String duration) {
+        this.duration = duration;
+    }
+
+    @Override
     public String toString() {
         return String.format("ProcedureID=%d, timestamp=%s, duration=%d", getProcedure().getId(), getTimestamp(), getDuration());
+    }
+
+    @Override
+    public int compareTo(TimeMeasurement o) {
+        DurationConverter c = ConverterManager.getInstance().getDurationConverter(this.getDuration());
+        return (int)Math.signum(c.getDurationMillis(this.getDuration())-c.getDurationMillis(o.getDuration()));
     }
 }

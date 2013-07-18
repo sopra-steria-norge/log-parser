@@ -203,11 +203,11 @@ public class AnalyzerTest {
     @Test
     public void testPercentile_null() {
         System.out.println("percentile 20_null");
-        String id = "not";
+        int id = 0;
         int k = 20;
         double expResult = 0;
-//        double result = analyzer.percentile(id, k);
-//        assertEquals(expResult, result, 0.0);
+        double result = analyzer.percentile(id, k);
+        assertEquals(expResult, result, 0.0);
     }
 
     @Test
@@ -259,20 +259,20 @@ public class AnalyzerTest {
 
     @Test
     public void testSplitIntoBuckets() {
-        TimeMeasurementBucket[] buckets;
+        List<TimeMeasurement> buckets;
         int bucketSize = 2;
         buckets = this.analyzer.splitIntoBuckets(id1, bucketSize);
 
-        assertEquals(bucketSize, buckets.length);
-        assertNull(buckets[1]);
+        assertEquals(bucketSize, buckets.size());
+        assertNull(buckets.get(1));
 
         bucketSize = 4;
         buckets = this.analyzer.splitIntoBuckets(id3, bucketSize);
 
-        assertNotNull(buckets[0]);
-        assertNull(buckets[1]);
-        assertNull(buckets[2]);
-        assertNotNull(buckets[3]);
+        assertNotNull(buckets.get(0));
+        assertNull(buckets.get(1));
+        assertNull(buckets.get(2));
+        assertNotNull(buckets.get(3));
 
         long duration = 0;
         int count = 0;
@@ -284,6 +284,18 @@ public class AnalyzerTest {
             }
         }
         duration /= count;
-        assertEquals(duration, buckets[0].getDuration());
+        assertEquals(duration, converter.getDurationMillis(buckets.get(0).getDuration()));
+    }
+
+    @Test
+    public void testSplitIntoBuckets_null() {
+        int id = 0;
+        List<TimeMeasurement> buckets;
+        int bucketSize = 10;
+        buckets = this.analyzer.splitIntoBuckets(id, bucketSize);
+        assertEquals(bucketSize, buckets.size());
+        for (TimeMeasurement bucket : buckets) {
+            assertNull(bucket);
+        }
     }
 }
