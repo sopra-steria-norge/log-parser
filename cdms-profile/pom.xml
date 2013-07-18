@@ -101,6 +101,17 @@
                                     org.springframework.jdbc.datasource,
                                     org.springframework.transaction.annotation,
 
+                                    org.apache.camel.osgi,
+                                    org.apache.camel.spring.spi,
+                                    org.apache.camel.model.dataformat,
+                                    org.apache.camel.converter.jaxb,
+
+                                    org.springframework.jmx.export,
+                                    org.springframework.jmx.export.annotation,
+                                    org.springframework.jmx.export.assembler,
+                                    org.springframework.jmx.export.naming,
+                                    org.springframework.jms.core,
+
                                     javax.sql,
                                     org.slf4j,
                                     org.apache.log4j,
