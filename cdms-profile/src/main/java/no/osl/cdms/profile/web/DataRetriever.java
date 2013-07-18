@@ -1,7 +1,6 @@
 package no.osl.cdms.profile.web;
 
 import no.osl.cdms.profile.analyzer.Analyzer;
-import no.osl.cdms.profile.analyzer.TimeMeasurementBucket;
 import no.osl.cdms.profile.api.Procedure;
 import no.osl.cdms.profile.api.TimeMeasurement;
 import no.osl.cdms.profile.jmx.DataRetrieverMBean;
@@ -31,13 +30,12 @@ public class DataRetriever implements DataRetrieverMBean{
         return logRepository.getAllProcedures();
     }
 
-    public TimeMeasurementBucket[] getTimeMeasurementBuckets(int procedureId, DateTime fromDate, DateTime toDate, int buckets){
+    public List<TimeMeasurement> getTimeMeasurements(int procedureId, DateTime fromDate, DateTime toDate, int buckets){
         List<TimeMeasurement> timeMeasurements = getTimeMeasurements(procedureId, fromDate, toDate);
         if (buckets > 0) {
-            return new Analyzer(timeMeasurements).splitIntoBuckets(procedureId, buckets);
-        } else {
-            return null;
+            timeMeasurements = new Analyzer(timeMeasurements).splitIntoBuckets(procedureId, buckets);
         }
+        return timeMeasurements;
     }
 
     public List<TimeMeasurement> getTimeMeasurements(int procedureId, DateTime fromDate, DateTime toDate){
