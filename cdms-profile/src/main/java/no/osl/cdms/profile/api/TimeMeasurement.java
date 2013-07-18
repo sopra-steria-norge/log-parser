@@ -2,6 +2,8 @@ package no.osl.cdms.profile.api;
 
 import no.osl.cdms.profile.log.ProcedureEntity;
 import no.osl.cdms.profile.log.MultiContextEntity;
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.joda.time.DateTime;
 
 import java.util.Date;
 
@@ -19,7 +21,10 @@ public interface TimeMeasurement extends Comparable<TimeMeasurement>{
 
     void setMultiContext(MultiContextEntity multiContextMeasurement);
 
+    @JsonIgnore
     Date getTimestamp();
+
+    DateTime getJodaTimestamp();
 
     void setTimestamp(Date timestamp);
 
