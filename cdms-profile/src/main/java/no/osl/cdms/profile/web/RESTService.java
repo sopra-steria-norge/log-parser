@@ -60,8 +60,14 @@ public class RESTService {
     public String getPercentiles(@PathParam("procedureId") String procedureId, @QueryParam("from") String from,
                                  @QueryParam("to") String to, @QueryParam("percentages") String percentages) {
         int[] percentagesArray;
+        DateTime fromDate;
+        DateTime toDate;
+
+        if (from == null) throw new WebApplicationException(400);
+
+        // Parse percentages
         if (percentages == null) {
-            percentagesArray = new int[] {10,20,30,40,50,60,70,80,90,100};
+            percentagesArray = new int[] {10,20,30,40,50,60,70,80,90};
         } else {
             String[] tmp = percentages.split(",");
             percentagesArray = new int[tmp.length];
@@ -73,36 +79,26 @@ public class RESTService {
                 }
             }
         }
-        DateTime fromDate;
-        DateTime toDate;
+
+        // Parse dates
         try {
-            fromDate = new DateTime(from);
+            fromDate = new DateTime(Long.parseLong(from));
             if (to != null) {
-                toDate = new DateTime(to);
+                toDate = new DateTime(Long.parseLong(to));
             } else {
                 toDate = new DateTime();
             }
-        } catch (IllegalArgumentException e) {
+        } catch (NumberFormatException e) {
             logger.debug("Illegal time format '" + from + "' or '" + to + "'");
             throw new WebApplicationException(415);
         }
 
+        // Retrieve percentiles
         try {
-            if (procedureId == null) {
-                return toJSON(dataRetriever.getPercentile(fromDate,toDate,percentagesArray));
-            }
-
             int procedureIdInt = Integer.parseInt(procedureId);
-
-            String[] percentiles = dataRetriever.getPercentileByProcedure(procedureIdInt, fromDate, toDate, percentagesArray);
-            return toJSON(percentiles);
-
-        } catch (NumberFormatException e) {
-            logger.debug("procedureId '" + procedureId + "' from user input could not be parsed into int");
-            throw new WebApplicationException(415);
-        } catch (IllegalArgumentException e) {
-            logger.debug("Timestamp '" + from + "' or '" + to +  "' from user input could not be parsed into Date");
-            throw new WebApplicationException(415);
+            return toJSON(dataRetriever.getPercentileByProcedure(procedureIdInt, fromDate, toDate, percentagesArray));
+        } catch (NumberFormatException e){
+            return toJSON(dataRetriever.getPercentile(fromDate,toDate,percentagesArray));
         }
     }
 
