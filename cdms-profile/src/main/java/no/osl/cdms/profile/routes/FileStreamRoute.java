@@ -42,6 +42,7 @@ public class FileStreamRoute extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
+        getContext().getShutdownStrategy().setTimeout(1);
         onException(Exception.class).process(exceptionHandler).markRollbackOnly().handled(true);
         fromF(TIMER_ENDPOINT, this.getClass().getSimpleName(), PERIOD, INITIAL_DELAY).autoStartup(false)
                 .bean(this, "readLines")

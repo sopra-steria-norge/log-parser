@@ -16,18 +16,15 @@ public class OldLogFetcherRoute extends RouteBuilder {
 
     private static final String OLD_LOG_FETCHER_ROUTE_ID = "OldLogFetcherRoute";
     private static final String LOG_DIRECTORY = "data/log";
-
     private static final String LOG_FILE_ENDPOINT = "file:%s?include=performance.log\\.\\d{4}-\\d{2}-\\d{2}&noop=true";
-
     private static DateTime lastRead;
-
     @Autowired
     private RouteExceptionHandler exceptionHandler;
 
     @Override
     public void configure() throws Exception {
         heartbeat();
-
+        getContext().getShutdownStrategy().setTimeout(1);
         onException(Exception.class).process(exceptionHandler).markRollbackOnly().handled(true);
         fromF(LOG_FILE_ENDPOINT, LOG_DIRECTORY).startupOrder(2)
                 .choice().when(shouldRead())
@@ -67,5 +64,4 @@ public class OldLogFetcherRoute extends RouteBuilder {
         return OLD_LOG_FETCHER_ROUTE_ID;
     }
     private static final Logger logger = Logger.getLogger(OldLogFetcherRoute.class.getName());
-
 }

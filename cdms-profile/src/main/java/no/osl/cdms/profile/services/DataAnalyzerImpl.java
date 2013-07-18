@@ -95,7 +95,7 @@ public class DataAnalyzerImpl implements DataAnalyzer {
         for (TimeMeasurement tm : timeMeasurements) {
             try {
                 index = (int) ((tm.getTimestamp().getTime() - first) / (anchor.bucketSizeInMinutes * milliesInMinutes));
-                logger.warn("TM: " + tm.getTimestamp().getTime() + " Anchor: " + first + " Buckets: " + anchor.bucketSizeInMinutes + " millies: " + milliesInMinutes + " INDEX: " + index);
+//                logger.warn("TM: " + tm.getTimestamp().getTime() + " Anchor: " + first + " Buckets: " + anchor.bucketSizeInMinutes + " millies: " + milliesInMinutes + " INDEX: " + index);
             } catch (ArithmeticException e) {
                 index = 0;
             }
@@ -124,21 +124,25 @@ public class DataAnalyzerImpl implements DataAnalyzer {
             aa.dateRange = Minutes.minutesBetween(fromDate, toDate).getMinutes(); //Eg 24*60
             
             aa.bucketSizeInMinutes = (int) Math.max(1, aa.dateRange / nBuckets);
+            System.out.println("minutesRange: " + aa.dateRange + " BucketSize: " + aa.bucketSizeInMinutes);
             logger.error("minutesRange: " + aa.dateRange + " BucketSize: " + aa.bucketSizeInMinutes);
 
             aa.firstAnchorDiff = Minutes.minutesBetween(aa.epochAnchor, fromDate).getMinutes(); //Minutes passed since 1970 to fromDate
             aa.numberOfBucketsInDiff = (int) (aa.firstAnchorDiff / aa.bucketSizeInMinutes); //The number of buckets needed to get close to fromDate
             
+            System.out.println("AnchorDiff: " + aa.firstAnchorDiff + " BucketsInDiff: " + aa.numberOfBucketsInDiff);
             logger.error("AnchorDiff: " + aa.firstAnchorDiff + " BucketsInDiff: " + aa.numberOfBucketsInDiff);
 
             aa.anchorFromDate = aa.epochAnchor.plusMinutes(aa.numberOfBucketsInDiff * aa.bucketSizeInMinutes); //Anchored new fromDate
-            logger.error("AnchorDate: " + aa.anchorFromDate + " ms: " + aa.anchorFromDate.getMillis());
+            System.out.println("AnchorDiff: " + aa.firstAnchorDiff + " BucketsInDiff: " + aa.numberOfBucketsInDiff);
+            logger.error("AnchorDiff: " + aa.firstAnchorDiff + " BucketsInDiff: " + aa.numberOfBucketsInDiff);
              
             aa.numberOfBucketsInDateRange = (int) Math.ceil((aa.dateRange * 1.0) / aa.bucketSizeInMinutes);
             while (aa.anchorFromDate.plusMinutes(aa.numberOfBucketsInDateRange * aa.bucketSizeInMinutes).isBefore(toDate)) {
                 aa.numberOfBucketsInDateRange++;
             }
             
+            System.out.println("BucketsInRange: " + aa.numberOfBucketsInDateRange);
             logger.error("BucketsInRange: " + aa.numberOfBucketsInDateRange);
             
             return aa;

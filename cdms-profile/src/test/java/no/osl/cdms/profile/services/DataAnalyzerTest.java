@@ -274,9 +274,6 @@ public class DataAnalyzerTest {
 
         assertTrue("Bucket size: " + buckets.size(), buckets.size() > 0);
 
-        bucketSize = 4;
-        buckets = this.analyzer.splitIntoBuckets(timeMeasurements3, fromDate, toDate, bucketSize);
-
         long duration = -1;
         for (TimeMeasurement t : timeMeasurements3) {
             DateTime time = new DateTime(t.getTimestamp());
