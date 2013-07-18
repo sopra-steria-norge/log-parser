@@ -3,6 +3,7 @@ package no.osl.cdms.profile.analyzer;
 import no.osl.cdms.profile.api.TimeMeasurement;
 import no.osl.cdms.profile.log.MultiContextEntity;
 import no.osl.cdms.profile.log.ProcedureEntity;
+import org.joda.time.DateTime;
 import org.joda.time.Period;
 import org.joda.time.convert.ConverterManager;
 import org.joda.time.convert.DurationConverter;
@@ -99,6 +100,12 @@ public class TimeMeasurementBucket implements TimeMeasurement {
     public Date getTimestamp() {
         if (!compressed) compress();
         return timestamp;
+    }
+
+    @Override
+    public DateTime getJodaTimestamp() {
+        if (!compressed) compress();
+        return new DateTime(timestamp);
     }
 
     @Override

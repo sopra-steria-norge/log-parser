@@ -2,6 +2,8 @@ package no.osl.cdms.profile.log;
 
 import no.osl.cdms.profile.api.TimeMeasurement;
 import javax.persistence.*;
+
+import org.joda.time.DateTime;
 import org.joda.time.convert.ConverterManager;
 import org.joda.time.convert.DurationConverter;
 
@@ -69,6 +71,10 @@ public class TimeMeasurementEntity implements TimeMeasurement {
 
     public Date getTimestamp() {
         return timestamp;
+    }
+
+    public DateTime getJodaTimestamp() {
+        return new DateTime(timestamp);
     }
 
     public void setTimestamp(Date timestamp) {
