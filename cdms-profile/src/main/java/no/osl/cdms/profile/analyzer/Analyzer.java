@@ -9,11 +9,11 @@ import no.osl.cdms.profile.interfaces.DataAnalyzer;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+
+import java.util.*;
+
 import no.osl.cdms.profile.api.TimeMeasurement;
+import no.osl.cdms.profile.log.TimeMeasurementEntity;
 import org.joda.time.convert.ConverterManager;
 import org.joda.time.convert.DurationConverter;
 
@@ -109,16 +109,19 @@ public class Analyzer implements DataAnalyzer {
     }
 
     @Override
-    public TimeMeasurementBucket[] splitIntoBuckets(int id, int nBuckets) {
+    public List<TimeMeasurement> splitIntoBuckets(int id, int nBuckets) {
         ArrayList<TimeMeasurement> timeMeasurements = new ArrayList(map.get(id));
-        TimeMeasurementBucket[] buckets;
+        TimeMeasurement[] buckets = new TimeMeasurementBucket[nBuckets];
 
-        buckets = new TimeMeasurementBucket[nBuckets];
+        if (timeMeasurements.size() <= 0) {
+            return Arrays.asList(buckets);
+        }
 
         long first = timeMeasurements.get(0).getTimestamp().getTime();
         long last = timeMeasurements.get(timeMeasurements.size()-1).getTimestamp().getTime();
         double timeInterval = (double)((last - first + 1)) / (double)nBuckets;
         int index;
+
         for (TimeMeasurement tm : timeMeasurements) {
             try {
                 index = (int) ((tm.getTimestamp().getTime() - first) / timeInterval);
@@ -126,9 +129,11 @@ public class Analyzer implements DataAnalyzer {
                 index = 0;
             }
 
-            if (buckets[index] == null) buckets[index] = new TimeMeasurementBucket();
-            buckets[index].addTimeMeasurement(tm);
+            if (buckets[index] == null) {
+                buckets[index] = new TimeMeasurementBucket();
+            }
+            ((TimeMeasurementBucket) buckets[index]).addTimeMeasurement(tm);
         }
-        return buckets;
+        return Arrays.asList(buckets);
     }
 }

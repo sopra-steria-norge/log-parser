@@ -125,6 +125,8 @@ public class RESTService {
         } catch (NumberFormatException e) {
             logger.debug("buckets '" + buckets + "' from user input could not be parsed into int");
             throw new WebApplicationException(415);
+        } catch (NullPointerException e) {
+            bucketsInt = -1;
         }
 
         DateTime fromDate, toDate;
@@ -141,7 +143,7 @@ public class RESTService {
         } catch (NullPointerException e) {
             throw new WebApplicationException(415);
         }
-        return toJSON(dataRetriever.getTimeMeasurementBuckets(procedureIdInt, fromDate, toDate, bucketsInt));
+        return toJSON(dataRetriever.getTimeMeasurements(procedureIdInt, fromDate, toDate, bucketsInt));
     }
 
     @GET
