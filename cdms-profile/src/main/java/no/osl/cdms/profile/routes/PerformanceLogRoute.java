@@ -1,14 +1,10 @@
 package no.osl.cdms.profile.routes;
 
-import no.osl.cdms.profile.api.TimeMeasurement;
 import no.osl.cdms.profile.factories.EntityFactory;
-import no.osl.cdms.profile.log.LogRepository;
 import no.osl.cdms.profile.log.TimeMeasurementEntity;
 import no.osl.cdms.profile.parser.LogLineRegexParser;
 import org.apache.camel.builder.RouteBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.Map;
 
 public class PerformanceLogRoute extends RouteBuilder {
 
@@ -33,7 +29,7 @@ public class PerformanceLogRoute extends RouteBuilder {
                 .bean(entityFactory, "createTimemeasurement") // Parses log entry into database format
                 .split(body())
                 .choice().when(body().isNotNull())
-                .toF(DATABASE_ENDPOINT, body().getClass().toString())
+                .toF(DATABASE_ENDPOINT, TimeMeasurementEntity.class.getCanonicalName())
                 .routeId(PERFORMANCE_LOG_ROUTE_ID);
     }
 

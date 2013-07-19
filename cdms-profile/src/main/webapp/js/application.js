@@ -1,7 +1,7 @@
 if (typeof String.prototype.startsWith !== 'function') {
-  String.prototype.startsWith = function (str){
-    return this.slice(0, str.length) === str;
-  };
+    String.prototype.startsWith = function(str) {
+        return this.slice(0, str.length) === str;
+    };
 }
 $(document).ready(function() {
     var AppRouter = Backbone.Router.extend({
@@ -20,10 +20,10 @@ $(document).ready(function() {
     loadPage('navbar', 'body', false, function() {
         var containerpage = Backbone.history.location.hash;
         if (containerpage.length >= 0 && containerpage.startsWith('#page')) {
-             containerpage = containerpage.split('/')[1];
+            containerpage = containerpage.split('/')[1];
         }
-        $('.navbar').find('a[href=#'+containerpage+']').parent().click();
-        
+        $('.navbar').find('a[href=#' + containerpage + ']').parent().click();
+
     });
     var router = new AppRouter();
     Backbone.history.start();
@@ -36,7 +36,8 @@ $(document).ready(function() {
 
     function loadPage(page, elementSelector, clear, callback) {
         var clear = clear || false;
-        var callback = callback || function(){};
+        var callback = callback || function() {
+        };
         if (clear) {
             $(elementSelector).html('');
         }

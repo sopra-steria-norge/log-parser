@@ -9,8 +9,8 @@
     <!--<osgi:service ref="flightService" interface="no.osl.cdms.core.api.flight.FlightService" />-->
 
     <!-- REFERENCES -->
-    <!--<osgi:reference id="transactionManager" interface="org.springframework.transaction.PlatformTransactionManager" />-->
+    <osgi:reference id="transactionManager" interface="org.springframework.transaction.PlatformTransactionManager" />
     <!--<osgi:reference id="entityManagerFactory" interface="javax.persistence.EntityManagerFactory" filter="(entityManager.system=CDMS)" />-->
-    <!--<osgi:reference id="cdmsDataSource" interface="javax.sql.DataSource" />-->
+    <!--<osgi:reference id="profileDataSource" interface="javax.sql.DataSource" />-->
 
 </beans>

@@ -77,7 +77,7 @@ public class GuavaHelpers {
         } catch (ParseException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
-        DateTimeFormatter dtf = DateTimeFormat.forPattern("yyyy-MM-dd kk:mm:ss,SSS");
+        DateTimeFormatter dtf = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss,SSS");
         Date date = dtf.parseDateTime(string).toDate();
 
         return date;
