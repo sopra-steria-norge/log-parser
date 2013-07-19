@@ -35,11 +35,9 @@ $(document).ready(function() {
 
 
     function loadPage(page, elementSelector, clear, callback) {
-        console.debug(page);
         var clear = clear || false;
         var callback = callback || function() {
         };
-        console.debug(clear);
         $.get({
             url: 'page/' + page,
             success: function(r) {
@@ -47,7 +45,6 @@ $(document).ready(function() {
 					$(elementSelector).html('');
 				}
                 $('body').trigger('destroy_view');
-                console.debug($('.applicationcontainer').html().length);
                 new PageView({model: new PageComponentCollection(JSON.parse(r)), el: elementSelector});
                 callback();
             }

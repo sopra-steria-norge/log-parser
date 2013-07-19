@@ -18,7 +18,9 @@ public class PerformanceLogRoute extends RouteBuilder {
 
     @Autowired
     private EntityFactory entityFactory;
-    private LogLineRegexParser logLineRegexParser = new LogLineRegexParser();
+
+    @Autowired
+    private LogLineRegexParser logLineRegexParser;
 
     @Override
     public void configure() throws Exception{

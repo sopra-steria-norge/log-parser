@@ -47,14 +47,10 @@ public class DataRetriever implements DataRetrieverMBean{
     }
 
     public String[] getPercentileByProcedure(int procedureId, DateTime fromDate, DateTime toDate, int[] percentages) {
-        /*String cacheQuery = "getPercentileByProcedure:" + fromDate + ":" + toDate;
-        for(double d : percentages) {
-            cacheQuery += ":" + d;
-        }*/
-        String[] percentiles = null;//(String[]) getFromCache(cacheQuery);
+        String[] percentiles = null;
         if (percentiles == null) {
             Analyzer analyzer = new Analyzer(logRepository.getTimeMeasurementsByProcedure(
-                    new DateTime(fromDate), new DateTime(toDate), logRepository.getProcedure(procedureId)));
+                    fromDate, toDate, logRepository.getProcedure(procedureId)));
             percentiles = new String[percentages.length];
             for (int i = 0; i < percentages.length; i++) {
                 percentiles[i] = new Duration((long)analyzer.percentile(procedureId, percentages[i])).toString();
