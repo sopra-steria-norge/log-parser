@@ -49,6 +49,12 @@ public class GuavaHelpersTest {
     @Autowired
     private LogRepository logRepository;
 
+    @Autowired
+    private EntityFactory entityFactory;
+
+    @Autowired
+    private GuavaHelpers guavaHelpers;
+
     @BeforeClass
     public static void setUpClass() {
     }
@@ -59,7 +65,7 @@ public class GuavaHelpersTest {
 
     @Before
     public void setUp() {
-        EntityFactory.getInstance().setLogRepository(logRepository);
+        entityFactory.setLogRepository(logRepository);
     }
 
     @After
@@ -67,7 +73,7 @@ public class GuavaHelpersTest {
     }
 
     /**
-     * Test of isDuration method, of class GuavaHelpers.
+     * Test of isDuration method, of class guavaHelpers.
      */
     @Test
     public void testIsDuration() {
@@ -86,12 +92,12 @@ public class GuavaHelpersTest {
         int i = 0;
         for (Entry<String, String> entry : entries) {
             System.out.println("Key: " + entry.getKey() + " Value: " + entry.getValue());
-            assertEquals("Testing " + i, expResult[i++], GuavaHelpers.isDuration().apply(entry));
+            assertEquals("Testing " + i, expResult[i++], guavaHelpers.isDuration().apply(entry));
         }
     }
 
     /**
-     * Test of getConverter method, of class GuavaHelpers.
+     * Test of getConverter method, of class guavaHelpers.
      */
     @Test
     public void testGetConverterLocalOK() {
@@ -100,12 +106,12 @@ public class GuavaHelpersTest {
         map.put("LocalThreadContext.duration", "PT0.015S");
         map.put("LocalThreadContext.id", "myID.test");
         map.put("timestamp", "2013-06-25 15:02:08,876");
-        Function<Map.Entry<String, String>, TimeMeasurement> functor = GuavaHelpers.getConverter(map);
+        Function<Map.Entry<String, String>, TimeMeasurement> functor = guavaHelpers.getConverter(map);
 
         TimeMeasurement result = null;
-        Procedure expSub = EntityFactory.getInstance().createProcedure("myID", "test");
-        TimeMeasurement expResult = EntityFactory.getInstance().createTimeMeasurement(expSub,
-                GuavaHelpers.parseDateString("2013-06-25 15:02:08,876"), "PT0.015S");
+        Procedure expSub = entityFactory.createProcedure("myID", "test");
+        TimeMeasurement expResult = entityFactory.createTimeMeasurement(expSub,
+                guavaHelpers.parseDateString("2013-06-25 15:02:08,876"), "PT0.015S");
 
         for (Entry<String, String> e : map.entrySet()) {
             System.out.println(e.getKey() + ": " + e.getValue());
@@ -123,13 +129,13 @@ public class GuavaHelpersTest {
         map.put("LocalThreadContext.duration", "15.0");
         map.put("LocalThreadContext.id", "myID.test");
         map.put("timestamp", "2013-06-25 15:02:08,876");
-        Function<Map.Entry<String, String>, TimeMeasurement> functor = GuavaHelpers.getConverter(map);
+        Function<Map.Entry<String, String>, TimeMeasurement> functor = guavaHelpers.getConverter(map);
 
         TimeMeasurement result = null;
-        Procedure expSub = EntityFactory.getInstance().createProcedure("myID", "test");
+        Procedure expSub = entityFactory.createProcedure("myID", "test");
 
-        TimeMeasurement expResult = EntityFactory.getInstance().createTimeMeasurement(expSub,
-                GuavaHelpers.parseDateString("2013-06-25 15:02:08,876"), "PT0.015S");
+        TimeMeasurement expResult = entityFactory.createTimeMeasurement(expSub,
+                guavaHelpers.parseDateString("2013-06-25 15:02:08,876"), "PT0.015S");
 
         for (Entry<String, String> e : map.entrySet()) {
             if (e.getKey().endsWith("duration")) {
@@ -146,12 +152,12 @@ public class GuavaHelpersTest {
         map.put("LocalThreadContext.duration", "15.0aasda");
         map.put("LocalThreadContext.id", "myID.test");
         map.put("timestamp", "2013-06-25 15:02:08,876");
-        Function<Map.Entry<String, String>, TimeMeasurement> functor = GuavaHelpers.getConverter(map);
+        Function<Map.Entry<String, String>, TimeMeasurement> functor = guavaHelpers.getConverter(map);
 
         TimeMeasurement result = null;
-        Procedure expSub = EntityFactory.getInstance().createProcedure("myID", "test");
-        TimeMeasurement expResult = EntityFactory.getInstance().createTimeMeasurement(expSub,
-                GuavaHelpers.parseDateString("2013-06-25 15:02:08,876"), "PT0.015S");
+        Procedure expSub = entityFactory.createProcedure("myID", "test");
+        TimeMeasurement expResult = entityFactory.createTimeMeasurement(expSub,
+                guavaHelpers.parseDateString("2013-06-25 15:02:08,876"), "PT0.015S");
 
         for (Entry<String, String> e : map.entrySet()) {
             if (e.getKey().endsWith("duration")) {
@@ -170,23 +176,23 @@ public class GuavaHelpersTest {
         map.put("DoesntNeedIt.Lap.Class.method:duration", "PT0.015S");
         map.put("DoesntNeedIt.Lap.Class.function:duration", "PT0.005S");
         map.put("timestamp", "2013-06-25 15:02:08,876");
-        Function<Map.Entry<String, String>, TimeMeasurement> functor = GuavaHelpers.getConverter(map);
+        Function<Map.Entry<String, String>, TimeMeasurement> functor = guavaHelpers.getConverter(map);
 
         Procedure[] expSub = new Procedure[]{
-                EntityFactory.getInstance().createProcedure("Total", ""),
-                EntityFactory.getInstance().createProcedure("Wait", ""),
-                EntityFactory.getInstance().createProcedure("Class", "method"),
-                EntityFactory.getInstance().createProcedure("Class", "function")
+                entityFactory.createProcedure("Total", ""),
+                entityFactory.createProcedure("Wait", ""),
+                entityFactory.createProcedure("Class", "method"),
+                entityFactory.createProcedure("Class", "function")
         };
         TimeMeasurement[] expResult = new TimeMeasurement[]{
-            EntityFactory.getInstance().createTimeMeasurement(expSub[0],
-                    GuavaHelpers.parseDateString("2013-06-25 15:02:08,876"), "PT0.015S"),
-            EntityFactory.getInstance().createTimeMeasurement(expSub[1],
-                    GuavaHelpers.parseDateString("2013-06-25 15:02:08,876"), "PT47.061S"),
-            EntityFactory.getInstance().createTimeMeasurement(expSub[2],
-                    GuavaHelpers.parseDateString("2013-06-25 15:02:08,876"), "PT0.015S"),
-            EntityFactory.getInstance().createTimeMeasurement(expSub[3],
-                    GuavaHelpers.parseDateString("2013-06-25 15:02:08,876"), "PT0.005S")
+                entityFactory.createTimeMeasurement(expSub[0],
+                    guavaHelpers.parseDateString("2013-06-25 15:02:08,876"), "PT0.015S"),
+                entityFactory.createTimeMeasurement(expSub[1],
+                    guavaHelpers.parseDateString("2013-06-25 15:02:08,876"), "PT47.061S"),
+                entityFactory.createTimeMeasurement(expSub[2],
+                    guavaHelpers.parseDateString("2013-06-25 15:02:08,876"), "PT0.015S"),
+                entityFactory.createTimeMeasurement(expSub[3],
+                    guavaHelpers.parseDateString("2013-06-25 15:02:08,876"), "PT0.005S")
         };
         int expResultCounter = 0;
         for (Entry<String, String> e : map.entrySet()) {
@@ -212,7 +218,7 @@ public class GuavaHelpersTest {
         map.put("", "PT0.005S");
         map.put("JustTesting", "PT0.005S");
         map.put(null, "PT0.015S");
-        Function<Map.Entry<String, String>, TimeMeasurement> functor = GuavaHelpers.getConverter(map);
+        Function<Map.Entry<String, String>, TimeMeasurement> functor = guavaHelpers.getConverter(map);
 
         Class[] expExceptions = new Class[]{
             IllegalArgumentException.class,
@@ -242,7 +248,7 @@ public class GuavaHelpersTest {
         System.out.println("testGetConverterLocalMissingId");
         Map<String, String> map = Maps.newLinkedHashMap();
         map.put("LocalThreadContext.duration", "15.0");
-        Function<Map.Entry<String, String>, TimeMeasurement> functor = GuavaHelpers.getConverter(map);
+        Function<Map.Entry<String, String>, TimeMeasurement> functor = guavaHelpers.getConverter(map);
         for (Entry<String, String> e : map.entrySet()) {
             functor.apply(e);
         }

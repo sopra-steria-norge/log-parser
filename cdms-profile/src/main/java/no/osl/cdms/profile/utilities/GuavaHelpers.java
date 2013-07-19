@@ -24,16 +24,26 @@ import org.joda.time.convert.ConverterManager;
 import org.joda.time.convert.DurationConverter;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author nutgaard
  */
+@Component
 public class GuavaHelpers {
 
-    private static DurationConverter converter = ConverterManager.getInstance().getDurationConverter("PT0.012S");
+    @Autowired
+    private EntityFactory entityFactory;
 
-    public static Predicate<Map.Entry<String, String>> isDuration() {
+    public GuavaHelpers() {
+
+    }
+
+    private DurationConverter converter = ConverterManager.getInstance().getDurationConverter("PT0.012S");
+
+    public Predicate<Map.Entry<String, String>> isDuration() {
         return new Predicate<Map.Entry<String, String>>() {
             @Override
             public boolean apply(Map.Entry<String, String> input) {
@@ -45,22 +55,22 @@ public class GuavaHelpers {
         };
     }
 
-    public static Function<Map.Entry<String, String>, TimeMeasurement> getConverter(final Map<String, String> properties) {
+    public Function<Map.Entry<String, String>, TimeMeasurement> getConverter(final Map<String, String> properties) {
         return new Function<Map.Entry<String, String>, TimeMeasurement>() {
             @Override
             public TimeMeasurement apply(Map.Entry<String, String> input) {
                 String[] measured = parseKey(input.getKey(), properties);
                 String time = parseDuration(input.getValue());
 
-                Procedure m = (ProcedureEntity) EntityFactory.getInstance().createProcedure(measured[0], measured[1]);
-                TimeMeasurement tm = EntityFactory.getInstance().createTimeMeasurement(m, parseDateString(properties.get("timestamp")), time);
+                Procedure m = (ProcedureEntity) entityFactory.createProcedure(measured[0], measured[1]);
+                TimeMeasurement tm = entityFactory.createTimeMeasurement(m, parseDateString(properties.get("timestamp")), time);
 
                 return tm;
             }
         };
     }
 
-    public static Date parseDateString(String string) {
+    public Date parseDateString(String string) {
 
         try {
             Date date = new SimpleDateFormat("yyyy-mm-dd kk:mm:ss,SSS", Locale.ENGLISH).parse(string);
@@ -73,7 +83,7 @@ public class GuavaHelpers {
         return date;
     }
 
-    public static String[] parseKey(String key, Map<String, String> map) {
+    public String[] parseKey(String key, Map<String, String> map) {
         if (key == null) {
             throw new IllegalArgumentException("Key for timemeasurement cannot be <null>");//Should not be possible, cannot store null as key in maps
         }
@@ -97,7 +107,7 @@ public class GuavaHelpers {
         }
     }
 
-    public static String parseDuration(String duration) {
+    public String parseDuration(String duration) {
         try {
             long ans = converter.getDurationMillis(duration);
             return duration;

@@ -17,6 +17,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,6 +45,12 @@ public class AnalyzerTest {
 
     private LogRepository logRepository;
 
+    @Autowired
+    private EntityFactory entityFactory;
+
+    @Autowired
+    private GuavaHelpers guavaHelpers;
+
     private static DurationConverter converter = ConverterManager.getInstance().getDurationConverter("PT0.123S");
 
     public AnalyzerTest() {
@@ -63,32 +70,32 @@ public class AnalyzerTest {
         when(logRepository.getProcedure(id2)).thenReturn(p2);
         when(logRepository.getProcedure(id3)).thenReturn(p3);
 
-        EntityFactory.getInstance().setLogRepository(logRepository);
+        entityFactory.setLogRepository(logRepository);
         tms = new LinkedList<TimeMeasurement>();
         ProcedureEntity procedure1 = logRepository.getProcedure(id1);
         ProcedureEntity procedure2 = logRepository.getProcedure(id2);
         ProcedureEntity procedure3 = logRepository.getProcedure(id3);
 
         for (double d : data) {
-            TimeMeasurement tm = EntityFactory.getInstance().createTimeMeasurement(procedure1,
-                    GuavaHelpers.parseDateString("2013-06-25 15:02:08,876"), "PT"+String.valueOf(d/1000)+"S");
+            TimeMeasurement tm = entityFactory.createTimeMeasurement(procedure1,
+                    guavaHelpers.parseDateString("2013-06-25 15:02:08,876"), "PT" + String.valueOf(d / 1000) + "S");
             tms.add(tm);
         }
-        TimeMeasurement tm2 = EntityFactory.getInstance().createTimeMeasurement(procedure2,
-                GuavaHelpers.parseDateString("2013-06-25 15:02:08,876"), "PT0.0"+String.valueOf(9999.0/1000)+"S");
+        TimeMeasurement tm2 = entityFactory.createTimeMeasurement(procedure2,
+                guavaHelpers.parseDateString("2013-06-25 15:02:08,876"), "PT0.0" + String.valueOf(9999.0 / 1000) + "S");
         tms.add(tm2);//Indirect test of delegate
 
         // Bucket measurements
-        tms.add(EntityFactory.getInstance().createTimeMeasurement(procedure3,
-                GuavaHelpers.parseDateString("2013-06-01 15:02:08,876"), "PT"+String.valueOf(50.0/1000)+"S"));
-        tms.add(EntityFactory.getInstance().createTimeMeasurement(procedure3,
-                GuavaHelpers.parseDateString("2013-06-02 15:02:08,876"), "PT"+String.valueOf(154.0/1000)+"S"));
-        tms.add(EntityFactory.getInstance().createTimeMeasurement(procedure3,
-                GuavaHelpers.parseDateString("2013-06-02 16:05:08,876"), "PT"+String.valueOf(45.0/1000)+"S"));
-        tms.add(EntityFactory.getInstance().createTimeMeasurement(procedure3,
-                GuavaHelpers.parseDateString("2014-06-02 16:05:08,876"), "PT"+String.valueOf(455.0/1000)+"S"));
-        tms.add(EntityFactory.getInstance().createTimeMeasurement(procedure3,
-                GuavaHelpers.parseDateString("2014-06-02 16:05:10,876"), "PT"+String.valueOf(123.0/1000)+"S"));
+        tms.add(entityFactory.createTimeMeasurement(procedure3,
+                guavaHelpers.parseDateString("2013-06-01 15:02:08,876"), "PT" + String.valueOf(50.0 / 1000) + "S"));
+        tms.add(entityFactory.createTimeMeasurement(procedure3,
+                guavaHelpers.parseDateString("2013-06-02 15:02:08,876"), "PT" + String.valueOf(154.0 / 1000) + "S"));
+        tms.add(entityFactory.createTimeMeasurement(procedure3,
+                guavaHelpers.parseDateString("2013-06-02 16:05:08,876"), "PT" + String.valueOf(45.0 / 1000) + "S"));
+        tms.add(entityFactory.createTimeMeasurement(procedure3,
+                guavaHelpers.parseDateString("2014-06-02 16:05:08,876"), "PT" + String.valueOf(455.0 / 1000) + "S"));
+        tms.add(entityFactory.createTimeMeasurement(procedure3,
+                guavaHelpers.parseDateString("2014-06-02 16:05:10,876"), "PT" + String.valueOf(123.0 / 1000) + "S"));
 
         this.analyzer = new Analyzer(tms);
     }
