@@ -55,6 +55,14 @@ public class RESTService {
     }
 
     @GET
+    @Path("percentile")
+    @Produces("application/json")
+    public String getPercentiles(@QueryParam("from") String from,
+                                 @QueryParam("to") String to, @QueryParam("percentages") String percentages) {
+        return getPercentiles(null, from, to, percentages);
+    }
+
+    @GET
     @Path("percentile/{procedureId}")
     @Produces("application/json")
     public String getPercentiles(@PathParam("procedureId") String procedureId, @QueryParam("from") String from,
@@ -62,7 +70,6 @@ public class RESTService {
         int[] percentagesArray;
         DateTime fromDate;
         DateTime toDate;
-
         if (from == null) throw new WebApplicationException(400);
 
         // Parse percentages
@@ -117,12 +124,14 @@ public class RESTService {
         }
 
         try{
-            bucketsInt = Integer.parseInt(buckets);
+            if (buckets == null) {
+                bucketsInt = -1;
+            } else {
+                bucketsInt = Integer.parseInt(buckets);
+            }
         } catch (NumberFormatException e) {
             logger.debug("buckets '" + buckets + "' from user input could not be parsed into int");
             throw new WebApplicationException(415);
-        } catch (NullPointerException e) {
-            bucketsInt = -1;
         }
 
         DateTime fromDate, toDate;
