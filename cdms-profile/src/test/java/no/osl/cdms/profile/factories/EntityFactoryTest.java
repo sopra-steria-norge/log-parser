@@ -28,7 +28,8 @@ import static org.junit.Assert.assertTrue;
         "classpath:test-cdms-profile-infra-ctx.xml"})
 public class EntityFactoryTest {
 
-    private EntityFactory entityFactory = EntityFactory.getInstance();
+    @Autowired
+    private EntityFactory entityFactory;
 
     @Autowired
     private LogRepository logRepository;

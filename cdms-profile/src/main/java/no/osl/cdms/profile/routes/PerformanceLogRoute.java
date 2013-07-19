@@ -20,7 +20,8 @@ public class PerformanceLogRoute extends RouteBuilder {
     private static final String LOG_FILE_ENDPOINT = "stream:file?fileName=%s/%s&scanStream=true&scanStreamDelay=%d";
     private static final String DATABASE_ENDPOINT = "jpa:%s?usePersist=true";
 
-    private EntityFactory entityFactory = EntityFactory.getInstance();
+    @Autowired
+    private EntityFactory entityFactory;
     private LogLineRegexParser logLineRegexParser = new LogLineRegexParser();
 
     @Override

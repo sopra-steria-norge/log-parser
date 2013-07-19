@@ -22,29 +22,23 @@ import no.osl.cdms.profile.log.TimeMeasurementEntity;
 import no.osl.cdms.profile.utilities.GuavaHelpers;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author nutgaard
  */
+@Component
 public class EntityFactory {
-
-    private static EntityFactory entityFactory;
-
     @Autowired
     private LogRepository logRepository;
+
+    @Autowired
+    private GuavaHelpers guavaHelpers;
 
     public void setLogRepository(LogRepository logRepository) {
         this.logRepository = logRepository;
     }
-
-    public static EntityFactory getInstance() {
-        if (entityFactory == null) {
-            entityFactory = new EntityFactory();
-        }
-        return entityFactory;
-    }
-
     public TimeMeasurement createTimeMeasurement(Procedure procedure, MultiContext context, Date timestamp, String duration) {
         return (TimeMeasurement) (new TimeMeasurementEntity((ProcedureEntity) procedure, (MultiContextEntity) context, timestamp, duration));
     }
@@ -78,8 +72,8 @@ public class EntityFactory {
         DateTime end = new DateTime(properties.get("MultiThreadContext.Total.end"));
         MultiContextEntity mcme = new MultiContextEntity(start.toDate(), end.toDate());
 
-        Map<String, String> measuredFiltered = Maps.filterEntries(properties, GuavaHelpers.isDuration());
-        List<TimeMeasurement> measured = Lists.newLinkedList(Iterables.transform(measuredFiltered.entrySet(), GuavaHelpers.getConverter(properties)));
+        Map<String, String> measuredFiltered = Maps.filterEntries(properties, guavaHelpers.isDuration());
+        List<TimeMeasurement> measured = Lists.newLinkedList(Iterables.transform(measuredFiltered.entrySet(), guavaHelpers.getConverter(properties)));
         for (TimeMeasurement tm : measured) {
             tm.setMultiContext(mcme);
         }
@@ -89,12 +83,12 @@ public class EntityFactory {
     public List<TimeMeasurement> createLocalContextTimeMeasurement(Map<String, String> properties) {
 //        DateTime timestamp = new DateTime(properties.get("timestamp"));
         String duration = properties.get("LocalThreadContext.duration");
-        String[] id = GuavaHelpers.parseKey("LocalThreadContext.id", properties);
+        String[] id = guavaHelpers.parseKey("LocalThreadContext.id", properties);
         String classname = id[0];
         String methodname = id[1];
         Procedure m = createProcedure(classname, methodname);
         //Procedure m = new ProcedureEntity("",classname, methodname);
-        TimeMeasurement tm = createTimeMeasurement(m, GuavaHelpers.parseDateString(properties.get("timestamp")), duration);
+        TimeMeasurement tm = createTimeMeasurement(m, guavaHelpers.parseDateString(properties.get("timestamp")), duration);
         tm.setProcedure((ProcedureEntity) m);
         List<TimeMeasurement> list = Lists.newLinkedList();
         list.add(tm);
