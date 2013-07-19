@@ -31,10 +31,10 @@
 
     <tx:annotation-driven/>
 
-    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
-        <property name="entityManagerFactory" ref="entityManagerFactory" />
-        <property name="dataSource" ref="profileDataSource" />
-    </bean>
+    <!--<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">-->
+        <!--<property name="entityManagerFactory" ref="entityManagerFactory" />-->
+        <!--<property name="dataSource" ref="profileDataSource" />-->
+    <!--</bean>-->
 
     <osgi:service ref="profileDataSource" interface="javax.sql.DataSource">
         <osgi:service-properties>
