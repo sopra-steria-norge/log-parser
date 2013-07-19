@@ -82,13 +82,13 @@ public class RESTService {
 
         // Parse dates
         try {
-            fromDate = new DateTime(Long.parseLong(from));
+            fromDate = new DateTime(from);
             if (to != null) {
-                toDate = new DateTime(Long.parseLong(to));
+                toDate = new DateTime(to);
             } else {
                 toDate = new DateTime();
             }
-        } catch (NumberFormatException e) {
+        } catch (IllegalArgumentException e) {
             logger.debug("Illegal time format '" + from + "' or '" + to + "'");
             throw new WebApplicationException(415);
         }
