@@ -111,6 +111,7 @@ public class Analyzer implements DataAnalyzer {
     @Override
     public List<TimeMeasurement> splitIntoBuckets(int id, int nBuckets) {
         ArrayList<TimeMeasurement> timeMeasurements = new ArrayList(map.get(id));
+        Collections.sort(timeMeasurements);
         TimeMeasurement[] buckets = new TimeMeasurementBucket[nBuckets];
 
         if (timeMeasurements.size() <= 0) {
