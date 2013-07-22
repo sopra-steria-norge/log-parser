@@ -155,9 +155,6 @@ public class RESTService {
     @Path("page/{name}")
     @Produces("application/json")
     public String getLayout(@PathParam("name") String name) {
-//        return "{\"elements\":[{\"type\":\"h1\",\"data\":{\"innerHTML\":\"hello\"}}," +
-//                "{\"type\":\"legend\", \"classes\":\"legend\", \"id\":\"legend1\"},"+
-//                "{\"type\":\"graph\", \"classes\":\"graph\", \"id\":\"graph1\", \"legendId\":\"legend1\"}]}";
 
         if (name == null) {
             List<String> names = dataRetriever.getAllLayoutEntityNames();

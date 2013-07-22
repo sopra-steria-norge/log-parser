@@ -47,8 +47,8 @@ $(document).ready(function() {
                 $('body').trigger('destroy_view');
                 console.log(r);
 //                console.log(JSON.parse(r));
-                if(typeof r !== 'string') r = JSON.stringify(r);
-                new PageView({model: new PageComponentCollection(JSON.parse(r)), el: elementSelector});
+                //if(typeof r !== 'string') r = JSON.stringify(r);
+                new PageView({model: new PageComponentCollection(r), el: elementSelector});
                 callback();
             }
         });
