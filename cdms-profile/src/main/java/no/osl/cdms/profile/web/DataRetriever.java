@@ -3,6 +3,7 @@ package no.osl.cdms.profile.web;
 import no.osl.cdms.profile.analyzer.Analyzer;
 import no.osl.cdms.profile.api.Procedure;
 import no.osl.cdms.profile.api.TimeMeasurement;
+import no.osl.cdms.profile.interfaces.DataAnalyzer;
 import no.osl.cdms.profile.jmx.DataRetrieverMBean;
 import no.osl.cdms.profile.log.LayoutEntity;
 import no.osl.cdms.profile.log.LogRepository;
@@ -22,6 +23,9 @@ public class DataRetriever implements DataRetrieverMBean{
     @Autowired
     private LogRepository logRepository;
 
+    @Autowired
+    private DataAnalyzer analyzer;
+
     public DataRetriever() {
 
     }
@@ -31,29 +35,33 @@ public class DataRetriever implements DataRetrieverMBean{
     }
 
     public List<TimeMeasurement> getTimeMeasurements(int procedureId, DateTime fromDate, DateTime toDate, int buckets){
-        List<TimeMeasurement> timeMeasurements = getTimeMeasurements(procedureId, fromDate, toDate);
+        List<TimeMeasurement> timeMeasurements = getTimeMeasurements(procedureId, fromDate, toDate, TimeMeasurement.Field.TIMESTAMP);
         if (buckets > 0) {
-            timeMeasurements = new Analyzer(timeMeasurements).splitIntoBuckets(procedureId, buckets);
+            timeMeasurements = analyzer.splitIntoBuckets(timeMeasurements, buckets);
         }
         return timeMeasurements;
     }
 
-    public List<TimeMeasurement> getTimeMeasurements(int procedureId, DateTime fromDate, DateTime toDate){
+    public List<TimeMeasurement> getTimeMeasurements(int procedureId, DateTime fromDate, DateTime toDate) {
+        return getTimeMeasurements(procedureId, fromDate, toDate, null);
+    }
+
+    public List<TimeMeasurement> getTimeMeasurements(int procedureId, DateTime fromDate, DateTime toDate, TimeMeasurement.Field orderBy) {
         if (toDate == null) {
             toDate = new DateTime();
         }
         Procedure procedure = logRepository.getProcedure(procedureId);
-        return logRepository.getTimeMeasurementsByProcedure(fromDate, toDate, procedure);
+        return logRepository.getTimeMeasurementsByProcedure(fromDate, toDate, procedure, orderBy);
     }
 
     public String[] getPercentileByProcedure(int procedureId, DateTime fromDate, DateTime toDate, int[] percentages) {
         String[] percentiles = null;
         if (percentiles == null) {
-            Analyzer analyzer = new Analyzer(logRepository.getTimeMeasurementsByProcedure(
-                    fromDate, toDate, logRepository.getProcedure(procedureId)));
+            List<TimeMeasurement> timeMeasurements = logRepository.getTimeMeasurementsByProcedure(
+                    fromDate, toDate, logRepository.getProcedure(procedureId), TimeMeasurement.Field.DURATION);
             percentiles = new String[percentages.length];
             for (int i = 0; i < percentages.length; i++) {
-                percentiles[i] = new Duration((long)analyzer.percentile(procedureId, percentages[i])).toString();
+                percentiles[i] = new Duration((long) analyzer.percentile(timeMeasurements, percentages[i])).toString();
             }
         }
 

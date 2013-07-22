@@ -154,7 +154,7 @@ public class RESTService {
     @GET
     @Path("layout/{name}")
     @Produces("application/json")
-    public String getLayout(@PathParam("id") String name) {
+    public String getLayout(@PathParam("name") String name) {
 //        return "{\"elements\":[{\"type\":\"h1\",\"data\":{\"innerHTML\":\"hello\"}}," +
 //                "{\"type\":\"legend\", \"classes\":\"legend\", \"id\":\"legend1\"},"+
 //                "{\"type\":\"graph\", \"classes\":\"graph\", \"id\":\"graph1\", \"legendId\":\"legend1\"}]}";
