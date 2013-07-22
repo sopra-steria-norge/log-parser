@@ -10,6 +10,7 @@ import java.util.List;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.NoSuchElementException;
 
 import no.osl.cdms.profile.log.TimeMeasurementEntity;
 import org.joda.time.Duration;
@@ -116,6 +117,8 @@ public class RESTService {
                                                   @QueryParam("from") String from, @QueryParam("to") String to,
                                                   @QueryParam("buckets") String buckets) {
         int procedureIdInt, bucketsInt;
+
+        // Parse procedure ID
         try {
             procedureIdInt = Integer.parseInt(procedureId);
         } catch (NumberFormatException e) {
@@ -123,6 +126,7 @@ public class RESTService {
             throw new WebApplicationException(415);
         }
 
+        // Determine number of buckets
         try{
             if (buckets == null) {
                 bucketsInt = -1;
@@ -134,6 +138,7 @@ public class RESTService {
             throw new WebApplicationException(415);
         }
 
+        // Determine timestamps
         DateTime fromDate, toDate;
         try {
             fromDate = new DateTime(from);
@@ -148,7 +153,13 @@ public class RESTService {
         } catch (NullPointerException e) {
             throw new WebApplicationException(415);
         }
-        return toJSON(dataRetriever.getTimeMeasurements(procedureIdInt, fromDate, toDate, bucketsInt));
+
+        // Retrieve and send data
+        try {
+            return toJSON(dataRetriever.getTimeMeasurements(procedureIdInt, fromDate, toDate, bucketsInt));
+        } catch (NoSuchElementException e) {
+            throw new WebApplicationException(404);
+        }
     }
 
     @GET

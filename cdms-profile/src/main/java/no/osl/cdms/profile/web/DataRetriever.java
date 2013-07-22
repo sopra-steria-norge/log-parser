@@ -1,6 +1,5 @@
 package no.osl.cdms.profile.web;
 
-import no.osl.cdms.profile.analyzer.Analyzer;
 import no.osl.cdms.profile.api.Procedure;
 import no.osl.cdms.profile.api.TimeMeasurement;
 import no.osl.cdms.profile.interfaces.DataAnalyzer;
@@ -16,6 +15,7 @@ import org.springframework.stereotype.Repository;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 @Repository
 public class DataRetriever implements DataRetrieverMBean{
@@ -34,7 +34,7 @@ public class DataRetriever implements DataRetrieverMBean{
         return logRepository.getAllProcedures();
     }
 
-    public List<TimeMeasurement> getTimeMeasurements(int procedureId, DateTime fromDate, DateTime toDate, int buckets){
+    public List<TimeMeasurement> getTimeMeasurements(int procedureId, DateTime fromDate, DateTime toDate, int buckets) throws NoSuchElementException {
         List<TimeMeasurement> timeMeasurements = getTimeMeasurements(procedureId, fromDate, toDate, TimeMeasurement.Field.TIMESTAMP);
         if (buckets > 0) {
             timeMeasurements = analyzer.splitIntoBuckets(timeMeasurements, buckets);
@@ -42,15 +42,18 @@ public class DataRetriever implements DataRetrieverMBean{
         return timeMeasurements;
     }
 
-    public List<TimeMeasurement> getTimeMeasurements(int procedureId, DateTime fromDate, DateTime toDate) {
+    public List<TimeMeasurement> getTimeMeasurements(int procedureId, DateTime fromDate, DateTime toDate) throws NoSuchElementException {
         return getTimeMeasurements(procedureId, fromDate, toDate, null);
     }
 
-    public List<TimeMeasurement> getTimeMeasurements(int procedureId, DateTime fromDate, DateTime toDate, TimeMeasurement.Field orderBy) {
+    public List<TimeMeasurement> getTimeMeasurements(int procedureId, DateTime fromDate, DateTime toDate, TimeMeasurement.Field orderBy) throws NoSuchElementException {
         if (toDate == null) {
             toDate = new DateTime();
         }
         Procedure procedure = logRepository.getProcedure(procedureId);
+        if (procedure == null) {
+            throw new NoSuchElementException();
+        }
         return logRepository.getTimeMeasurementsByProcedure(fromDate, toDate, procedure, orderBy);
     }
 
