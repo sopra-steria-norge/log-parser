@@ -1,4 +1,5 @@
 package no.osl.cdms.profile.utilities;
+
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -14,7 +15,6 @@ public class LogWriter {
 
     private static String inputFilePath = "C:/Data/input.log";
     private static String outputFilePath = "C:/Data/performance.log";
-
 
     public static void main(String[] args) throws IOException {
         final FileWriter writer = new FileWriter(outputFilePath, true);
@@ -34,18 +34,20 @@ public class LogWriter {
 
         while (true) {
             line = bufferedReader.readLine();
-
+            System.out.println("Next line to log: "+line);
+            
             if (line != null && !line.equals("")) {
-                thisPrintLog = parseDateString(line.substring(0,23));
+                thisPrintLog = parseDateString(line.substring(0, 23));
                 while (true) {
-                    thisPrintSystem = new DateTime();
-                    if (thisPrintLog.isBefore(lastPrintLog.plus(thisPrintSystem.minus(lastPrintSystem.getMillis()).getMillis()))) {
-                        printWriter.println(fromLogDateTimeToSystemLogTimeFormat(thisPrintSystem) + line.substring(23));
-
-                        lastPrintLog = thisPrintLog;
-                        lastPrintSystem = thisPrintSystem;
-                        break;
+                    while (!thisPrintLog.isBefore(lastPrintLog.plus(new DateTime().minus(lastPrintSystem.getMillis()).getMillis()))) {
+                        Thread.yield();
                     }
+                    thisPrintSystem = new DateTime();
+                    printWriter.println(fromLogDateTimeToSystemLogTimeFormat(thisPrintSystem) + line.substring(23));
+
+                    lastPrintLog = thisPrintLog;
+                    lastPrintSystem = thisPrintSystem;
+                    break;
                 }
             } else {
                 JOptionPane.showMessageDialog(null, "end of log");
@@ -68,5 +70,4 @@ public class LogWriter {
         DateTimeFormatter dtf = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss,SSS");
         return dtf.parseDateTime(string);
     }
-
 }
