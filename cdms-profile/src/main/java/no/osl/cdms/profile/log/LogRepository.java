@@ -41,11 +41,14 @@ public class LogRepository {
         return entityManager.find(TimeMeasurementEntity.class, id);
     }
 
-
     public List<TimeMeasurement> getTimeMeasurementsByProcedure(DateTime fromDate, DateTime toDate, Procedure procedure) {
-        TypedQuery<TimeMeasurement> query = entityManager.createQuery(
-                "SELECT a FROM TimeMeasurementEntity a where a.procedure = :procedure AND a.timestamp >= :fromDate" +
-                        " AND a.timestamp <= :toDate", TimeMeasurement.class);
+        return getTimeMeasurementsByProcedure(fromDate, toDate, procedure, null);
+    }
+
+    public List<TimeMeasurement> getTimeMeasurementsByProcedure(DateTime fromDate, DateTime toDate, Procedure procedure, TimeMeasurement.Field orderBy) {
+        TypedQuery<TimeMeasurement> query = entityManager.createQuery("SELECT a FROM TimeMeasurementEntity a " +
+                "where a.procedure = :procedure AND a.timestamp >= :fromDate AND a.timestamp <= :toDate"
+                + queryOrderingSuffix(orderBy), TimeMeasurement.class);
         query.setParameter("procedure", procedure);
         query.setParameter("fromDate", fromDate.toDate());
         query.setParameter("toDate", toDate.toDate());
@@ -54,8 +57,12 @@ public class LogRepository {
     }
 
     public List<TimeMeasurement> getTimeMeasurementsByProcedure(Procedure procedure) {
+        return getTimeMeasurementsByProcedure(procedure, null);
+    }
+
+    public List<TimeMeasurement> getTimeMeasurementsByProcedure(Procedure procedure, TimeMeasurement.Field orderBy) {
         TypedQuery<TimeMeasurement> query = entityManager.createQuery(
-                "SELECT a FROM TimeMeasurementEntity a where a.procedure = :procedure",
+                "SELECT a FROM TimeMeasurementEntity a where a.procedure = :procedure" + queryOrderingSuffix(orderBy),
                 TimeMeasurement.class);
         query.setParameter("procedure", procedure);
 
@@ -118,5 +125,27 @@ public class LogRepository {
         } catch (javax.persistence.NoResultException e) {
             return null;
         }
+    }
+
+    /**
+     * Generates a String to be appended to a query.
+     * The String will specify which field to order by, if any.
+     * @param orderBy
+     * @return query suffix
+     */
+    private String queryOrderingSuffix(TimeMeasurement.Field orderBy) {
+        String querySuffix = "";
+        if (orderBy == null) {
+            return querySuffix;
+        }
+        switch (orderBy) {
+            case DURATION:
+                querySuffix = " ORDER BY a.duration";
+                break;
+            case TIMESTAMP:
+                querySuffix = " ORDER BY a.timestamp";
+                break;
+        }
+        return querySuffix;
     }
 }
