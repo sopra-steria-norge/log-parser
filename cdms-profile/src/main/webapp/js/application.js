@@ -39,12 +39,15 @@ $(document).ready(function() {
         var callback = callback || function() {
         };
         $.get({
-            url: 'page/' + page,
+            url: 'rest/page/' + page,
             success: function(r) {
 				if (clear) {
 					$(elementSelector).html('');
 				}
                 $('body').trigger('destroy_view');
+                console.log(r);
+//                console.log(JSON.parse(r));
+                if(typeof r !== 'string') r = JSON.stringify(r);
                 new PageView({model: new PageComponentCollection(JSON.parse(r)), el: elementSelector});
                 callback();
             }
