@@ -38,17 +38,14 @@ $(document).ready(function() {
         var clear = clear || false;
         var callback = callback || function() {
         };
-        $.get({
-            url: 'rest/page/' + page,
-            success: function(r) {
-                if (clear) {
-                    $(elementSelector).html('');
-                }
-                $('body').trigger('destroy_view');
-
-                new PageView({model: new PageComponentCollection(r), el: elementSelector});
-                callback();
+        $.get('rest/page/' + page, function(r) {
+            if (clear) {
+                $(elementSelector).html('');
             }
+            $('body').trigger('destroy_view');
+
+            new PageView({model: new PageComponentCollection(r), el: elementSelector});
+            callback();
         });
     }
 });
