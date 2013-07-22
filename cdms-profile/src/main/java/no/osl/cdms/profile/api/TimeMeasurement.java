@@ -36,4 +36,8 @@ public interface TimeMeasurement extends Comparable<TimeMeasurement>{
     public boolean equals(Object obj);
     @Override
     public int hashCode();
+
+    public enum Field {
+        ID, PROCEDURE, MULTI_CONTEXT, TIMESTAMP, DURATION;
+    }
 }
