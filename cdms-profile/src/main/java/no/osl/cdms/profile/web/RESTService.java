@@ -10,6 +10,7 @@ import java.util.List;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.NoSuchElementException;
 
 import no.osl.cdms.profile.log.TimeMeasurementEntity;
 import org.joda.time.Duration;
@@ -116,6 +117,8 @@ public class RESTService {
                                                   @QueryParam("from") String from, @QueryParam("to") String to,
                                                   @QueryParam("buckets") String buckets) {
         int procedureIdInt, bucketsInt;
+
+        // Parse procedure ID
         try {
             procedureIdInt = Integer.parseInt(procedureId);
         } catch (NumberFormatException e) {
@@ -123,6 +126,7 @@ public class RESTService {
             throw new WebApplicationException(415);
         }
 
+        // Determine number of buckets
         try{
             if (buckets == null) {
                 bucketsInt = -1;
@@ -134,6 +138,7 @@ public class RESTService {
             throw new WebApplicationException(415);
         }
 
+        // Determine timestamps
         DateTime fromDate, toDate;
         try {
             fromDate = new DateTime(from);
@@ -148,16 +153,19 @@ public class RESTService {
         } catch (NullPointerException e) {
             throw new WebApplicationException(415);
         }
-        return toJSON(dataRetriever.getTimeMeasurements(procedureIdInt, fromDate, toDate, bucketsInt));
+
+        // Retrieve and send data
+        try {
+            return toJSON(dataRetriever.getTimeMeasurements(procedureIdInt, fromDate, toDate, bucketsInt));
+        } catch (NoSuchElementException e) {
+            throw new WebApplicationException(404);
+        }
     }
 
     @GET
-    @Path("layout/{name}")
+    @Path("page/{name}")
     @Produces("application/json")
     public String getLayout(@PathParam("name") String name) {
-//        return "{\"elements\":[{\"type\":\"h1\",\"data\":{\"innerHTML\":\"hello\"}}," +
-//                "{\"type\":\"legend\", \"classes\":\"legend\", \"id\":\"legend1\"},"+
-//                "{\"type\":\"graph\", \"classes\":\"graph\", \"id\":\"graph1\", \"legendId\":\"legend1\"}]}";
 
         if (name == null) {
             List<String> names = dataRetriever.getAllLayoutEntityNames();
@@ -165,6 +173,30 @@ public class RESTService {
                 throw new WebApplicationException(404);
             }
             return toJSON(names);
+        }
+
+        if(name.equals("navbar")){
+            return "[{\"type\":\"navbar\",\"classes\":\"navbar-inverse navbar-fixed-top\",\"data\":{\"brand\":\"CDMS-Profile\",\"links\":[{\"href\":\"#last24h\",\"text\":\"Last 24 h\"},{\"href\":\"#last72h\",\"text\":\"Last 72 h\"},{\"href\":\"#last1w\",\"text\":\"Last week\"},{\"href\":\"#last2w\",\"text\":\"Last two weeks\"},{\"href\":\"#realtime\",\"text\":\"Realtime\"},{\"href\":\"#settings\",\"text\":\"Settings\"}]}}]";
+        }
+
+        if(name.equals("last24h")){
+            return "[{\"type\":\"div\",\"classes\":\"row\",\"elements\":[{\"type\":\"graph\",\"classes\":\"span4\",\"data\":{\"modal\":true,\"graphOf\":[\"ICWThingy\"],\"timeConfig\":{\"realtime\":false,\"pt\":[\"PT24H\"]}}},{\"type\":\"graph\",\"classes\":\"span4\",\"data\":{\"modal\":true,\"graphOf\":[\"TSATCalculator\"],\"timeConfig\":{\"realtime\":false,\"pt\":[\"PT24H\"]}}},{\"type\":\"graph\",\"classes\":\"span4\",\"data\":{\"modal\":true,\"graphOf\":[\"ICWThingy\",\"TSATCalculator\"],\"timeConfig\":{\"realtime\":false,\"pt\":[\"PT24H\"]}}}]},{\"type\":\"div\",\"classes\":\"row\",\"elements\":[{\"type\":\"percentileTable\",\"classes\":\"\",\"data\":{\"percentiles\":{\"of\":[\"ICWThingy\",\"TSATCalculator\"],\"values\":[100,90,80,0],\"limits\":{\"ICWThingy\":[11,10,10,10],\"TSATCalculator\":[10,10,10,10]},\"timeConfig\":{\"realtime\":false,\"pt\":[\"PT24H\"]}},\"tablestyle\":\"table table-striped\",\"tableheaderstyle\":\"\",\"tablerowstyle\":\"\",\"tablecellstyle\":\"\"}}]}]";
+        }
+
+        if(name.equals("last72h")){
+            return "[{\"type\":\"div\",\"classes\":\"row\",\"elements\":[{\"type\":\"graph\",\"classes\":\"span4\",\"data\":{\"modal\":true,\"graphOf\":[\"ICWThingy\"],\"timeConfig\":{\"realtime\":false,\"pt\":[\"PT72H\"]}}},{\"type\":\"graph\",\"classes\":\"span4\",\"data\":{\"modal\":true,\"graphOf\":[\"TSATCalculator\"],\"timeConfig\":{\"realtime\":false,\"pt\":[\"PT72H\"]}}},{\"type\":\"graph\",\"classes\":\"span4\",\"data\":{\"modal\":true,\"graphOf\":[\"ICWThingy\",\"TSATCalculator\"],\"timeConfig\":{\"realtime\":false,\"pt\":[\"PT72H\"]}}}]},{\"type\":\"div\",\"classes\":\"row\",\"elements\":[{\"type\":\"percentileTable\",\"classes\":\"\",\"data\":{\"percentiles\":{\"of\":[\"ICWThingy\",\"TSATCalculator\"],\"values\":[100,90,80,0],\"limits\":{\"ICWThingy\":[11,10,10,10],\"TSATCalculator\":[10,10,10,10]},\"timeConfig\":{\"realtime\":false,\"pt\":[\"PT72H\"]}},\"tablestyle\":\"table table-striped\",\"tableheaderstyle\":\"\",\"tablerowstyle\":\"\",\"tablecellstyle\":\"\"}}]}]";
+        }
+
+        if(name.equals("last1w")){
+            return "[{\"type\":\"div\",\"classes\":\"row\",\"elements\":[{\"type\":\"graph\",\"classes\":\"span4\",\"data\":{\"modal\":true,\"graphOf\":[\"ICWThingy\"],\"timeConfig\":{\"realtime\":false,\"pt\":[\"PT1W\"]}}},{\"type\":\"graph\",\"classes\":\"span4\",\"data\":{\"modal\":true,\"graphOf\":[\"TSATCalculator\"],\"timeConfig\":{\"realtime\":false,\"pt\":[\"PT1W\"]}}},{\"type\":\"graph\",\"classes\":\"span4\",\"data\":{\"modal\":true,\"graphOf\":[\"ICWThingy\",\"TSATCalculator\"],\"timeConfig\":{\"realtime\":false,\"pt\":[\"PT1W\"]}}}]},{\"type\":\"div\",\"classes\":\"row\",\"elements\":[{\"type\":\"percentileTable\",\"classes\":\"\",\"data\":{\"percentiles\":{\"of\":[\"ICWThingy\",\"TSATCalculator\"],\"values\":[100,90,80,0],\"limits\":{\"ICWThingy\":[11,10,10,10],\"TSATCalculator\":[10,10,10,10]},\"timeConfig\":{\"realtime\":false,\"pt\":[\"PT1W\"]}},\"tablestyle\":\"table table-striped\",\"tableheaderstyle\":\"\",\"tablerowstyle\":\"\",\"tablecellstyle\":\"\"}}]}]";
+        }
+
+        if(name.equals("last2w")){
+            return "[{\"type\":\"div\",\"classes\":\"row\",\"elements\":[{\"type\":\"graph\",\"classes\":\"span4\",\"data\":{\"modal\":true,\"graphOf\":[\"ICWThingy\"],\"timeConfig\":{\"realtime\":false,\"pt\":[\"PT2W\"]}}},{\"type\":\"graph\",\"classes\":\"span4\",\"data\":{\"modal\":true,\"graphOf\":[\"TSATCalculator\"],\"timeConfig\":{\"realtime\":false,\"pt\":[\"PT2W\"]}}},{\"type\":\"graph\",\"classes\":\"span4\",\"data\":{\"modal\":true,\"graphOf\":[\"ICWThingy\",\"TSATCalculator\"],\"timeConfig\":{\"realtime\":false,\"pt\":[\"PT2W\"]}}}]},{\"type\":\"div\",\"classes\":\"row\",\"elements\":[{\"type\":\"percentileTable\",\"classes\":\"\",\"data\":{\"percentiles\":{\"of\":[\"ICWThingy\",\"TSATCalculator\"],\"values\":[100,90,80,0],\"limits\":{\"ICWThingy\":[11,10,10,10],\"TSATCalculator\":[10,10,10,10]},\"timeConfig\":{\"realtime\":false,\"pt\":[\"PT2W\"]}},\"tablestyle\":\"table table-striped\",\"tableheaderstyle\":\"\",\"tablerowstyle\":\"\",\"tablecellstyle\":\"\"}}]}]";
+        }
+
+        if(name.equals("realtime")){
+            return "[{\"type\":\"grapharray\",\"data\":{\"graphOf\":[\"all\"],\"span\":4,\"timeConfig\":{\"realtime\":true,\"pt\":[\"PT1H\"]}}}]";
         }
 
         LayoutEntity entity = dataRetriever.getLayoutEntity(name);
