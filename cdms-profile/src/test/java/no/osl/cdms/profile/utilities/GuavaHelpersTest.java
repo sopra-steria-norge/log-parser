@@ -22,6 +22,8 @@ import no.osl.cdms.profile.log.LogRepository;
 import org.joda.time.DateTime;
 import org.joda.time.convert.ConverterManager;
 import org.joda.time.convert.InstantConverter;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -77,6 +79,7 @@ public class GuavaHelpersTest {
      */
     @Test
     public void testIsDuration() {
+
         System.out.println("isDuration");
         Map<String, String> map = Maps.newLinkedHashMap();
         map.put("key", "value");
