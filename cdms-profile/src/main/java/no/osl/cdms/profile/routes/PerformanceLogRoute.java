@@ -34,6 +34,15 @@ public class PerformanceLogRoute extends RouteBuilder {
     @Autowired
     private GuavaHelpers guavaHelpers;
 
+    public PerformanceLogRoute() {
+
+    }
+
+    public PerformanceLogRoute(EntityFactory entityFactory, LogLineRegexParser logLineRegexParser) {
+        this.entityFactory = entityFactory;
+        this.logLineRegexParser = logLineRegexParser;
+    }
+
     @Override
     public void configure() throws Exception{
         final TimeMeasurement lastInsertedTimeMeasurement = logRepository.getLatestTimeMeasurement();
