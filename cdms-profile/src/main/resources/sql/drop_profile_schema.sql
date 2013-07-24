@@ -1,7 +1,6 @@
 drop table CDM_PROFILE_TIMEMEASUREMENT cascade constraints;
 drop table CDM_PROFILE_PROCEDURE cascade constraints;
 drop table CDM_PROFILE_MULTICONTEXT cascade constraints;
-drop table CDM_PROFILE_LAYOUT cascade constraints;
 
 drop sequence TIMEMEASUREMENT_SEQ;
 drop sequence PROCEDURE_SEQ;
