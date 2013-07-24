@@ -49,6 +49,7 @@ public class PerformanceTest {
             
         }
         timestamp(startParse);
+        System.out.println("AVGPerLine: "+((System.currentTimeMillis()-startParse)/(lines.size()*1.0)));
         avgCalc();
     }
     private void avgCalc() {

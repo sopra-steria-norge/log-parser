@@ -21,6 +21,7 @@ import no.osl.cdms.profile.log.ProcedureEntity;
 import no.osl.cdms.profile.log.MultiContextEntity;
 import no.osl.cdms.profile.log.TimeMeasurementEntity;
 import no.osl.cdms.profile.utilities.GuavaHelpers;
+import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -31,11 +32,16 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class EntityFactoryImpl implements EntityFactory {
+    Logger logger = Logger.getRootLogger();
+    
     @Autowired
     private LogRepository logRepository;
 
     @Autowired
     private GuavaHelpers guavaHelpers;
+    
+    private static int counter = 0;
+    private static long lastOut = System.currentTimeMillis();
 
     public void setLogRepository(LogRepository logRepository) {
         this.logRepository = logRepository;
@@ -118,7 +124,19 @@ public class EntityFactoryImpl implements EntityFactory {
 
     @Override
     public List<TimeMeasurement> process(Map<String, String> s) {
-        return createTimemeasurement(s);
+        long time = System.currentTimeMillis();
+        List<TimeMeasurement> l = createTimemeasurement(s);
+        lastOut+= (System.currentTimeMillis()-time);
+        debug();
+        return l;
+    }
+    private void debug() {
+        counter++;
+        if (counter == 1000){
+            counter = 0;
+            logger.warn("EntityFactory::SelfTime: "+lastOut);
+            lastOut = 0;
+        }
     }
 }
 

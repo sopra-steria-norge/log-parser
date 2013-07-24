@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import no.osl.cdms.profile.interfaces.Parser;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 /**
@@ -24,15 +25,32 @@ public class ParserImpl implements Parser {
     private static final Pattern MTCPattern = Pattern.compile("(\\w+)\\{([^=]+)=([^;\\]\\}]+)"+repetition+repetition+repetition+repetition+repetition+repetition+"\\}");
     private static final int timestampLength = "2013-06-25 15:02:10,063".length();
     
+    private static int counter = 0;
+    private static long lastOut = System.currentTimeMillis();
+    
+    
+    Logger logger = Logger.getRootLogger();
+    
      @Override
     public Map<String, String> process(String s) {
         HashMap<String, String> m = Maps.newHashMap();
         if (s == null || s.length() < timestampLength){
             return m;
         }
-        return parse(m, s);
+        long time = System.currentTimeMillis();
+        Map<String, String> map = parse(m, s);
+        lastOut+= (System.currentTimeMillis()-time);
+        debug();
+        return map;
     }
-    
+    private void debug() {
+        counter++;
+        if (counter == 1000){
+            counter = 0;
+            logger.warn("Parser::SelfTime: "+lastOut);
+            lastOut = 0;
+        }
+    }
     private Map<String, String> parse(Map<String, String> properties, String obj) {
         if (isMultiThreadContext(obj)) {
             handleMultiThreadContext(properties, obj);
