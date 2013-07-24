@@ -22,6 +22,15 @@ public class PerformanceLogRoute extends RouteBuilder {
     @Autowired
     private LogLineRegexParser logLineRegexParser;
 
+    public PerformanceLogRoute() {
+
+    }
+
+    public PerformanceLogRoute(EntityFactory entityFactory, LogLineRegexParser logLineRegexParser) {
+        this.entityFactory = entityFactory;
+        this.logLineRegexParser = logLineRegexParser;
+    }
+
     @Override
     public void configure() throws Exception{
         fromF(LOG_FILE_ENDPOINT, LOG_DIRECTORY, LOG_FILE, DELAY)
