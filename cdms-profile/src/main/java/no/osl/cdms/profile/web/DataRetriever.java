@@ -1,7 +1,7 @@
 package no.osl.cdms.profile.web;
 
-import no.osl.cdms.profile.api.Procedure;
-import no.osl.cdms.profile.api.TimeMeasurement;
+import no.osl.cdms.profile.interfaces.db.Procedure;
+import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
 import no.osl.cdms.profile.interfaces.DataAnalyzer;
 import no.osl.cdms.profile.jmx.DataRetrieverMBean;
 import no.osl.cdms.profile.log.LayoutEntity;

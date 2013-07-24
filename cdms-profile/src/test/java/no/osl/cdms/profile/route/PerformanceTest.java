@@ -2,8 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package no.osl.cdms.profile.parser;
+package no.osl.cdms.profile.route;
 
+import no.osl.cdms.profile.route.ParserImpl;
 import com.google.common.collect.Lists;
 import java.io.File;
 import java.util.List;
@@ -38,7 +39,7 @@ public class PerformanceTest {
      */
     @Test
     public void localMockLogLine() {
-        Parser parser = new Simpleton();
+        Parser parser = new ParserImpl();
         long i = 0;
         long startParse = System.currentTimeMillis();
         prev = System.currentTimeMillis();

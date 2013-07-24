@@ -12,14 +12,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
-import java.util.TimeZone;
+import no.osl.cdms.profile.interfaces.EntityFactory;
 
-import no.osl.cdms.profile.api.Procedure;
-import no.osl.cdms.profile.api.TimeMeasurement;
-import no.osl.cdms.profile.factories.EntityFactory;
+import no.osl.cdms.profile.interfaces.db.Procedure;
+import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
 import no.osl.cdms.profile.log.ProcedureEntity;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.joda.time.convert.ConverterManager;
 import org.joda.time.convert.DurationConverter;
 import org.joda.time.format.DateTimeFormat;

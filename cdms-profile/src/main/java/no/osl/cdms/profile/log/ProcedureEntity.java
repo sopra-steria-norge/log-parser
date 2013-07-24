@@ -1,6 +1,6 @@
 package no.osl.cdms.profile.log;
 
-import no.osl.cdms.profile.api.Procedure;
+import no.osl.cdms.profile.interfaces.db.Procedure;
 import javax.persistence.*;
 
 @Entity

@@ -2,8 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package no.osl.cdms.profile.parser;
+package no.osl.cdms.profile.route;
 
+import no.osl.cdms.profile.route.ParserImpl;
 import java.util.Map;
 import no.osl.cdms.profile.interfaces.Parser;
 import org.junit.Test;
@@ -21,7 +22,7 @@ public class MockParserTest {
 
     @Before
     public void setup() {
-        parser = new Simpleton();
+        parser = new ParserImpl();
     }
     /**
      * Test of parse method, of class Parser.

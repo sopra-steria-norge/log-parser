@@ -1,6 +1,6 @@
 package no.osl.cdms.profile.log;
 
-import no.osl.cdms.profile.api.TimeMeasurement;
+import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
 import javax.persistence.*;
 
 import org.joda.time.DateTime;

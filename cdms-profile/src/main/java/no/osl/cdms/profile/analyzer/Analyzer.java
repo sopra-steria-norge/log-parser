@@ -4,7 +4,7 @@
  */
 package no.osl.cdms.profile.analyzer;
 
-import no.osl.cdms.profile.api.Procedure;
+import no.osl.cdms.profile.interfaces.db.Procedure;
 import no.osl.cdms.profile.interfaces.DataAnalyzer;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Lists;
@@ -12,7 +12,7 @@ import com.google.common.collect.Multimap;
 
 import java.util.*;
 
-import no.osl.cdms.profile.api.TimeMeasurement;
+import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
 import no.osl.cdms.profile.log.TimeMeasurementEntity;
 import org.joda.time.convert.ConverterManager;
 import org.joda.time.convert.DurationConverter;

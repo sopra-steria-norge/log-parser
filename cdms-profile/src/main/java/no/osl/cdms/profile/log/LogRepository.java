@@ -1,8 +1,8 @@
 package no.osl.cdms.profile.log;
 
-import no.osl.cdms.profile.api.Procedure;
-import no.osl.cdms.profile.api.MultiContext;
-import no.osl.cdms.profile.api.TimeMeasurement;
+import no.osl.cdms.profile.interfaces.db.Procedure;
+import no.osl.cdms.profile.interfaces.db.MultiContext;
+import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Repository;
 

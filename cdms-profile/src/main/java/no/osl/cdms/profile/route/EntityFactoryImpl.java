@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package no.osl.cdms.profile.factories;
+package no.osl.cdms.profile.route;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -12,9 +12,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import no.osl.cdms.profile.api.Procedure;
-import no.osl.cdms.profile.api.MultiContext;
-import no.osl.cdms.profile.api.TimeMeasurement;
+import no.osl.cdms.profile.interfaces.db.Procedure;
+import no.osl.cdms.profile.interfaces.db.MultiContext;
+import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
+import no.osl.cdms.profile.interfaces.EntityFactory;
 import no.osl.cdms.profile.log.LogRepository;
 import no.osl.cdms.profile.log.ProcedureEntity;
 import no.osl.cdms.profile.log.MultiContextEntity;
@@ -29,7 +30,7 @@ import org.springframework.stereotype.Component;
  * @author nutgaard
  */
 @Component
-public class EntityFactory {
+public class EntityFactoryImpl implements EntityFactory {
     @Autowired
     private LogRepository logRepository;
 
@@ -113,6 +114,11 @@ public class EntityFactory {
             databaseEntities.add(database_entity);
         }
         return databaseEntities;
+    }
+
+    @Override
+    public List<TimeMeasurement> process(Map<String, String> s) {
+        return createTimemeasurement(s);
     }
 }
 

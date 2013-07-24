@@ -1,3 +1,5 @@
+package no.osl.cdms.profile.route;
+
 //package no.osl.cdms.profile.routes;
 //import org.apache.camel.test.spring.CamelSpringTestSupport;
 //import org.junit.After;

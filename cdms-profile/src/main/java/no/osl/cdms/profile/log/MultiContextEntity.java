@@ -1,6 +1,6 @@
 package no.osl.cdms.profile.log;
 
-import no.osl.cdms.profile.api.MultiContext;
+import no.osl.cdms.profile.interfaces.db.MultiContext;
 
 import javax.persistence.*;
 import java.util.Date;

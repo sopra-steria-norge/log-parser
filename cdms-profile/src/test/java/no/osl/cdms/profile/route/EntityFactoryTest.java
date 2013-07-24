@@ -1,6 +1,7 @@
-package no.osl.cdms.profile.factories;
+package no.osl.cdms.profile.route;
 
-import no.osl.cdms.profile.api.Procedure;
+import no.osl.cdms.profile.route.EntityFactoryImpl;
+import no.osl.cdms.profile.interfaces.db.Procedure;
 import no.osl.cdms.profile.log.LogRepository;
 import no.osl.cdms.profile.log.MultiContextEntity;
 import no.osl.cdms.profile.log.ProcedureEntity;
@@ -29,7 +30,7 @@ import static org.junit.Assert.assertTrue;
 public class EntityFactoryTest {
 
     @Autowired
-    private EntityFactory entityFactory;
+    private EntityFactoryImpl entityFactory;
 
     @Autowired
     private LogRepository logRepository;

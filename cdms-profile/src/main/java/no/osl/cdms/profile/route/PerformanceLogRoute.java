@@ -1,6 +1,6 @@
-package no.osl.cdms.profile.routes;
+package no.osl.cdms.profile.route;
 
-import no.osl.cdms.profile.factories.EntityFactory;
+import no.osl.cdms.profile.interfaces.EntityFactory;
 import no.osl.cdms.profile.interfaces.Parser;
 import no.osl.cdms.profile.log.TimeMeasurementEntity;
 import org.apache.camel.builder.RouteBuilder;
@@ -20,15 +20,15 @@ public class PerformanceLogRoute extends RouteBuilder {
     private EntityFactory entityFactory;
 
     @Autowired
-    private Parser logLineRegexParser;
+    private Parser parser;
 
     @Override
     public void configure() throws Exception{
         fromF(LOG_FILE_ENDPOINT, LOG_DIRECTORY, LOG_FILE, DELAY)
                 .convertBodyTo(String.class)                  // Converts input to String
                 .choice().when(body().isGreaterThan(""))      // Ignores empty lines
-                .bean(logLineRegexParser, "parse")            // Parses log entry into String map
-                .bean(entityFactory, "createTimemeasurement") // Parses log entry into database format
+                .bean(parser, "process")            // Parses log entry into String map
+                .bean(entityFactory, "process") // Parses log entry into database format
                 .split(body())
                 .choice().when(body().isNotNull())
                 .toF(DATABASE_ENDPOINT, TimeMeasurementEntity.class.getCanonicalName())

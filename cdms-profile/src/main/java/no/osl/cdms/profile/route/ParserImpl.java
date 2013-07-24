@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package no.osl.cdms.profile.parser;
+package no.osl.cdms.profile.route;
 
 import com.google.common.collect.Maps;
 import java.util.HashMap;
@@ -10,12 +10,14 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import no.osl.cdms.profile.interfaces.Parser;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author Nicklas
  */
-public class Simpleton implements Parser {
+@Component
+public class ParserImpl implements Parser {
 
     private static final Pattern LTCPattern = Pattern.compile("id=([^,]+),duration=([^,\\[\\{]+)");
     private static final String repetition = "(?:[;,]([^=]+)=([^;\\]\\},;]+))?";
