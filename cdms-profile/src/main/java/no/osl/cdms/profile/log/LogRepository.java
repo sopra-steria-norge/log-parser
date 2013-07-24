@@ -71,10 +71,8 @@ public class LogRepository {
 
     public Procedure getEqualPersistedProcedure(Procedure procedure) {
         TypedQuery<ProcedureEntity> query = entityManager.createQuery(
-                "SELECT a FROM ProcedureEntity a where a.name = :name AND " +
-                        "a.className = :class AND " +
+                "SELECT a FROM ProcedureEntity a where a.className = :class AND " +
                         "a.method = :method", ProcedureEntity.class);
-        query.setParameter("name", procedure.getName());
         query.setParameter("class", procedure.getClassName());
         query.setParameter("method", procedure.getMethod());
         try {
