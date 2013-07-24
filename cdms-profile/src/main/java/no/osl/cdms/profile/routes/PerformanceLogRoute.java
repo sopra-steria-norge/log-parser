@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class PerformanceLogRoute extends RouteBuilder {
 
     public static final String PERFORMANCE_LOG_ROUTE_ID = "PerformanceLogRoute";
-    private static final String LOG_DIRECTORY = "C:/data";
+    private static final String LOG_DIRECTORY = "data/log";
     private static final String LOG_FILE = "performance.log";
     private static final int DELAY = 0;
 
