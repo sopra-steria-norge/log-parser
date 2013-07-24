@@ -38,37 +38,41 @@ public class PerformanceLogRoute extends RouteBuilder {
 
     }
 
-    public PerformanceLogRoute(EntityFactory entityFactory, LogLineRegexParser logLineRegexParser) {
-        this.entityFactory = entityFactory;
-        this.logLineRegexParser = logLineRegexParser;
-    }
+//    public PerformanceLogRoute(EntityFactory entityFactory, LogLineRegexParser logLineRegexParser) {
+//        this.entityFactory = entityFactory;
+//        this.logLineRegexParser = logLineRegexParser;
+//    }
 
     @Override
     public void configure() throws Exception{
-        final TimeMeasurement lastInsertedTimeMeasurement = logRepository.getLatestTimeMeasurement();
 
         fromF(LOG_FILE_ENDPOINT, LOG_DIRECTORY, LOG_FILE, DELAY)
                 .convertBodyTo(String.class)                  // Converts input to String
                 .choice().when(body().isGreaterThan(""))      // Ignores empty lines
-                .choice().when(new Predicate() {
-            @Override
-            public boolean matches(Exchange exchange) {
-                DateTime logEntryDate = new DateTime(guavaHelpers.parseDateString(exchange.getIn().getBody().toString().substring(0,23)));
-                if (lastInsertedTimeMeasurement == null) {
-                    return true;
-                } else if (logEntryDate.isAfter(lastInsertedTimeMeasurement.getJodaTimestamp()) ||
-                        logEntryDate.isEqual(lastInsertedTimeMeasurement.getJodaTimestamp())) {
-                    return true;
-                }
-                return false;
-            }
-        })
+                .choice().when(isUnreadLine())
                 .bean(logLineRegexParser, "parse")            // Parses log entry into String map
                 .bean(entityFactory, "createTimemeasurement") // Parses log entry into database format
                 .split(body())
                 .choice().when(body().isNotNull())
                 .toF(DATABASE_ENDPOINT, TimeMeasurementEntity.class.getCanonicalName())
                 .routeId(PERFORMANCE_LOG_ROUTE_ID);
+    }
+
+    private Predicate isUnreadLine() {
+        final TimeMeasurement lastInsertedTimeMeasurement = logRepository.getLatestTimeMeasurement();
+        return new Predicate() {
+            @Override
+            public boolean matches(Exchange exchange) {
+                DateTime logEntryDate = new DateTime(guavaHelpers.parseDateString(exchange.getIn().getBody().toString().substring(0,23)));
+                if (lastInsertedTimeMeasurement == null) {
+                    return true;
+                } else if (logEntryDate.isAfter(lastInsertedTimeMeasurement.getJodaTimestamp()) ||
+                    logEntryDate.isEqual(lastInsertedTimeMeasurement.getJodaTimestamp())) {
+                    return true;
+                }
+                return false;
+            }
+        };
     }
 
     public String toString() {
