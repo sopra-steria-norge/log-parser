@@ -1,8 +1,8 @@
 package no.osl.cdms.profile.routes;
 
 import no.osl.cdms.profile.factories.EntityFactory;
+import no.osl.cdms.profile.interfaces.Parser;
 import no.osl.cdms.profile.log.TimeMeasurementEntity;
-import no.osl.cdms.profile.parser.LogLineRegexParser;
 import org.apache.camel.builder.RouteBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -20,7 +20,7 @@ public class PerformanceLogRoute extends RouteBuilder {
     private EntityFactory entityFactory;
 
     @Autowired
-    private LogLineRegexParser logLineRegexParser;
+    private Parser logLineRegexParser;
 
     @Override
     public void configure() throws Exception{

@@ -4,14 +4,10 @@
  */
 package no.osl.cdms.profile.interfaces;
 
-import java.util.Map;
-import org.springframework.stereotype.Component;
-
 /**
  *
  * @author nutgaard
  */
-@Component
-public interface Parser extends RouteComponent<String, Map<String, String>>{
+public interface RouteComponent<S, T> {
+    public T process(S s);
 }
-

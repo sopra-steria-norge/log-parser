@@ -14,16 +14,12 @@ public class LogLineRegexParser implements Parser {
     private static Pattern kvPatt = Pattern.compile("([^,;\\[\\]=]+?)[=;]([^,;\\[\\]]+)");
 
     @Override
-    public Map<String, String> parse(String text) {
+    public Map<String, String> process(String s) {
         HashMap<String, String> properties = new HashMap<String, String>();
-        return parse(properties, text);
+        return parse(properties, s);
     }
 
-    @Override
-    public Map<String, String> parse(Map<String, String> properties, String text) {
-        if (properties == null) {
-            return parse(text);
-        }
+    private Map<String, String> parse(Map<String, String> properties, String text) {
         appendToProperties(properties, "", text);
         if (properties.size() > 0) {
             properties.put("timestamp", getTimestamp(text));
