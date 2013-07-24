@@ -1,14 +1,13 @@
 package no.osl.cdms.profile.jmx;
 
-import no.osl.cdms.profile.interfaces.db.Procedure;
-import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
-import no.osl.cdms.profile.log.LayoutEntity;
+
 import no.osl.cdms.profile.log.ProcedureEntity;
 import org.joda.time.DateTime;
-
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import no.osl.cdms.profile.interfaces.db.Procedure;
+import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
 
 public interface DataRetrieverMBean {
 
@@ -23,10 +22,4 @@ public interface DataRetrieverMBean {
     public String[] getPercentileByProcedure(int procedureId, DateTime fromDate, DateTime toDate, int[] percentages);
 
     public Map<Procedure, String[]> getPercentile(DateTime fromDate, DateTime toDate, int[] percentages);
-
-    public List<LayoutEntity> getAllLayoutEntities();
-
-    public List<String> getAllLayoutEntityNames();
-
-    public LayoutEntity getLayoutEntity(String name);
 }

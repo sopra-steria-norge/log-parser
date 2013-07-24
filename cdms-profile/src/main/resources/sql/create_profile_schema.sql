@@ -26,8 +26,36 @@ CREATE TABLE CDM_PROFILE_MULTICONTEXT
 );
 CREATE SEQUENCE MULTICONTEXT_SEQ START WITH 1 INCREMENT BY 1 NOCACHE NOCYCLE;
 
-CREATE TABLE CDM_PROFILE_LAYOUT
-(
-  NAME VARCHAR (100) PRIMARY KEY NOT NULL,
-  JSON CLOB NOT NULL
-);
+Insert into CDM_PROFILE_PROCEDURE (PROCEDURE_ID,NAME,CLASS,METHOD) values (PROCEDURE_SEQ.nextval,'Lagre ICW','FlightServiceImpl','process');
+Insert into CDM_PROFILE_PROCEDURE (PROCEDURE_ID,NAME,CLASS,METHOD) values (PROCEDURE_SEQ.nextval,'WS.getFlights','FlightWebservice','getFlights');
+Insert into CDM_PROFILE_PROCEDURE (PROCEDURE_ID,NAME,CLASS,METHOD) values (PROCEDURE_SEQ.nextval,'getIataAirport','FlightRepository','getIataAirport');
+Insert into CDM_PROFILE_PROCEDURE (PROCEDURE_ID,NAME,CLASS,METHOD) values (PROCEDURE_SEQ.nextval,'Cache.get','CacheUpdateRouteBean','getCdmFlightEntitiesFor');
+Insert into CDM_PROFILE_PROCEDURE (PROCEDURE_ID,NAME,CLASS,METHOD) values (PROCEDURE_SEQ.nextval,'Cache.apply','CacheUpdateRouteBean','applyRules');
+Insert into CDM_PROFILE_PROCEDURE (PROCEDURE_ID,NAME,CLASS,METHOD) values (PROCEDURE_SEQ.nextval,'Cache.populate','CacheUpdateRouteBean','populateCache');
+Insert into CDM_PROFILE_PROCEDURE (PROCEDURE_ID,NAME,CLASS,METHOD) values (PROCEDURE_SEQ.nextval,'findFlightLeg','FlightRepository','findFlightLeg');
+Insert into CDM_PROFILE_PROCEDURE (PROCEDURE_ID,NAME,CLASS,METHOD) values (PROCEDURE_SEQ.nextval,'findOrCreateCdmFlight','FlightRepository','findOrCreateCdmFlight');
+Insert into CDM_PROFILE_PROCEDURE (PROCEDURE_ID,NAME,CLASS,METHOD) values (PROCEDURE_SEQ.nextval,'Scheduled-in','ScheduledInboundMilestone','execute');
+Insert into CDM_PROFILE_PROCEDURE (PROCEDURE_ID,NAME,CLASS,METHOD) values (PROCEDURE_SEQ.nextval,'Scheduled-out','ScheduledOutboundMilestone','execute');
+Insert into CDM_PROFILE_PROCEDURE (PROCEDURE_ID,NAME,CLASS,METHOD) values (PROCEDURE_SEQ.nextval,'FPL-in','FlightPlanActivationInbound','execute');
+Insert into CDM_PROFILE_PROCEDURE (PROCEDURE_ID,NAME,CLASS,METHOD) values (PROCEDURE_SEQ.nextval,'PA.shouldPunish','PunishmentAlgorithm','shouldPunishFlightLeg');
+Insert into CDM_PROFILE_PROCEDURE (PROCEDURE_ID,NAME,CLASS,METHOD) values (PROCEDURE_SEQ.nextval,'DTAA.assignNonRegFlight','DynamicTableAssignmentAlgorithm','assignNonRegulatedFlight');
+Insert into CDM_PROFILE_PROCEDURE (PROCEDURE_ID,NAME,CLASS,METHOD) values (PROCEDURE_SEQ.nextval,'Tsat.calc','TsatCalculatorServiceImpl','calculateTtotAndTsatFor');
+Insert into CDM_PROFILE_PROCEDURE (PROCEDURE_ID,NAME,CLASS,METHOD) values (PROCEDURE_SEQ.nextval,'FPL-out','FlightPlanActivationOutbound','execute');
+Insert into CDM_PROFILE_PROCEDURE (PROCEDURE_ID,NAME,CLASS,METHOD) values (PROCEDURE_SEQ.nextval,'Publiser','UpdateMessageFactory','createUpdatesForPublishing');
+Insert into CDM_PROFILE_PROCEDURE (PROCEDURE_ID,NAME,CLASS,METHOD) values (PROCEDURE_SEQ.nextval,'Vent','Wait',null);
+Insert into CDM_PROFILE_PROCEDURE (PROCEDURE_ID,NAME,CLASS,METHOD) values (PROCEDURE_SEQ.nextval,'Total','Total',null);
+Insert into CDM_PROFILE_PROCEDURE (PROCEDURE_ID,NAME,CLASS,METHOD) values (PROCEDURE_SEQ.nextval,'Mottak ICW','IcwMessageProcessorBean','process');
+Insert into CDM_PROFILE_PROCEDURE (PROCEDURE_ID,NAME,CLASS,METHOD) values (PROCEDURE_SEQ.nextval,'Landed','Landed','execute');
+Insert into CDM_PROFILE_PROCEDURE (PROCEDURE_ID,NAME,CLASS,METHOD) values (PROCEDURE_SEQ.nextval,'Airborne','Airborne','execute');
+Insert into CDM_PROFILE_PROCEDURE (PROCEDURE_ID,NAME,CLASS,METHOD) values (PROCEDURE_SEQ.nextval,'Inblock','InBlock','execute');
+Insert into CDM_PROFILE_PROCEDURE (PROCEDURE_ID,NAME,CLASS,METHOD) values (PROCEDURE_SEQ.nextval,'Kjør milestone','Milestone','execute');
+Insert into CDM_PROFILE_PROCEDURE (PROCEDURE_ID,NAME,CLASS,METHOD) values (PROCEDURE_SEQ.nextval,'STAA.assignFlight','StaticTableAssignmentAlgorithm','assignFlight');
+Insert into CDM_PROFILE_PROCEDURE (PROCEDURE_ID,NAME,CLASS,METHOD) values (PROCEDURE_SEQ.nextval,'transitionToEm2','FlightServiceImpl','processScheduledTransitionToEobtMinusTwoHours');
+Insert into CDM_PROFILE_PROCEDURE (PROCEDURE_ID,NAME,CLASS,METHOD) values (PROCEDURE_SEQ.nextval,'Em2','EobtMinusTwoHours','execute');
+Insert into CDM_PROFILE_PROCEDURE (PROCEDURE_ID,NAME,CLASS,METHOD) values (PROCEDURE_SEQ.nextval,'transitionToFCT','FlightServiceImpl','processScheduledTransitionToFinalConfirmationOfTobt');
+Insert into CDM_PROFILE_PROCEDURE (PROCEDURE_ID,NAME,CLASS,METHOD) values (PROCEDURE_SEQ.nextval,'transitionToTsatIssued','FlightServiceImpl','processScheduledTransitionToTsatIssued');
+Insert into CDM_PROFILE_PROCEDURE (PROCEDURE_ID,NAME,CLASS,METHOD) values (PROCEDURE_SEQ.nextval,'FCT','FinalConfirmationOfTobt','execute');
+Insert into CDM_PROFILE_PROCEDURE (PROCEDURE_ID,NAME,CLASS,METHOD) values (PROCEDURE_SEQ.nextval,'TsatIssued','TsatIssued','execute');
+Insert into CDM_PROFILE_PROCEDURE (PROCEDURE_ID,NAME,CLASS,METHOD) values (PROCEDURE_SEQ.nextval,'PA.punish','PunishmentAlgorithm','punish');
+Insert into CDM_PROFILE_PROCEDURE (PROCEDURE_ID,NAME,CLASS,METHOD) values (PROCEDURE_SEQ.nextval,'OffBlock','OffBlock','execute');
+Insert into CDM_PROFILE_PROCEDURE (PROCEDURE_ID,NAME,CLASS,METHOD) values (PROCEDURE_SEQ.nextval,'TakeOff','TakeOff','execute');

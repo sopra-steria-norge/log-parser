@@ -46,7 +46,7 @@ public class EntityFactoryTest {
 
         ProcedureEntity old = new ProcedureEntity("name", "class", "method");
         logRepository.persistNewProcedure(old);
-        Procedure current = entityFactory.createProcedure("name", "class", "method");
+        Procedure current = entityFactory.createProcedure("class", "method");
 
         assertEquals(old, current);
     }

@@ -2,7 +2,6 @@ package no.osl.cdms.profile.web;
 
 import java.io.StringWriter;
 
-import no.osl.cdms.profile.log.LayoutEntity;
 import no.osl.cdms.profile.log.MultiContextEntity;
 import no.osl.cdms.profile.log.ProcedureEntity;
 
@@ -162,49 +161,7 @@ public class RESTService {
         }
     }
 
-    @GET
-    @Path("page/{name}")
-    @Produces("application/json")
-    public String getLayout(@PathParam("name") String name) {
 
-        if (name == null) {
-            List<String> names = dataRetriever.getAllLayoutEntityNames();
-            if (names == null || names.size() == 0) {
-                throw new WebApplicationException(404);
-            }
-            return toJSON(names);
-        }
-
-        if(name.equals("navbar")){
-            return "[{\"type\":\"navbar\",\"classes\":\"navbar-inverse navbar-fixed-top\",\"data\":{\"brand\":\"CDMS-Profile\",\"links\":[{\"href\":\"#last24h\",\"text\":\"Last 24 h\"},{\"href\":\"#last72h\",\"text\":\"Last 72 h\"},{\"href\":\"#last1w\",\"text\":\"Last week\"},{\"href\":\"#last2w\",\"text\":\"Last two weeks\"},{\"href\":\"#realtime\",\"text\":\"Realtime\"},{\"href\":\"#settings\",\"text\":\"Settings\"}]}}]";
-        }
-
-        if(name.equals("last24h")){
-            return "[{\"type\":\"div\",\"classes\":\"row\",\"elements\":[{\"type\":\"graph\",\"classes\":\"span4\",\"data\":{\"modal\":true,\"graphOf\":[100],\"timeConfig\":{\"realtime\":false,\"pt\":[\"PT24H/\"]}}},{\"type\":\"graph\",\"classes\":\"span4\",\"data\":{\"modal\":true,\"graphOf\":[101],\"timeConfig\":{\"realtime\":false,\"pt\":[\"PT24H/\"]}}},{\"type\":\"graph\",\"classes\":\"span4\",\"data\":{\"modal\":true,\"graphOf\":[100, 101],\"timeConfig\":{\"realtime\":false,\"pt\":[\"PT24H/\"]}}}]},{\"type\":\"div\",\"classes\":\"row\",\"elements\":[{\"type\":\"percentileTable\",\"classes\":\"\",\"data\":{\"percentiles\":{\"of\":[100, 101],\"values\":[100,90,80,0],\"limits\":{\"100\":[11,10,10,10],\"101\":[10,10,10,10]},\"timeConfig\":{\"realtime\":false,\"pt\":[\"PT24H/\"]}},\"tablestyle\":\"table table-striped\",\"tableheaderstyle\":\"\",\"tablerowstyle\":\"\",\"tablecellstyle\":\"\"}}]}]";
-        }
-
-        if(name.equals("last72h")){
-            return "[{\"type\":\"div\",\"classes\":\"row\",\"elements\":[{\"type\":\"graph\",\"classes\":\"span4\",\"data\":{\"modal\":true,\"graphOf\":[100],\"timeConfig\":{\"realtime\":false,\"pt\":[\"PT72H/\"]}}},{\"type\":\"graph\",\"classes\":\"span4\",\"data\":{\"modal\":true,\"graphOf\":[101],\"timeConfig\":{\"realtime\":false,\"pt\":[\"PT72H/\"]}}},{\"type\":\"graph\",\"classes\":\"span4\",\"data\":{\"modal\":true,\"graphOf\":[100, 101],\"timeConfig\":{\"realtime\":false,\"pt\":[\"PT72H/\"]}}}]},{\"type\":\"div\",\"classes\":\"row\",\"elements\":[{\"type\":\"percentileTable\",\"classes\":\"\",\"data\":{\"percentiles\":{\"of\":[100, 101],\"values\":[100,90,80,0],\"limits\":{\"100\":[11,10,10,10],\"101\":[10,10,10,10]},\"timeConfig\":{\"realtime\":false,\"pt\":[\"PT72H/\"]}},\"tablestyle\":\"table table-striped\",\"tableheaderstyle\":\"\",\"tablerowstyle\":\"\",\"tablecellstyle\":\"\"}}]}]";
-        }
-
-        if(name.equals("last1w")){
-            return "[{\"type\":\"div\",\"classes\":\"row\",\"elements\":[{\"type\":\"graph\",\"classes\":\"span4\",\"data\":{\"modal\":true,\"graphOf\":[100],\"timeConfig\":{\"realtime\":false,\"pt\":[\"P1W/\"]}}},{\"type\":\"graph\",\"classes\":\"span4\",\"data\":{\"modal\":true,\"graphOf\":[101],\"timeConfig\":{\"realtime\":false,\"pt\":[\"P1W/\"]}}},{\"type\":\"graph\",\"classes\":\"span4\",\"data\":{\"modal\":true,\"graphOf\":[100, 101],\"timeConfig\":{\"realtime\":false,\"pt\":[\"P1W/\"]}}}]},{\"type\":\"div\",\"classes\":\"row\",\"elements\":[{\"type\":\"percentileTable\",\"classes\":\"\",\"data\":{\"percentiles\":{\"of\":[100, 101],\"values\":[100,90,80,0],\"limits\":{\"100\":[11,10,10,10],\"101\":[10,10,10,10]},\"timeConfig\":{\"realtime\":false,\"pt\":[\"P1W/\"]}},\"tablestyle\":\"table table-striped\",\"tableheaderstyle\":\"\",\"tablerowstyle\":\"\",\"tablecellstyle\":\"\"}}]}]";
-        }
-
-        if(name.equals("last2w")){
-            return "[{\"type\":\"div\",\"classes\":\"row\",\"elements\":[{\"type\":\"graph\",\"classes\":\"span4\",\"data\":{\"modal\":true,\"graphOf\":[100],\"timeConfig\":{\"realtime\":false,\"pt\":[\"P2W/\"]}}},{\"type\":\"graph\",\"classes\":\"span4\",\"data\":{\"modal\":true,\"graphOf\":[101],\"timeConfig\":{\"realtime\":false,\"pt\":[\"P2W/\"]}}},{\"type\":\"graph\",\"classes\":\"span4\",\"data\":{\"modal\":true,\"graphOf\":[100, 101],\"timeConfig\":{\"realtime\":false,\"pt\":[\"P2W/\"]}}}]},{\"type\":\"div\",\"classes\":\"row\",\"elements\":[{\"type\":\"percentileTable\",\"classes\":\"\",\"data\":{\"percentiles\":{\"of\":[100, 101],\"values\":[100,90,80,0],\"limits\":{\"100\":[11,10,10,10],\"101\":[10,10,10,10]},\"timeConfig\":{\"realtime\":false,\"pt\":[\"P2W/\"]}},\"tablestyle\":\"table table-striped\",\"tableheaderstyle\":\"\",\"tablerowstyle\":\"\",\"tablecellstyle\":\"\"}}]}]";
-        }
-
-        if(name.equals("realtime")){
-            return "[{\"type\":\"grapharray\",\"data\":{\"graphOf\":[\"all\"],\"span\":4,\"timeConfig\":{\"realtime\":true,\"pt\":[\"PT1H\"]}}}]";
-        }
-
-        LayoutEntity entity = dataRetriever.getLayoutEntity(name);
-        if (entity == null) {
-            throw new WebApplicationException(404);
-        }
-        return toJSON(entity);
-    }
 
 //
 //    @GET
