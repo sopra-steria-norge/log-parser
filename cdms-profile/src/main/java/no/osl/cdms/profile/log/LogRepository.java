@@ -71,10 +71,8 @@ public class LogRepository {
 
     public Procedure getEqualPersistedProcedure(Procedure procedure) {
         TypedQuery<ProcedureEntity> query = entityManager.createQuery(
-                "SELECT a FROM ProcedureEntity a where a.name = :name AND " +
-                        "a.className = :class AND " +
+                "SELECT a FROM ProcedureEntity a where a.className = :class AND " +
                         "a.method = :method", ProcedureEntity.class);
-        query.setParameter("name", procedure.getName());
         query.setParameter("class", procedure.getClassName());
         query.setParameter("method", procedure.getMethod());
         try {
@@ -93,38 +91,6 @@ public class LogRepository {
             return new java.util.ArrayList<ProcedureEntity>();
         }
 
-    }
-
-    public List<String> getAllLayoutEntityNames() {
-        List<LayoutEntity> layoutEntities = getAllLayoutEntities();
-        List<String> names = new ArrayList<String>();
-
-        for (LayoutEntity layoutEntity: layoutEntities) {
-            names.add(layoutEntity.getName());
-        }
-
-        return names;
-    }
-
-    public List<LayoutEntity> getAllLayoutEntities() {
-        TypedQuery<LayoutEntity> query = entityManager.createQuery(
-                "SELECT a FROM LayoutEntity a", LayoutEntity.class);
-        try {
-            return query.getResultList();
-        } catch (javax.persistence.NoResultException e) {
-            return new java.util.ArrayList<LayoutEntity>();
-        }
-    }
-
-    public LayoutEntity getLayoutEntity(String name) {
-        TypedQuery<LayoutEntity> query = entityManager.createQuery(
-                "SELECT a FROM LayoutEntity a WHERE a.name = :name", LayoutEntity.class);
-        query.setParameter("name", name);
-        try {
-            return query.getSingleResult();
-        } catch (javax.persistence.NoResultException e) {
-            return null;
-        }
     }
 
     /**

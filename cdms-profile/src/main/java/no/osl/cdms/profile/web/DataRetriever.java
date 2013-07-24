@@ -4,7 +4,6 @@ import no.osl.cdms.profile.api.Procedure;
 import no.osl.cdms.profile.api.TimeMeasurement;
 import no.osl.cdms.profile.interfaces.DataAnalyzer;
 import no.osl.cdms.profile.jmx.DataRetrieverMBean;
-import no.osl.cdms.profile.log.LayoutEntity;
 import no.osl.cdms.profile.log.LogRepository;
 import no.osl.cdms.profile.log.ProcedureEntity;
 import org.joda.time.DateTime;
@@ -81,18 +80,6 @@ public class DataRetriever implements DataRetrieverMBean{
             percentileMap.put(procedure, percentiles);
         }
         return percentileMap;
-    }
-
-    public List<LayoutEntity> getAllLayoutEntities() {
-         return logRepository.getAllLayoutEntities();
-    }
-
-    public List<String> getAllLayoutEntityNames() {
-        return logRepository.getAllLayoutEntityNames();
-    }
-
-    public LayoutEntity getLayoutEntity(String name) {
-        return logRepository.getLayoutEntity(name);
     }
 
 }
