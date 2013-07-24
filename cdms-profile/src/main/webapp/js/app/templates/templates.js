@@ -2,15 +2,19 @@ var templates = templates || {};
 
 (function () {
 
+
+
 	templates.row = '' +
 	'<div class="row'+
 	'</div>';
 
-	templates.graph = ''+
-	'<div class="span4">'+
-	'	<div class="graph">' +
-	'	</div>'+
-	'</div>';
+	templates.graph = function(graphOf) {
+		return ''+
+		'<div class="span4">'+
+		'	<div class="graph" data-graphOf="'+graphOf+'">' +
+		'	</div>'+
+		'</div>';
+	}
 
 	templates.navbar = '' +
 	'<div class="navbar navbar-fixed-top">'+
@@ -60,9 +64,9 @@ var templates = templates || {};
 
 	templates.defaultPage= '' +
 	'<div class="row">' +
-		templates.graph +
-		templates.graph +
-		templates.graph +
+		templates.graph('100') +
+		templates.graph('101') +
+		templates.graph('102') +
 	'</div>'+
 	'<div class="row>'+
 		templates.percentileTable +
