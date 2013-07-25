@@ -1,9 +1,7 @@
-var app = app || {};
-
-app.Procedure = Backbone.RelationalModel.extend({
-	idAttribute: '_id',
-    urlRoot: '/rest/procedure/',
+app.Procedure = Backbone.Model.extend({
+	idAttribute: 'id',
+    //urlRoot: '/rest/procedure/',
 	initialize: function(options){
-
+		
 	},
 });

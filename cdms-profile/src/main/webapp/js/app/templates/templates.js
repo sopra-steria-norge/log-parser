@@ -34,45 +34,57 @@ var templates = templates || {};
 	'</div>';
 
 	templates.percentileTable = function(){
+		
 		return '' +
+		'<table class="table table-striped">'+
+		'	<thead id="tablehead">' +
+		'	</thead>' +
+		'	<tbody id="tablebody">' +
+		'	</tbody>'+
+		'</table>';
+
+		/*
+		temp = '' +
 		'<table class="table table-striped">'+
 		'	<thead>' +
 		'		<tr>' +
-		'			<th>Name/Percentiles</th>' +
-		'			<th>100</th>' +
-		'			<th>90</th>' +
-		'			<th>80</th>' +
-		'			<th>0</th>' +
+		'			<th>Name/Percentiles</th>';
+		for (var i = 0; i < app.percentiles.length; i++) {
+			temp += '			<th>'+app.percentiles[i]+'</th>';
+		}
+		temp += '' +
 		'		</tr>' +
 		'	</thead>' +
-		'	<tbody>' +
-		'		<tr data-name="100" class="success">'+
-		'			<td></td>' +
-		'			<td data-percentile="100">PT0S</td>'+
-		'			<td data-percentile="90">PT0S</td>'+
-		'			<td data-percentile="80">PT0S</td>'+
-		'			<td data-percentile="0">PT0S</td>'+
-		'		</tr>'+
-		'		<tr data-name="101" class="success">'+
-		'			<td></td>'+
-		'			<td data-percentile="100">PT0S</td>'+
-		'			<td data-percentile="90">PT0S</td>'+
-		'			<td data-percentile="80">PT0S</td>'+
-		'			<td data-percentile="0">PT0S</td>'+
-		'		</tr>'+
+		'	<tbody>';
+		console.log(app.procedureMapping)
+		for (var i = 0; i < app.procedureMapping.length; i++) {
+			temp += '		<tr data-name="'+app.procedureMapping[i].name+'" data-rowOf="'+app.procedureMapping[i].id+'" class="success">'
+			temp += '			<td>'+app.procedureMapping[i].name+'</td>';
+			for (var j = 0; j < app.percentiles.length; j++) {
+				temp += '			<td data-percentile="'+app.percentiles[j]+'">PT0S</td>';
+			};
+			temp += '		</tr>'
+		};
+		temp += ''+
 		'	</tbody>'+
 		'</table>';
+
+		return temp;
+		*/
+		
 	}
 
-	templates.defaultPage= '' +
-	'<div class="row">' +
-		templates.graph('1') +
-		templates.graph('18') +
-		templates.graph('1, 18') +
-	'</div>'+
-	'<div class="row>'+
-		templates.percentileTable() +
-	'</div>';
+	templates.defaultPage = function(){
+		return '' +
+		'<div class="row">' +
+			templates.graph('1') +
+			templates.graph('18') +
+			templates.graph('1, 18') +
+		'</div>'+
+		'<div class="row">'+
+			templates.percentileTable() +
+		'</div>';
+	}
 
 
 })(templates);

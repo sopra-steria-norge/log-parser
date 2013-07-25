@@ -1,5 +1,4 @@
-var app = app || {};
-
 app.Procedures = Backbone.Collection.extend({
-	model: app.Measured
+	model: app.Procedure,
+	url: 'rest/procedure/'
 });
