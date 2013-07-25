@@ -1,8 +1,7 @@
 app.GraphView = Backbone.View.extend({
 
 	initialize : function () {
-		this.container = this.$el;
-		this.svgcontainer = undefined;
+		this.container = this.svgcontainer = this.$el;
         this.graphics = undefined;
         this.series;
         this.graphOf = [this.$el.data('graphof')];
@@ -14,41 +13,15 @@ app.GraphView = Backbone.View.extend({
         };
 
         this.numberOfBuckets = 200;
-
-        this.procedureMapping;
-        this.getProcedureMapping(function() {
-
-        }.bind(this));
 	},
 
 	render: function() {
-        this.container = this.$el;
-        this.svgcontainer = undefined;
-        this.graphics = undefined;
-        this.series;
-        this.intervalUpdater;
-        this.isModal = false;
-        this.isShown = false;
-        this.placeholder;
-        this.containerwidth;
-        this.procedureMapping;
+        this.graphics = this.drawGraph(this.svgcontainer);
+        this.startUpdate();
+        this.createResizeHandler();
+        this.createDestroyHandler();
+    },
 
-        this.getProcedureMapping(function() {
-            this.svgcontainer = this.container;
-            //this.createModalIfActivated(this.json);
-            this.graphics = this.drawGraph(this.svgcontainer);
-            this.startUpdate();
-            this.createResizeHandler();
-            this.createDestroyHandler();
-        }.bind(this));
-    },
-    getProcedureMapping: function(callback) {
-        var that = this;
-        $.get('rest/procedure', function(resp) {
-            that.procedureMapping = resp;
-            callback();
-        });
-    },
     destroy_view: function() {
         this.undelegateEvents();
         this.$el.removeData().unbind();
@@ -72,7 +45,6 @@ app.GraphView = Backbone.View.extend({
     updateGraph: function() {
         var that = this;
         var name = this.graphOf;
-        console.log('name', name)
         var tconf = this.timeConfig();
         var intervalConf = tconf.pt.join('/');
         var interval = new moment().interval(intervalConf);
@@ -82,7 +54,7 @@ app.GraphView = Backbone.View.extend({
         for (var i = 0; i < name.length; i++) {
             var url = 'rest/timeMeasurement/' + name[i] + suffix;
             $.get(url, function(resp) {
-                console.debug('TMResp', resp);
+                //console.debug('TMResp', resp);
                 update(resp);
             }.bind(this));
         }
@@ -109,7 +81,7 @@ app.GraphView = Backbone.View.extend({
             if (typeof s === 'undefined') {
                 return;
             }
-            console.debug('pushing', newdata, 'on', s);
+            //console.debug('pushing', newdata, 'on', s);
             s.data.push(newdata);
             var nd;
             while (typeof (nd = newdata.shift()) !== 'undefined') {
@@ -121,7 +93,7 @@ app.GraphView = Backbone.View.extend({
             while (s.data.length > that.numberOfBuckets) {
                 s.data.shift();
             }
-            console.debug('s.length', s.data.length, s);
+            //console.debug('s.length', s.data.length, s);
             that.series[remI] = s;
 
 
@@ -129,7 +101,7 @@ app.GraphView = Backbone.View.extend({
             that.graphics.setupGrid();
             that.graphics.draw();
             
-            console.debug('gr', that.graphics);
+            //console.debug('gr', that.graphics);
             
         }
     },
@@ -205,7 +177,7 @@ app.GraphView = Backbone.View.extend({
             });
         });
     },
-    
+
     createModalIfActivated: function(json) {
         if (json.data.modal) {
             if ($('body>.modal').length === 0) {
@@ -240,9 +212,9 @@ app.GraphView = Backbone.View.extend({
         return graph;
     },
     getNameFromProcedureId: function(id) {
-        for (var i = 0; i < this.procedureMapping.length; i++) {
-            if (id === this.procedureMapping[i].id) {
-                return createNameFromProcedure(this.procedureMapping[i]);
+        for (var i = 0; i < app.procedureMapping.length; i++) {
+            if (id === app.procedureMapping[i].id) {
+                return createNameFromProcedure(app.procedureMapping[i]);
                 break;
             }
         }
