@@ -14,6 +14,7 @@ public class OldLogFetcherRoute extends RouteBuilder {
 
     @Override
     public void configure() throws Exception{
+        lastRead = new DateTime();
 
         fromF(LOG_FILE_ENDPOINT, LOG_DIRECTORY).startupOrder(2)
                 .split(body().tokenize("\n")).streaming()
