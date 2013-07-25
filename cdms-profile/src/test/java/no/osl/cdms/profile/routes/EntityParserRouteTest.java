@@ -20,11 +20,11 @@
 //import static org.mockito.Mockito.verify;
 //import static org.mockito.Mockito.when;
 //
-//import static no.osl.cdms.profile.routes.PerformanceLogRoute.PERFORMANCE_LOG_ROUTE_ID;
+//import static no.osl.cdms.profile.routes.EntityParserRoute.ENTITY_PARSER_ROUTE_ID;
 //
 //public class PerformanceLogRouteTest extends CamelSpringTestSupport {
 //
-//    PerformanceLogRoute performanceLogRoute;
+//    EntityParserRoute performanceLogRoute;
 //    LogLineRegexParser logLineRegexParser;
 //    EntityFactory entityFactory;
 //
@@ -41,11 +41,11 @@
 //
 //
 //        // Creates and starts route
-//        performanceLogRoute = new PerformanceLogRoute(entityFactory, logLineRegexParser);
+//        performanceLogRoute = new EntityParserRoute(entityFactory, logLineRegexParser);
 //
 //        context.addRoutes(performanceLogRoute);
 //        template.setDefaultEndpointUri("direct:start");
-//        context.getRouteDefinition(PERFORMANCE_LOG_ROUTE_ID).adviceWith(context, new AdviceWithRouteBuilder() {
+//        context.getRouteDefinition(ENTITY_PARSER_ROUTE_ID).adviceWith(context, new AdviceWithRouteBuilder() {
 //            @Override
 //            public void configure() throws Exception {
 //                replaceFromWith("direct:start");
