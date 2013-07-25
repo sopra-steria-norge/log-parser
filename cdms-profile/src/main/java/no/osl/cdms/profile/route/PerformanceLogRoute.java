@@ -1,6 +1,7 @@
 package no.osl.cdms.profile.route;
 
 import no.osl.cdms.profile.interfaces.EntityFactory;
+import no.osl.cdms.profile.interfaces.EntityInsertionCache;
 import no.osl.cdms.profile.interfaces.Parser;
 import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
 import no.osl.cdms.profile.log.LogRepository;
@@ -28,6 +29,8 @@ public class PerformanceLogRoute extends RouteBuilder {
     private LogRepository logRepository;
     @Autowired
     private GuavaHelpers guavaHelpers;
+    @Autowired
+    private EntityInsertionCache entityCache;
 
     public PerformanceLogRoute() {
     }
@@ -45,9 +48,9 @@ public class PerformanceLogRoute extends RouteBuilder {
                 .choice().when(isUnreadLine())
                 .bean(parser, "process") // Parses log entry into String map
                 .bean(entityFactory, "process") // Parses log entry into database format                
-                .split(body())
+                .bean(entityCache, "process")
                 .choice().when(body().isNotNull())
-                .toF(DATABASE_ENDPOINT, TimeMeasurementEntity.class.getCanonicalName())
+                .toF(DATABASE_ENDPOINT, TimeMeasurementEntity[].class.getCanonicalName())
                 .routeId(PERFORMANCE_LOG_ROUTE_ID);
     }
 
@@ -56,12 +59,15 @@ public class PerformanceLogRoute extends RouteBuilder {
         return new Predicate() {
             @Override
             public boolean matches(Exchange exchange) {
-                DateTime logEntryDate = new DateTime(guavaHelpers.parseDateString(exchange.getIn().getBody().toString().substring(0, 23)));
+
                 if (lastInsertedTimeMeasurement == null) {
                     return true;
-                } else if (logEntryDate.isAfter(lastInsertedTimeMeasurement.getJodaTimestamp())
-                        || logEntryDate.isEqual(lastInsertedTimeMeasurement.getJodaTimestamp())) {
-                    return true;
+                } else {
+                    DateTime logEntryDate = new DateTime(guavaHelpers.parseDateString(exchange.getIn().getBody().toString().substring(0, 23)));
+                    if (logEntryDate.isAfter(lastInsertedTimeMeasurement.getJodaTimestamp())
+                            || logEntryDate.isEqual(lastInsertedTimeMeasurement.getJodaTimestamp())) {
+                        return true;
+                    }
                 }
                 return false;
             }

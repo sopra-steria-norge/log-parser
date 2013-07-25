@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import no.osl.cdms.profile.interfaces.Parser;
 import no.osl.cdms.profile.interfaces.db.Procedure;
+import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
 import no.osl.cdms.profile.log.LogRepository;
 import no.osl.cdms.profile.interfaces.EntityFactory;
 import org.apache.commons.io.FileUtils;
@@ -18,6 +19,7 @@ import org.junit.Test;
 import static org.mockito.Mockito.*;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+import static org.junit.Assert.*;
 
 /**
  *
@@ -63,14 +65,16 @@ public class PerformanceTest {
 
         for (String l : lines) {
             long s = System.currentTimeMillis();
-            Map<String, String> map = parser.process(l);
+            Map<String, String> map = parser.process(l);            
             long p = System.currentTimeMillis();
-            factory.process(map);
+            List<TimeMeasurement> list = factory.process(map);
             long f = System.currentTimeMillis();
 
-            parseTime += p - s;
-            factoryTime += f - p;
-
+            validateList(list);
+            
+            parseTime += p-s;
+            factoryTime += f-p;
+            
             if (modDebug(i++, prev)) {
                 System.out.println("Parser: " + parseTime);
                 System.out.println("Factory: " + factoryTime);
@@ -83,6 +87,19 @@ public class PerformanceTest {
         timestamp(startParse);
         System.out.println("AVGPerLine: " + ((System.currentTimeMillis() - startParse) / (lines.size() * 1.0)));
         avgCalc();
+    }
+    
+    private void validateList(List<TimeMeasurement> list) {
+        for (TimeMeasurement tm : list) {
+            assertNotNull(tm.getDuration());
+            assertTrue(tm.getDuration().length() > 0);
+            assertNotNull(tm.getProcedure());
+            assertNotNull(tm.getTimestamp());
+            
+            Procedure p = tm.getProcedure();
+            assertNotNull(p.getClassName());
+            assertTrue(p.getClassName().length() > 0);
+        }
     }
 
     private void avgCalc() {

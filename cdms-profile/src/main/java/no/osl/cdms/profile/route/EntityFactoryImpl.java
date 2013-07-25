@@ -70,8 +70,7 @@ public class EntityFactoryImpl implements EntityFactory {
             methodName = null;
         }
         Procedure p = new ProcedureEntity(name, className, methodName);
-        p =logRepository.getEqualPersistedProcedure(p);
-        return p;
+        return logRepository.getEqualPersistedProcedure(p);
     }
 
     public List<TimeMeasurement> createMultiContext(Map<String, String> properties) {

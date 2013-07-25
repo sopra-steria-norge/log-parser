@@ -12,6 +12,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.*;
+import javax.persistence.Query;
 import org.apache.log4j.Logger;
 
 @Repository
@@ -51,7 +52,7 @@ public class LogRepository {
         return getTimeMeasurementsByProcedure(fromDate, toDate, procedure, null);
     }
 
-    public List<TimeMeasurement> getTimeMeasurementsByProcedure(DateTime fromDate, DateTime toDate, Procedure procedure, TimeMeasurement.Field orderBy) {
+    public List<TimeMeasurement> getTimeMeasurementsByProcedure(DateTime fromDate, DateTime toDate, Procedure procedure, TimeMeasurement.Field orderBy) {        
         TypedQuery<TimeMeasurement> query = entityManager.createQuery("SELECT a FROM TimeMeasurementEntity a " +
                 "where a.procedure = :procedure AND a.timestamp >= :fromDate AND a.timestamp <= :toDate"
                 + queryOrderingSuffix(orderBy), TimeMeasurement.class);
@@ -91,7 +92,7 @@ public class LogRepository {
             cache.add(db);
             return db;
         } catch (javax.persistence.NoResultException e) {
-            return null;
+            return procedure;
         }
     }
 
@@ -110,6 +111,7 @@ public class LogRepository {
         TypedQuery<TimeMeasurement> query = entityManager.createQuery(
                 "SELECT a FROM TimeMeasurementEntity a where a.timestamp = (SELECT MAX(b.timestamp) from TimeMeasurementEntity b)",
                 TimeMeasurement.class);
+        query.setMaxResults(1);
         try {
             return query.getSingleResult();
         } catch (NoResultException e) {
