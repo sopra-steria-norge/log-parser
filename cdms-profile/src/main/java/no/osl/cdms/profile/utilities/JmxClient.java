@@ -1,8 +1,6 @@
 package no.osl.cdms.profile.utilities;
 
-import no.osl.cdms.profile.api.Procedure;
 import no.osl.cdms.profile.jmx.DataRetrieverMBean;
-import no.osl.cdms.profile.web.DataRetriever;
 
 import javax.management.MBeanServerConnection;
 import javax.management.MBeanServerInvocationHandler;
@@ -12,8 +10,7 @@ import javax.management.remote.JMXConnector;
 import javax.management.remote.JMXConnectorFactory;
 import javax.management.remote.JMXServiceURL;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import no.osl.cdms.profile.interfaces.db.Procedure;
 
 /**
  * Created with IntelliJ IDEA.

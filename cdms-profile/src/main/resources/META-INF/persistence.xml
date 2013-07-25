@@ -14,7 +14,6 @@
         <class>no.osl.cdms.profile.log.ProcedureEntity</class>
         <class>no.osl.cdms.profile.log.MultiContextEntity</class>
         <class>no.osl.cdms.profile.log.TimeMeasurementEntity</class>
-        <class>no.osl.cdms.profile.log.LayoutEntity</class>
 
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
 
@@ -25,7 +24,7 @@
             <property name="openjpa.Log" value="commons" />
 
             <property name="openjpa.QueryCache" value="false"/>
-            <property name="openjpa.DataCache" value="false"/>
+            <property name="openjpa.DataCache" value="true"/>
         </properties>
 
     </persistence-unit>
@@ -37,7 +36,6 @@
         <class>no.osl.cdms.profile.log.ProcedureEntity</class>
         <class>no.osl.cdms.profile.log.MultiContextEntity</class>
         <class>no.osl.cdms.profile.log.TimeMeasurementEntity</class>
-        <class>no.osl.cdms.profile.log.LayoutEntity</class>
 
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
 
@@ -48,9 +46,7 @@
             <property name="openjpa.Log" value="commons" />
 
             <property name="openjpa.QueryCache" value="false"/>
-            <property name="openjpa.DataCacheManager" value="net.sf.ehcache.openjpa.datacache.EhCacheDataCacheManager"/>
-            <property name="openjpa.DataCache" value="net.sf.ehcache.openjpa.datacache.EhCacheDataCache"/>
-            <property name="openjpa.RemoteCommitProvider" value="net.sf.ehcache.openjpa.datacache.NoOpRemoteCommitProvider"/>
+            <property name="openjpa.DataCache" value="true"/>
 
         </properties>
 

@@ -1,4 +1,4 @@
-package no.osl.cdms.profile.api;
+package no.osl.cdms.profile.interfaces.db;
 
 public interface Procedure {
 

@@ -1,10 +1,10 @@
 package no.osl.cdms.profile.routes;
 
-import no.osl.cdms.profile.api.TimeMeasurement;
-import no.osl.cdms.profile.factories.EntityFactory;
+import no.osl.cdms.profile.interfaces.EntityFactory;
+import no.osl.cdms.profile.interfaces.Parser;
+import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
 import no.osl.cdms.profile.log.LogRepository;
 import no.osl.cdms.profile.log.TimeMeasurementEntity;
-import no.osl.cdms.profile.parser.LogLineRegexParser;
 import no.osl.cdms.profile.utilities.GuavaHelpers;
 import org.apache.camel.Exchange;
 import org.apache.camel.Predicate;
@@ -26,7 +26,7 @@ public class EntityParserRoute extends RouteBuilder {
     private LogRepository logRepository;
 
     @Autowired
-    private LogLineRegexParser logLineRegexParser;
+    private Parser parser;
 
     @Autowired
     private GuavaHelpers guavaHelpers;
@@ -61,7 +61,7 @@ public class EntityParserRoute extends RouteBuilder {
 
         from(INPUT_ENDPOINT).startupOrder(1)
                 .choice().when(isUnreadLine())
-                .bean(logLineRegexParser, "parse")            // Parses log entry into String map
+                .bean(parser, "parse")            // Parses log entry into String map
                 .bean(entityFactory, "createTimemeasurement") // Parses log entry into database format
                 .split(body())
                 .choice().when(body().isNotNull())

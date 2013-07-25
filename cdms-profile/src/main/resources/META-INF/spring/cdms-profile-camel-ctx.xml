@@ -4,6 +4,7 @@
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
 
+
     <bean id="entityParserRoute" class="no.osl.cdms.profile.routes.EntityParserRoute"/>
     <bean id="fileStreamRoute" class="no.osl.cdms.profile.routes.FileStreamRoute"/>
     <bean id="oldLogFetcherRoute" class="no.osl.cdms.profile.routes.OldLogFetcherRoute"/>
