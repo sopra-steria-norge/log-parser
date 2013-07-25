@@ -5,8 +5,8 @@
        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
 
     <bean id="entityParserRoute" class="no.osl.cdms.profile.routes.EntityParserRoute"/>
-    <bean id="oldLogFetcherRoute" class="no.osl.cdms.profile.routes.OldLogFetcherRoute"/>
     <bean id="fileStreamRoute" class="no.osl.cdms.profile.routes.FileStreamRoute"/>
+    <bean id="oldLogFetcherRoute" class="no.osl.cdms.profile.routes.OldLogFetcherRoute"/>
 
 
     <bean id="PROPAGATION_REQUIRED" class="org.apache.camel.spring.spi.SpringTransactionPolicy">
