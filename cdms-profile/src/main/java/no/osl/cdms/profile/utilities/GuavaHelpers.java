@@ -37,9 +37,14 @@ public class GuavaHelpers {
     public GuavaHelpers() {
 
     }
+    public GuavaHelpers(EntityFactory entityFactory) {
+        this.entityFactory = entityFactory;
+    }
 
-    private DurationConverter converter = ConverterManager.getInstance().getDurationConverter("PT0.012S");
-
+    private static DurationConverter converter = ConverterManager.getInstance().getDurationConverter("PT0.012S");
+    private static DateTimeFormatter dtf = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss,SSS");
+    
+    
     public Predicate<Map.Entry<String, String>> isDuration() {
         return new Predicate<Map.Entry<String, String>>() {
             @Override
@@ -68,16 +73,7 @@ public class GuavaHelpers {
     }
 
     public Date parseDateString(String string) {
-
-        try {
-            Date date = new SimpleDateFormat("yyyy-mm-dd kk:mm:ss,SSS", Locale.ENGLISH).parse(string);
-        } catch (ParseException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-        DateTimeFormatter dtf = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss,SSS");
-        Date date = dtf.parseDateTime(string).toDate();
-
-        return date;
+        return dtf.parseDateTime(string).toDate();
     }
 
     public String[] parseKey(String key, Map<String, String> map) {

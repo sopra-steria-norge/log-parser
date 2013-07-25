@@ -4,23 +4,29 @@
  */
 package no.osl.cdms.profile.route;
 
-import no.osl.cdms.profile.route.ParserImpl;
 import com.google.common.collect.Lists;
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import no.osl.cdms.profile.interfaces.Parser;
+import no.osl.cdms.profile.interfaces.db.Procedure;
+import no.osl.cdms.profile.log.LogRepository;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
+import static org.mockito.Mockito.*;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 /**
  *
  * @author nutgaard
  */
 public class PerformanceTest {
+
     private Long prev;
     private List<Long> avg;
-
     private List<String> lines;
 
     public PerformanceTest() {
@@ -40,33 +46,62 @@ public class PerformanceTest {
     @Test
     public void localMockLogLine() {
         Parser parser = new ParserImpl();
+        EntityFactoryImpl factory = new EntityFactoryImpl();
+        LogRepository repo = mock(LogRepository.class);
+        when(repo.getEqualPersistedProcedure(any(Procedure.class))).then(new Answer<Procedure>() {
+            @Override
+            public Procedure answer(InvocationOnMock invocation) throws Throwable {
+                return (Procedure) invocation.getArguments()[0];
+            }
+        });
+        factory.setLogRepository(repo);
+
         long i = 0;
         long startParse = System.currentTimeMillis();
-        prev = System.currentTimeMillis();
+        
+        long parseTime = 0, factoryTime = 0, prev = System.currentTimeMillis();
+        
         for (String l : lines) {
-            parser.process(l);
-            if (modDebug(i++, prev))prev = System.currentTimeMillis();
+            long s = System.currentTimeMillis();
+            Map<String, String> map = parser.process(l);
+            long p = System.currentTimeMillis();
+            factory.process(map);
+            long f = System.currentTimeMillis();
             
+            parseTime += p-s;
+            factoryTime += f-p;
+            
+            if (modDebug(i++, prev)) {
+                System.out.println("Parser: "+parseTime);
+                System.out.println("Factory: "+factoryTime);
+                parseTime = 0;
+                factoryTime = 0;
+                prev = System.currentTimeMillis();
+            }
+
         }
         timestamp(startParse);
-        System.out.println("AVGPerLine: "+((System.currentTimeMillis()-startParse)/(lines.size()*1.0)));
+        System.out.println("AVGPerLine: " + ((System.currentTimeMillis() - startParse) / (lines.size() * 1.0)));
         avgCalc();
     }
+
     private void avgCalc() {
         long sum = 0;
-        for (long l : avg){
+        for (long l : avg) {
             sum += l;
         }
-        System.out.println("AVG Time: "+(sum/avg.size())+"ms");
+        System.out.println("AVG Time: " + (sum / avg.size()) + "ms");
     }
+
     private void timestamp(long start) {
         long t = System.currentTimeMillis() - start;
         avg.add(t);
-        System.out.println("Time "+t+"ms");
+        System.out.println("Time " + t + "ms");
     }
-    private boolean modDebug(long i, long prev){
-        if (i%1000 == 0){
-            System.out.print("Line "+i+" parsed at ");
+
+    private boolean modDebug(long i, long prev) {
+        if (i % 1000 == 0) {
+            System.out.print("Line " + i + " parsed at ");
             timestamp(prev);
             return true;
         }

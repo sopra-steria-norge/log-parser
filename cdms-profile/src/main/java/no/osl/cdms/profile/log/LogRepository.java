@@ -1,5 +1,6 @@
 package no.osl.cdms.profile.log;
 
+import com.google.common.collect.Lists;
 import no.osl.cdms.profile.interfaces.db.Procedure;
 import no.osl.cdms.profile.interfaces.db.MultiContext;
 import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
@@ -11,9 +12,13 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.*;
+import org.apache.log4j.Logger;
 
 @Repository
 public class LogRepository {
+    Logger logger = Logger.getRootLogger();
+    
+    private static List<Procedure> cache = Lists.newArrayList();
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -69,15 +74,22 @@ public class LogRepository {
 
         return query.getResultList();
     }
-
     public Procedure getEqualPersistedProcedure(Procedure procedure) {
+        int cached = inCache(procedure);
+        if (cached != -1){
+            return cache.get(cached);
+        }
+        logger.error("Cache miss for: "+procedure);
+        
         TypedQuery<ProcedureEntity> query = entityManager.createQuery(
                 "SELECT a FROM ProcedureEntity a where a.className = :class AND " +
                         "a.method = :method", ProcedureEntity.class);
         query.setParameter("class", procedure.getClassName());
         query.setParameter("method", procedure.getMethod());
         try {
-            return query.getSingleResult();
+            Procedure db =  query.getSingleResult();
+            cache.add(db);
+            return db;
         } catch (javax.persistence.NoResultException e) {
             return null;
         }
@@ -126,6 +138,7 @@ public class LogRepository {
         }
         return querySuffix;
     }
-
-
+    private static int inCache(Procedure p){
+        return cache.indexOf(p);
+    }
 }

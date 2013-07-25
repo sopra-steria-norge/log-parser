@@ -21,7 +21,6 @@ import no.osl.cdms.profile.log.ProcedureEntity;
 import no.osl.cdms.profile.log.MultiContextEntity;
 import no.osl.cdms.profile.log.TimeMeasurementEntity;
 import no.osl.cdms.profile.utilities.GuavaHelpers;
-import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -32,20 +31,17 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class EntityFactoryImpl implements EntityFactory {
-    Logger logger = Logger.getRootLogger();
+
+    @Autowired
+    private GuavaHelpers guavaHelpers = new GuavaHelpers(this);
     
     @Autowired
     private LogRepository logRepository;
 
-    @Autowired
-    private GuavaHelpers guavaHelpers;
-    
-    private static int counter = 0;
-    private static long lastOut = System.currentTimeMillis();
-
-    public void setLogRepository(LogRepository logRepository) {
-        this.logRepository = logRepository;
+    public void setLogRepository(LogRepository logrepo) {
+        this.logRepository = logrepo;
     }
+
     public TimeMeasurement createTimeMeasurement(Procedure procedure, MultiContext context, Date timestamp, String duration) {
         return (TimeMeasurement) (new TimeMeasurementEntity((ProcedureEntity) procedure, (MultiContextEntity) context, timestamp, duration));
     }
@@ -64,14 +60,18 @@ public class EntityFactoryImpl implements EntityFactory {
     }
 
     public Procedure createProcedure(String name, String className, String methodName) {
-        if (name != null && name.equals("")) name = null;
-        if (className != null && className.equals("")) className = null;
-        if (methodName != null && methodName.equals("")) methodName = null;
-        Procedure newProcedure = new ProcedureEntity(name, className, methodName);
-        Procedure existingProcedure = logRepository.getEqualPersistedProcedure(newProcedure);
-
-        if (existingProcedure != null) return existingProcedure;
-        return newProcedure;
+        if (name != null && name.equals("")) {
+            name = null;
+        }
+        if (className != null && className.equals("")) {
+            className = null;
+        }
+        if (methodName != null && methodName.equals("")) {
+            methodName = null;
+        }
+        Procedure p = new ProcedureEntity(name, className, methodName);
+        p =logRepository.getEqualPersistedProcedure(p);
+        return p;
     }
 
     public List<TimeMeasurement> createMultiContext(Map<String, String> properties) {
@@ -88,13 +88,11 @@ public class EntityFactoryImpl implements EntityFactory {
     }
 
     public List<TimeMeasurement> createLocalContextTimeMeasurement(Map<String, String> properties) {
-//        DateTime timestamp = new DateTime(properties.get("timestamp"));
         String duration = properties.get("LocalThreadContext.duration");
         String[] id = guavaHelpers.parseKey("LocalThreadContext.id", properties);
         String classname = id[0];
         String methodname = id[1];
         Procedure m = createProcedure(classname, methodname);
-        //Procedure m = new ProcedureEntity("",classname, methodname);
         TimeMeasurement tm = createTimeMeasurement(m, guavaHelpers.parseDateString(properties.get("timestamp")), duration);
         tm.setProcedure((ProcedureEntity) m);
         List<TimeMeasurement> list = Lists.newLinkedList();
@@ -124,19 +122,6 @@ public class EntityFactoryImpl implements EntityFactory {
 
     @Override
     public List<TimeMeasurement> process(Map<String, String> s) {
-        long time = System.currentTimeMillis();
-        List<TimeMeasurement> l = createTimemeasurement(s);
-        lastOut+= (System.currentTimeMillis()-time);
-        debug();
-        return l;
-    }
-    private void debug() {
-        counter++;
-        if (counter == 1000){
-            counter = 0;
-            logger.warn("EntityFactory::SelfTime: "+lastOut);
-            lastOut = 0;
-        }
+        return createTimemeasurement(s);
     }
 }
-

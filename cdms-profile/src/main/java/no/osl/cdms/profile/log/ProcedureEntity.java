@@ -71,11 +71,10 @@ public class ProcedureEntity implements Procedure {
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 97 * hash + this.id;
-        hash = 97 * hash + (this.name != null ? this.name.hashCode() : 0);
-        hash = 97 * hash + (this.className != null ? this.className.hashCode() : 0);
-        hash = 97 * hash + (this.method != null ? this.method.hashCode() : 0);
+        int hash = 7;
+        hash = 29 * hash + (this.name != null ? this.name.hashCode() : 0);
+        hash = 29 * hash + (this.className != null ? this.className.hashCode() : 0);
+        hash = 29 * hash + (this.method != null ? this.method.hashCode() : 0);
         return hash;
     }
 
@@ -88,12 +87,7 @@ public class ProcedureEntity implements Procedure {
             return false;
         }
         final ProcedureEntity other = (ProcedureEntity) obj;
-        if (this.id != other.id) {
-            return false;
-        }
-        if ((this.name == null) ? (other.name != null) : !this.name.equals(other.name)) {
-            return false;
-        }
+        
         if ((this.className == null) ? (other.className != null) : !this.className.equals(other.className)) {
             return false;
         }
@@ -102,4 +96,7 @@ public class ProcedureEntity implements Procedure {
         }
         return true;
     }
+    
+
+    
 }

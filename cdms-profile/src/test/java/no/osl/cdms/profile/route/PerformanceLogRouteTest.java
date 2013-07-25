@@ -1,6 +1,7 @@
 package no.osl.cdms.profile.route;
 
 //package no.osl.cdms.profile.routes;
+
 //import no.osl.cdms.profile.api.TimeMeasurement;
 //import no.osl.cdms.profile.factories.EntityFactory;
 //import no.osl.cdms.profile.parser.LogLineRegexParser;
@@ -90,3 +91,4 @@ package no.osl.cdms.profile.route;
 //                "classpath:test-cdms-profile-infra-ctx.xml", "classpath:test-cdms-profile-camel-ctx.xml");
 //    }
 //}
+

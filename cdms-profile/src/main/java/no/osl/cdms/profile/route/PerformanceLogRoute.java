@@ -18,39 +18,32 @@ public class PerformanceLogRoute extends RouteBuilder {
     private static final String LOG_DIRECTORY = "data/log";
     private static final String LOG_FILE = "performance.log";
     private static final int DELAY = 0;
-
     private static final String LOG_FILE_ENDPOINT = "stream:file?fileName=%s/%s&scanStream=true&scanStreamDelay=%d";
     private static final String DATABASE_ENDPOINT = "jpa:%s?usePersist=true";
-
     @Autowired
     private EntityFactory entityFactory;
-
     @Autowired
     private Parser parser;
-
     @Autowired
     private LogRepository logRepository;
-    
     @Autowired
     private GuavaHelpers guavaHelpers;
 
     public PerformanceLogRoute() {
-
     }
 
 //    public PerformanceLogRoute(EntityFactory entityFactory, LogLineRegexParser logLineRegexParser) {
 //        this.entityFactory = entityFactory;
 //        this.logLineRegexParser = logLineRegexParser;
 //    }
-
     @Override
-    public void configure() throws Exception{
+    public void configure() throws Exception {
 
         fromF(LOG_FILE_ENDPOINT, LOG_DIRECTORY, LOG_FILE, DELAY)
-                .convertBodyTo(String.class)                  // Converts input to String
-                .choice().when(body().isGreaterThan(""))      // Ignores empty lines
-        .choice().when(isUnreadLine())
-                .bean(parser, "process")            // Parses log entry into String map
+                .convertBodyTo(String.class) // Converts input to String
+                .choice().when(body().isGreaterThan("")) // Ignores empty lines
+                .choice().when(isUnreadLine())
+                .bean(parser, "process") // Parses log entry into String map
                 .bean(entityFactory, "process") // Parses log entry into database format                
                 .split(body())
                 .choice().when(body().isNotNull())
@@ -63,11 +56,11 @@ public class PerformanceLogRoute extends RouteBuilder {
         return new Predicate() {
             @Override
             public boolean matches(Exchange exchange) {
-                DateTime logEntryDate = new DateTime(guavaHelpers.parseDateString(exchange.getIn().getBody().toString().substring(0,23)));
+                DateTime logEntryDate = new DateTime(guavaHelpers.parseDateString(exchange.getIn().getBody().toString().substring(0, 23)));
                 if (lastInsertedTimeMeasurement == null) {
                     return true;
-                } else if (logEntryDate.isAfter(lastInsertedTimeMeasurement.getJodaTimestamp()) ||
-                    logEntryDate.isEqual(lastInsertedTimeMeasurement.getJodaTimestamp())) {
+                } else if (logEntryDate.isAfter(lastInsertedTimeMeasurement.getJodaTimestamp())
+                        || logEntryDate.isEqual(lastInsertedTimeMeasurement.getJodaTimestamp())) {
                     return true;
                 }
                 return false;

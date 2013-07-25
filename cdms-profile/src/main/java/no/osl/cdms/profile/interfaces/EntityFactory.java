@@ -20,5 +20,5 @@ import org.springframework.stereotype.Component;
 public interface EntityFactory extends RouteComponent<Map<String, String>, List<TimeMeasurement>>{
     public Procedure createProcedure(String className, String methodName);
     public TimeMeasurement createTimeMeasurement(Procedure procedure, Date timestamp, String duration);
-    public void setLogRepository(LogRepository logrepository);
+    public void setLogRepository(LogRepository logRepository);
 }
