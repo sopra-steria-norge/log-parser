@@ -131,11 +131,11 @@ public class TimeMeasurementBucket implements TimeMeasurement {
 
     @Override
     public int compareTo(TimeMeasurement other) {
-        long thisTime = this.getJodaTimestamp().getMillis();
-        long otherTime = other.getJodaTimestamp().getMillis();
-//        DurationConverter c = ConverterManager.getInstance().getDurationConverter(this.getDuration());
-//        return (int)Math.signum(c.getDurationMillis(this.getDuration())-c.getDurationMillis(o.getDuration()));
-        return (int) Math.signum(thisTime - otherTime);
+//        long thisTime = this.getJodaTimestamp().getMillis();
+//        long otherTime = other.getJodaTimestamp().getMillis();
+        DurationConverter c = ConverterManager.getInstance().getDurationConverter(this.getDuration());
+        return (int)Math.signum(c.getDurationMillis(this.getDuration())-c.getDurationMillis(other.getDuration()));
+//        return (int) Math.signum(thisTime - otherTime);
     }
 
 }

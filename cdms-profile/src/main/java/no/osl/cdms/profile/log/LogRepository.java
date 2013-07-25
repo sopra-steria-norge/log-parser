@@ -7,6 +7,7 @@ import org.joda.time.DateTime;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.*;
@@ -93,6 +94,17 @@ public class LogRepository {
 
     }
 
+    public TimeMeasurement getLatestTimeMeasurement() {
+        TypedQuery<TimeMeasurement> query = entityManager.createQuery(
+                "SELECT a FROM TimeMeasurementEntity a where a.timestamp = (SELECT MAX(b.timestamp) from TimeMeasurementEntity b)",
+                TimeMeasurement.class);
+        try {
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
     /**
      * Generates a String to be appended to a query.
      * The String will specify which field to order by, if any.
@@ -114,4 +126,6 @@ public class LogRepository {
         }
         return querySuffix;
     }
+
+
 }
