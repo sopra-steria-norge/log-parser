@@ -61,8 +61,8 @@ public class EntityParserRoute extends RouteBuilder {
 
         from(INPUT_ENDPOINT).startupOrder(1)
                 .choice().when(isUnreadLine())
-                .bean(parser, "parse")            // Parses log entry into String map
-                .bean(entityFactory, "createTimemeasurement") // Parses log entry into database format
+                .bean(parser, "process")            // Parses log entry into String map
+                .bean(entityFactory, "process") // Parses log entry into database format
                 .split(body())
                 .choice().when(body().isNotNull())
                 .toF(DATABASE_ENDPOINT, TimeMeasurementEntity.class.getCanonicalName())
