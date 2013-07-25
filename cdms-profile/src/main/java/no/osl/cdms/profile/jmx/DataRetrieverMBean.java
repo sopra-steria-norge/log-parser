@@ -1,13 +1,13 @@
 package no.osl.cdms.profile.jmx;
 
-import no.osl.cdms.profile.api.Procedure;
-import no.osl.cdms.profile.api.TimeMeasurement;
+
 import no.osl.cdms.profile.log.ProcedureEntity;
 import org.joda.time.DateTime;
-
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import no.osl.cdms.profile.interfaces.db.Procedure;
+import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
 
 public interface DataRetrieverMBean {
 

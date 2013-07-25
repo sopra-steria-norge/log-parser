@@ -4,7 +4,8 @@
  */
 package no.osl.cdms.profile.interfaces;
 
-import java.util.Map;
+import java.util.List;
+import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
 import org.springframework.stereotype.Component;
 
 /**
@@ -12,6 +13,6 @@ import org.springframework.stereotype.Component;
  * @author nutgaard
  */
 @Component
-public interface Parser extends RouteComponent<String, Map<String, String>>{
+public interface EntityInsertionCache extends RouteComponent<List<TimeMeasurement>, TimeMeasurement[]>{
+    
 }
-

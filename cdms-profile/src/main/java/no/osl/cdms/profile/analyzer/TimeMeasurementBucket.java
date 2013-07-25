@@ -1,6 +1,6 @@
 package no.osl.cdms.profile.analyzer;
 
-import no.osl.cdms.profile.api.TimeMeasurement;
+import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
 import no.osl.cdms.profile.log.MultiContextEntity;
 import no.osl.cdms.profile.log.ProcedureEntity;
 import org.joda.time.DateTime;

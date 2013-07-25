@@ -1,8 +1,9 @@
 package no.osl.cdms.profile.log;
 
-import no.osl.cdms.profile.api.Procedure;
-import no.osl.cdms.profile.api.MultiContext;
-import no.osl.cdms.profile.api.TimeMeasurement;
+import com.google.common.collect.Lists;
+import no.osl.cdms.profile.interfaces.db.Procedure;
+import no.osl.cdms.profile.interfaces.db.MultiContext;
+import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Repository;
 
@@ -11,9 +12,14 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.*;
+import javax.persistence.Query;
+import org.apache.log4j.Logger;
 
 @Repository
 public class LogRepository {
+    Logger logger = Logger.getRootLogger();
+    
+    private static List<Procedure> cache = Lists.newArrayList();
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -46,7 +52,7 @@ public class LogRepository {
         return getTimeMeasurementsByProcedure(fromDate, toDate, procedure, null);
     }
 
-    public List<TimeMeasurement> getTimeMeasurementsByProcedure(DateTime fromDate, DateTime toDate, Procedure procedure, TimeMeasurement.Field orderBy) {
+    public List<TimeMeasurement> getTimeMeasurementsByProcedure(DateTime fromDate, DateTime toDate, Procedure procedure, TimeMeasurement.Field orderBy) {        
         TypedQuery<TimeMeasurement> query = entityManager.createQuery("SELECT a FROM TimeMeasurementEntity a " +
                 "where a.procedure = :procedure AND a.timestamp >= :fromDate AND a.timestamp <= :toDate"
                 + queryOrderingSuffix(orderBy), TimeMeasurement.class);
@@ -69,17 +75,24 @@ public class LogRepository {
 
         return query.getResultList();
     }
-
     public Procedure getEqualPersistedProcedure(Procedure procedure) {
+        int cached = inCache(procedure);
+        if (cached != -1){
+            return cache.get(cached);
+        }
+        logger.error("Cache miss for: "+procedure);
+        
         TypedQuery<ProcedureEntity> query = entityManager.createQuery(
                 "SELECT a FROM ProcedureEntity a where a.className = :class AND " +
                         "a.method = :method", ProcedureEntity.class);
         query.setParameter("class", procedure.getClassName());
         query.setParameter("method", procedure.getMethod());
         try {
-            return query.getSingleResult();
+            Procedure db =  query.getSingleResult();
+            cache.add(db);
+            return db;
         } catch (javax.persistence.NoResultException e) {
-            return null;
+            return procedure;
         }
     }
 
@@ -98,6 +111,7 @@ public class LogRepository {
         TypedQuery<TimeMeasurement> query = entityManager.createQuery(
                 "SELECT a FROM TimeMeasurementEntity a where a.timestamp = (SELECT MAX(b.timestamp) from TimeMeasurementEntity b)",
                 TimeMeasurement.class);
+        query.setMaxResults(1);
         try {
             return query.getSingleResult();
         } catch (NoResultException e) {
@@ -137,6 +151,7 @@ public class LogRepository {
         }
         return querySuffix;
     }
-
-
+    private static int inCache(Procedure p){
+        return cache.indexOf(p);
+    }
 }

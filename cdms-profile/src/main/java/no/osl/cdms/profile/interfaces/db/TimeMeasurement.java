@@ -1,4 +1,4 @@
-package no.osl.cdms.profile.api;
+package no.osl.cdms.profile.interfaces.db;
 
 import no.osl.cdms.profile.log.ProcedureEntity;
 import no.osl.cdms.profile.log.MultiContextEntity;

@@ -7,23 +7,14 @@ package no.osl.cdms.profile.utilities;
 import com.google.common.base.Function;
 import com.google.common.collect.Maps;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import no.osl.cdms.profile.interfaces.EntityFactory;
 
-import no.osl.cdms.profile.api.Procedure;
-import no.osl.cdms.profile.api.TimeMeasurement;
-import no.osl.cdms.profile.factories.EntityFactory;
+import no.osl.cdms.profile.interfaces.db.Procedure;
+import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
 import no.osl.cdms.profile.log.LogRepository;
-import org.joda.time.DateTime;
-import org.joda.time.convert.ConverterManager;
-import org.joda.time.convert.InstantConverter;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
