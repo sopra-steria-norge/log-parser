@@ -6,12 +6,12 @@ package no.osl.cdms.profile.route;
 
 import com.google.common.collect.Lists;
 import java.io.File;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import no.osl.cdms.profile.interfaces.Parser;
 import no.osl.cdms.profile.interfaces.db.Procedure;
 import no.osl.cdms.profile.log.LogRepository;
+import no.osl.cdms.profile.interfaces.EntityFactory;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -46,7 +46,7 @@ public class PerformanceTest {
     @Test
     public void localMockLogLine() {
         Parser parser = new ParserImpl();
-        EntityFactoryImpl factory = new EntityFactoryImpl();
+        EntityFactory factory = new EntityFactoryImpl();
         LogRepository repo = mock(LogRepository.class);
         when(repo.getEqualPersistedProcedure(any(Procedure.class))).then(new Answer<Procedure>() {
             @Override
@@ -58,22 +58,22 @@ public class PerformanceTest {
 
         long i = 0;
         long startParse = System.currentTimeMillis();
-        
+
         long parseTime = 0, factoryTime = 0, prev = System.currentTimeMillis();
-        
+
         for (String l : lines) {
             long s = System.currentTimeMillis();
             Map<String, String> map = parser.process(l);
             long p = System.currentTimeMillis();
             factory.process(map);
             long f = System.currentTimeMillis();
-            
-            parseTime += p-s;
-            factoryTime += f-p;
-            
+
+            parseTime += p - s;
+            factoryTime += f - p;
+
             if (modDebug(i++, prev)) {
-                System.out.println("Parser: "+parseTime);
-                System.out.println("Factory: "+factoryTime);
+                System.out.println("Parser: " + parseTime);
+                System.out.println("Factory: " + factoryTime);
                 parseTime = 0;
                 factoryTime = 0;
                 prev = System.currentTimeMillis();

@@ -1,27 +1,19 @@
 package no.osl.cdms.profile.route;
 
-import no.osl.cdms.profile.route.EntityFactoryImpl;
+import no.osl.cdms.profile.interfaces.EntityFactory;
 import no.osl.cdms.profile.interfaces.db.Procedure;
 import no.osl.cdms.profile.log.LogRepository;
-import no.osl.cdms.profile.log.MultiContextEntity;
 import no.osl.cdms.profile.log.ProcedureEntity;
-import no.osl.cdms.profile.log.TimeMeasurementEntity;
-import no.osl.cdms.profile.utilities.GuavaHelpers;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 @Transactional
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -30,7 +22,7 @@ import static org.junit.Assert.assertTrue;
 public class EntityFactoryTest {
 
     @Autowired
-    private EntityFactoryImpl entityFactory;
+    private EntityFactory entityFactory;
 
     @Autowired
     private LogRepository logRepository;

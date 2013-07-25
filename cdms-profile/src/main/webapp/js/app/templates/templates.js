@@ -33,43 +33,45 @@ var templates = templates || {};
 	'	</div>'+
 	'</div>';
 
-	templates.percentileTable = '' +
-	'<table class="table table-striped">'+
-	'	<thead>' +
-	'		<tr>' +
-	'			<th>Name/Percentiles</th>' +
-	'			<th>100</th>' +
-	'			<th>90</th>' +
-	'			<th>80</th>' +
-	'			<th>0</th>' +
-	'		</tr>' +
-	'	</thead>' +
-	'	<tbody>' +
-	'		<tr data-name="100" class="success">'+
-	'			<td></td>' +
-	'			<td data-percentile="100">PT0S</td>'+
-	'			<td data-percentile="90">PT0S</td>'+
-	'			<td data-percentile="80">PT0S</td>'+
-	'			<td data-percentile="0">PT0S</td>'+
-	'		</tr>'+
-	'		<tr data-name="101" class="success">'+
-	'			<td></td>'+
-	'			<td data-percentile="100">PT0S</td>'+
-	'			<td data-percentile="90">PT0S</td>'+
-	'			<td data-percentile="80">PT0S</td>'+
-	'			<td data-percentile="0">PT0S</td>'+
-	'		</tr>'+
-	'	</tbody>'+
-	'</table>';
+	templates.percentileTable = function(){
+		return '' +
+		'<table class="table table-striped">'+
+		'	<thead>' +
+		'		<tr>' +
+		'			<th>Name/Percentiles</th>' +
+		'			<th>100</th>' +
+		'			<th>90</th>' +
+		'			<th>80</th>' +
+		'			<th>0</th>' +
+		'		</tr>' +
+		'	</thead>' +
+		'	<tbody>' +
+		'		<tr data-name="100" class="success">'+
+		'			<td></td>' +
+		'			<td data-percentile="100">PT0S</td>'+
+		'			<td data-percentile="90">PT0S</td>'+
+		'			<td data-percentile="80">PT0S</td>'+
+		'			<td data-percentile="0">PT0S</td>'+
+		'		</tr>'+
+		'		<tr data-name="101" class="success">'+
+		'			<td></td>'+
+		'			<td data-percentile="100">PT0S</td>'+
+		'			<td data-percentile="90">PT0S</td>'+
+		'			<td data-percentile="80">PT0S</td>'+
+		'			<td data-percentile="0">PT0S</td>'+
+		'		</tr>'+
+		'	</tbody>'+
+		'</table>';
+	}
 
 	templates.defaultPage= '' +
 	'<div class="row">' +
-		templates.graph('100') +
-		templates.graph('101') +
-		templates.graph('102') +
+		templates.graph('1') +
+		templates.graph('18') +
+		templates.graph('1, 18') +
 	'</div>'+
 	'<div class="row>'+
-		templates.percentileTable +
+		templates.percentileTable() +
 	'</div>';
 
 

@@ -44,7 +44,7 @@ public class LogRepositoryTest {
                 new DateTime("2011-06-25T01:15:52.700Z").toDate());
 
         timeMeasurementEntity1 = new TimeMeasurementEntity(procedureEntity1, multiContextEntity1,
-                new DateTime("2013-06-25T01:15:52.480Z").toDate(), "PT0.017S");
+                new DateTime().toDate(), "PT0.017S");
         timeMeasurementEntity2 = new TimeMeasurementEntity(procedureEntity2, multiContextEntity1,
                 new DateTime("2013-06-25T01:15:52.458Z").toDate(), "PT0.107S");
         timeMeasurementEntity3 = new TimeMeasurementEntity(procedureEntity1, multiContextEntity2,

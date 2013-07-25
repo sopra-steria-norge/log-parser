@@ -117,6 +117,17 @@ public class LogRepository {
         }
     }
 
+    public TimeMeasurement getOldestTimeMeasurement() {
+        TypedQuery<TimeMeasurement> query = entityManager.createQuery(
+                "SELECT a FROM TimeMeasurementEntity a where a.timestamp = (SELECT MIN(b.timestamp) from TimeMeasurementEntity b)",
+                TimeMeasurement.class);
+        try {
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
     /**
      * Generates a String to be appended to a query.
      * The String will specify which field to order by, if any.

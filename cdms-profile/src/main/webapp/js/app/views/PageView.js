@@ -14,7 +14,12 @@ app.PageView = Backbone.View.extend({
 
 	render: function() {
 		this.$el.append(this.navbar.getCurrentViewTemplate());
-		_.each(this.$el.find('.graph'), function(el) {console.log(el)});
+		_.each(this.$el.find('.graph'), function(el) {
+			var g = new app.GraphView({
+				el: $(el)
+			})
+			g.render();
+		});
 	}
 
 
