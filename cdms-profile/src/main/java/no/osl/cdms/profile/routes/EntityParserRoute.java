@@ -12,14 +12,11 @@ import org.apache.camel.builder.RouteBuilder;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class PerformanceLogRoute extends RouteBuilder {
+public class EntityParserRoute extends RouteBuilder {
 
-    public static final String PERFORMANCE_LOG_ROUTE_ID = "PerformanceLogRoute";
-    private static final String LOG_DIRECTORY = "data/log";
-    private static final String LOG_FILE = "performance.log";
-    private static final int DELAY = 0;
+    public static final String ENTITY_PARSER_ROUTE_ID = "EntityParserRoute";
 
-    private static final String LOG_FILE_ENDPOINT = "stream:file?fileName=%s/%s&scanStream=true&scanStreamDelay=%d";
+    public static final String INPUT_ENDPOINT = "direct:entityParserRoute";
     private static final String DATABASE_ENDPOINT = "jpa:%s?usePersist=true";
 
     @Autowired
@@ -34,28 +31,42 @@ public class PerformanceLogRoute extends RouteBuilder {
     @Autowired
     private GuavaHelpers guavaHelpers;
 
-    public PerformanceLogRoute() {
+    public EntityParserRoute() {
 
     }
 
-//    public PerformanceLogRoute(EntityFactory entityFactory, LogLineRegexParser logLineRegexParser) {
+//    public EntityParserRoute(EntityFactory entityFactory, LogLineRegexParser logLineRegexParser) {
 //        this.entityFactory = entityFactory;
 //        this.logLineRegexParser = logLineRegexParser;
 //    }
 
+
     @Override
     public void configure() throws Exception{
+//        DateTime firstToRead = new DateTime().minusDays(14);
+//        TimeMeasurement oldestTimeMeasurement = logRepository.getOldestTimeMeasurement();
+//        if (oldestTimeMeasurement != null) {
+//            DateTime oldest = oldestTimeMeasurement.getJodaTimestamp();
+//            if (oldest.isAfter(firstToRead)) {
+//                firstToRead = oldest;
+//            }
+//        }
 
-        fromF(LOG_FILE_ENDPOINT, LOG_DIRECTORY, LOG_FILE, DELAY)
-                .convertBodyTo(String.class)                  // Converts input to String
-                .choice().when(body().isGreaterThan(""))      // Ignores empty lines
+        //from("file//:data/log").bean().choice(body().isNotNull()).
+
+        //String firstToReadTimestamp = firstToRead.getYear()+"-"+firstToRead.getMonthOfYear()+"-"+firstToRead.getDayOfMonth();
+
+
+        //"performance.log"+ firstToReadTimestamp;
+
+        from(INPUT_ENDPOINT).startupOrder(1)
                 .choice().when(isUnreadLine())
                 .bean(logLineRegexParser, "parse")            // Parses log entry into String map
                 .bean(entityFactory, "createTimemeasurement") // Parses log entry into database format
                 .split(body())
                 .choice().when(body().isNotNull())
                 .toF(DATABASE_ENDPOINT, TimeMeasurementEntity.class.getCanonicalName())
-                .routeId(PERFORMANCE_LOG_ROUTE_ID);
+                .routeId(ENTITY_PARSER_ROUTE_ID);
     }
 
     private Predicate isUnreadLine() {
@@ -76,6 +87,6 @@ public class PerformanceLogRoute extends RouteBuilder {
     }
 
     public String toString() {
-        return PERFORMANCE_LOG_ROUTE_ID;
+        return ENTITY_PARSER_ROUTE_ID;
     }
 }

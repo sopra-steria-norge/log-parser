@@ -4,7 +4,10 @@
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
 
-    <bean id="performanceLogRoute" class="no.osl.cdms.profile.routes.PerformanceLogRoute" />
+    <bean id="entityParserRoute" class="no.osl.cdms.profile.routes.EntityParserRoute"/>
+    <bean id="fileStreamRoute" class="no.osl.cdms.profile.routes.FileStreamRoute"/>
+    <bean id="oldLogFetcherRoute" class="no.osl.cdms.profile.routes.OldLogFetcherRoute"/>
+
 
     <bean id="PROPAGATION_REQUIRED" class="org.apache.camel.spring.spi.SpringTransactionPolicy">
         <property name="transactionManager" ref="transactionManager" />
@@ -16,8 +19,11 @@
         <property name="propagationBehaviorName" value="PROPAGATION_REQUIRES_NEW" />
     </bean>
 
+
     <camel:camelContext id="cdms-profile-camel-context">
-        <camel:routeBuilder ref="performanceLogRoute" />
+        <camel:routeBuilder ref="entityParserRoute" />
+        <camel:routeBuilder ref="oldLogFetcherRoute" />
+        <camel:routeBuilder ref="fileStreamRoute" />
     </camel:camelContext>
 
 </beans>
