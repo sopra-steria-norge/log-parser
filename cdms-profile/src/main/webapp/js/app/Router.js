@@ -34,15 +34,17 @@ app.Router = Backbone.Router.extend({
         var interval = new moment().interval(intervalConf);
         var from = interval.start().toISOString();
         var to = interval.end().toISOString();
+        var that = this;
+        app.collections.measurementBuckets = new app.MeasurementBuckets();
+        app.collections.measurementBuckets.fetch({
+            data: $.param({from:from, to:to, buckets:app.nrOfBuckets}),
+            success:function(){
+            	that.activeView = new app.PageView({
+            		el: '#appcontainer'
+            	});
+            	that.activeView.render();
+        }});
 
-        app.collections.measurementBuckets = new app.MeasurementBuckets()
-        app.collections.measurementBuckets.fetch({data: $.param({from:from, to:to, buckets:app.nrOfBuckets})});
-
-    	this.activeView = new app.PageView({
-    		el: '#appcontainer'
-    	});
-
-    	this.activeView.render();
 
     }
 })
