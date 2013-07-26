@@ -13,10 +13,14 @@ public interface TimeMeasurement extends Comparable<TimeMeasurement>{
 
     void setId(int id);
 
+    @JsonIgnore
     ProcedureEntity getProcedure();
+
+    int getProcedureId();
 
     void setProcedure(ProcedureEntity measured);
 
+    @JsonIgnore
     MultiContextEntity getMultiContext();
 
     void setMultiContext(MultiContextEntity multiContextMeasurement);
