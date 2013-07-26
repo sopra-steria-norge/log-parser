@@ -57,6 +57,10 @@ public class TimeMeasurementEntity implements TimeMeasurement {
         return procedure;
     }
 
+    public int getProcedureId() {
+        return procedure.getId();
+    }
+
     public void setProcedure(ProcedureEntity procedure) {
         this.procedure = procedure;
     }

@@ -79,11 +79,12 @@ public class Analyzer implements DataAnalyzer {
         if (k == 100) return converter.getDurationMillis(timeMeasurements.get(timeMeasurements.size() - 1).getDuration());
         double ind = k / 100.0 * timeMeasurements.size();
         if (ind == (int) ind) {
-            return (converter.getDurationMillis(timeMeasurements.get((int) ind).getDuration()) +
-                    converter.getDurationMillis(timeMeasurements.get((int) (ind - 1)).getDuration())) / 2;
+            return converter.getDurationMillis(timeMeasurements.get((int) ind - 1).getDuration());
+//            return (converter.getDurationMillis(timeMeasurements.get((int) ind).getDuration()) +
+//                    converter.getDurationMillis(timeMeasurements.get((int) (ind) - 1).getDuration())) / 2;
         } else {
-            ind = Math.round(ind);
-            return converter.getDurationMillis(timeMeasurements.get((int) (ind - 1)).getDuration());
+            ind = ((int) ind) + 1;
+            return converter.getDurationMillis(timeMeasurements.get((int) (ind) - 1).getDuration());
         }
     }
 

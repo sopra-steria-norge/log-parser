@@ -1,7 +1,14 @@
 package no.osl.cdms.profile.routes;
 
+import org.apache.camel.Exchange;
+import org.apache.camel.Predicate;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.component.file.GenericFile;
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
+import java.io.File;
 
 public class OldLogFetcherRoute extends RouteBuilder {
 
@@ -17,10 +24,24 @@ public class OldLogFetcherRoute extends RouteBuilder {
         lastRead = new DateTime();
 
         fromF(LOG_FILE_ENDPOINT, LOG_DIRECTORY).startupOrder(2)
+                .choice().when(shouldRead())
                 .split(body().tokenize("\n")).streaming()
                 .to(EntityParserRoute.INPUT_ENDPOINT)
                 .bean(this, "heartbeat")
                 .routeId(OLD_LOG_FETCHER_ROUTE_ID);
+    }
+
+    private Predicate shouldRead() {
+           return new Predicate() {
+               @Override
+               public boolean matches(Exchange exchange) {
+                   String fileName = ((GenericFile)exchange.getIn().getBody()).getFileName();
+                   String fileDate = fileName.substring("performance.log.".length());
+                   DateTimeFormatter dtf = DateTimeFormat.forPattern("yyyy-MM-dd");
+                   DateTime date = dtf.parseDateTime(fileDate);
+                   return new DateTime().minusDays(15).isBefore(date);
+               }
+           };
     }
 
     public String toString() {

@@ -75,6 +75,12 @@ public class TimeMeasurementBucket implements TimeMeasurement {
     }
 
     @Override
+    public int getProcedureId() {
+        if (!compressed) compress();
+        return procedure.getId();
+    }
+
+    @Override
     public void setProcedure(ProcedureEntity procedure) {
         this.procedure = procedure;
     }
