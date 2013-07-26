@@ -2,12 +2,6 @@ var templates = templates || {};
 
 (function () {
 
-
-
-	templates.row = '' +
-	'<div class="row'+
-	'</div>';
-
 	templates.graph = function(graphOf) {
 		return ''+
 		'<div class="span4">'+
@@ -75,15 +69,17 @@ var templates = templates || {};
 	}
 
 	templates.defaultPage = function(){
-		return '' +
-		'<div class="row">' +
-			templates.graph('1') +
-			templates.graph('18') +
-			templates.graph('1, 18') +
+		temp = '' +
+		'<div class="row">';
+		_.each(app.graphOfs, function (graphOf) {
+			temp += templates.graph(graphOf);
+		})
+		temp += '' +
 		'</div>'+
 		'<div class="row">'+
 			templates.percentileTable() +
 		'</div>';
+		return temp;
 	}
 
 

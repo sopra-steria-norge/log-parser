@@ -4,4 +4,5 @@ app.Procedure = Backbone.Model.extend({
 	initialize: function(options){
 		
 	},
+	
 });

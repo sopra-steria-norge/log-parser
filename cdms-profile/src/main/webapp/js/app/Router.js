@@ -29,6 +29,15 @@ app.Router = Backbone.Router.extend({
     		this.activeView.remove();
     	}
 
+        var tconf = this.navbarModel.getCurrentTimeConfig();
+        var intervalConf = tconf.pt.join('/');
+        var interval = new moment().interval(intervalConf);
+        var from = interval.start().toISOString();
+        var to = interval.end().toISOString();
+
+        app.collections.measurementBuckets = new app.MeasurementBuckets()
+        app.collections.measurementBuckets.fetch({data: $.param({from:from, to:to, buckets:app.nrOfBuckets})});
+
     	this.activeView = new app.PageView({
     		el: '#appcontainer'
     	});

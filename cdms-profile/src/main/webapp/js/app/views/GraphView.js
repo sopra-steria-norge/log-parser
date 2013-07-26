@@ -12,7 +12,6 @@ app.GraphView = Backbone.View.extend({
             };
         };
 
-        this.numberOfBuckets = 200;
 	},
 
 	render: function() {
@@ -50,7 +49,7 @@ app.GraphView = Backbone.View.extend({
         var interval = new moment().interval(intervalConf);
         var from = interval.start().toISOString();
         var to = interval.end().toISOString();
-        var suffix = '?from=' + from + '&to=' + to + '&buckets=' + this.numberOfBuckets;
+        var suffix = '?from=' + from + '&to=' + to + '&buckets=' + app.nrOfBuckets;
         for (var i = 0; i < name.length; i++) {
             var url = 'rest/timeMeasurement/' + name[i] + suffix;
             $.get(url, function(resp) {
@@ -61,7 +60,7 @@ app.GraphView = Backbone.View.extend({
         function update(newdata) {
             var procedureid = -1;
             for (var i = 0; i < newdata.length; i++) {
-                if (typeof newdata[i] !== 'undefined') {
+                if (typeof newdata[i] !== 'undefined' && newdata[i] !== null) {
                     procedureid = newdata[i].procedure.id;
                     break;
                 }
@@ -90,7 +89,7 @@ app.GraphView = Backbone.View.extend({
                 }
                 s.data.push(that.parseTimestamp(nd));
             }
-            while (s.data.length > that.numberOfBuckets) {
+            while (s.data.length > app.nrOfBuckets) {
                 s.data.shift();
             }
             //console.debug('s.length', s.data.length, s);
@@ -212,21 +211,10 @@ app.GraphView = Backbone.View.extend({
         return graph;
     },
     getNameFromProcedureId: function(id) {
-        for (var i = 0; i < app.procedureMapping.length; i++) {
-            if (id === app.procedureMapping[i].id) {
-                return createNameFromProcedure(app.procedureMapping[i]);
-                break;
-            }
-        }
+        if (typeof app.collections.procedures.get(id) !== 'undefined') {
+            return app.collections.procedures.get(id).get('name');
+        };
         return 'Unknown';
-
-        function createNameFromProcedure(procedure) {
-            var name = 'Unknown';
-            if (procedure.name) {
-                name = procedure.name;
-            }
-            return name;
-        }
     },
 
 	graphOptions: function() {
