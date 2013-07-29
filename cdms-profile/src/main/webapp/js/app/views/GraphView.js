@@ -16,7 +16,6 @@ app.GraphView = Backbone.View.extend({
 
 	render: function() {
         this.graphics = this.drawGraph(this.svgcontainer);
-        this.startUpdate();
         this.createResizeHandler();
         this.createDestroyHandler();
     },
@@ -31,82 +30,9 @@ app.GraphView = Backbone.View.extend({
             clearInterval(this.intervalUpdater);
         }
     },
-    startUpdate: function() {
-        var timeconfig = this.timeConfig();
-        if (timeconfig.realtime) {
-            this.intervalUpdater = setInterval(function() {
-                this.updateGraph();
-            }.bind(this), 100);
-        } else {
-            this.updateGraph();
-        }
-    },
-    updateGraph: function() {
-        var that = this;
-        var name = this.graphOf;
-        var tconf = this.timeConfig();
-        var intervalConf = tconf.pt.join('/');
-        var interval = new moment().interval(intervalConf);
-        var from = interval.start().toISOString();
-        var to = interval.end().toISOString();
-        var suffix = '?from=' + from + '&to=' + to + '&buckets=' + app.nrOfBuckets;
-        for (var i = 0; i < name.length; i++) {
-            var url = 'rest/timeMeasurement/' + name[i] + suffix;
-            $.get(url, function(resp) {
-                //console.debug('TMResp', resp);
-                update(resp);
-            }.bind(this));
-        }
-        function update(newdata) {
-            var procedureid = -1;
-            for (var i = 0; i < newdata.length; i++) {
-                if (typeof newdata[i] !== 'undefined' && newdata[i] !== null) {
-                    procedureid = newdata[i].procedure.id;
-                    break;
-                }
-            }
-            if (procedureid === -1) {
-                return;
-            }
-            var s = undefined;
-            var remI = -1;
-            for (var i = 0; i < that.series.length; i++) {
-                if (that.series[i].procedureid === procedureid) {
-                    s = that.series[i];
-                    remI = i;
-                    break;
-                }
-            }
-            if (typeof s === 'undefined') {
-                return;
-            }
-            //console.debug('pushing', newdata, 'on', s);
-            s.data.push(newdata);
-            var nd;
-            while (typeof (nd = newdata.shift()) !== 'undefined') {
-                if (nd === null) {
-                    continue;
-                }
-                s.data.push(that.parseTimestamp(nd));
-            }
-            while (s.data.length > app.nrOfBuckets) {
-                s.data.shift();
-            }
-            //console.debug('s.length', s.data.length, s);
-            that.series[remI] = s;
-
-
-            that.graphics.setData(that.series);
-            that.graphics.setupGrid();
-            that.graphics.draw();
-            
-            //console.debug('gr', that.graphics);
-            
-        }
-    },
     parseTimestamp: function(timestamp) {
-        var time = moment(timestamp.jodaTimestamp).valueOf();
-        var duration = moment.duration(timestamp.duration)._milliseconds;
+        var time = moment(timestamp.get('jodaTimestamp')).valueOf();
+        var duration = moment.duration(timestamp.get('duration'))._milliseconds;
         return [time, duration];
     },
     createDestroyHandler: function() {
@@ -196,14 +122,21 @@ app.GraphView = Backbone.View.extend({
             this.series = this.graphics.series;
         } else {
             this.series = [];
-            for (var i = 0; i < this.graphOf.length; i++) {
+            var grouped = _.groupBy(app.collections.measurementBuckets.models, function(mb){
+                return mb.get('procedureId');
+            });
+            var that = this;
+            _.each(this.graphOf, function (id) {
                 var serie = {
                     data: [],
-                    procedureid: this.graphOf[i],
-                    label: this.getNameFromProcedureId(this.graphOf[i])
+                    procedureid: id,
+                    label: that.getNameFromProcedureId(id)
                 };
-                this.series.push(serie);
-            }
+                _.each(grouped[id], function (measurment){
+                    serie.data.push(that.parseTimestamp(measurment));
+                });
+                that.series.push(serie);
+            });
         }
         var maxheight = 600;
         svgcontainer.height(svgcontainer.width() < maxheight ? svgcontainer.width() : maxheight);
@@ -236,13 +169,5 @@ app.GraphView = Backbone.View.extend({
                 },
                 tooltip: true
             }
-	},
-
-    timeConfig: function() {
-        return {
-            realtime: false,
-            pollInterval: 1000,
-            pt: ['PT24H/']
-        }
-    }
+	}
 })
