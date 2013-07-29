@@ -21,15 +21,6 @@
     <context:component-scan base-package="no.osl.cdms.profile" />
     <context:annotation-config/>
 
-    <!--&lt;!&ndash; this bean must not be lazily initialized if the exporting is to happen &ndash;&gt;-->
-    <!--<bean id="exporter" class="org.springframework.jmx.export.MBeanExporter" lazy-init="false">-->
-        <!--<property name="beans">-->
-            <!--<map>-->
-                <!--<entry key="bean:name=jmxServiceBean" value-ref="jmxServiceBean"/>-->
-            <!--</map>-->
-        <!--</property>-->
-    <!--</bean>-->
-
     <bean id="jmxServiceBean" class="no.osl.cdms.profile.jmx.JMXService" />
 
     <bean id="exporter" class="org.springframework.jmx.export.MBeanExporter">

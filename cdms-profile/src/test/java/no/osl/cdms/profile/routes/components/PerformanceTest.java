@@ -2,8 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package no.osl.cdms.profile.route;
+package no.osl.cdms.profile.routes.components;
 
+import no.osl.cdms.profile.routes.components.EntityFactoryImpl;
+import no.osl.cdms.profile.routes.components.ParserImpl;
 import com.google.common.collect.Lists;
 import java.io.File;
 import java.util.List;
@@ -11,7 +13,7 @@ import java.util.Map;
 import no.osl.cdms.profile.interfaces.Parser;
 import no.osl.cdms.profile.interfaces.db.Procedure;
 import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
-import no.osl.cdms.profile.log.LogRepository;
+import no.osl.cdms.profile.persistence.LogRepository;
 import no.osl.cdms.profile.interfaces.EntityFactory;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;

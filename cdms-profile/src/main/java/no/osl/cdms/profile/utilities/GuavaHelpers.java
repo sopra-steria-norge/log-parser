@@ -16,7 +16,7 @@ import no.osl.cdms.profile.interfaces.EntityFactory;
 
 import no.osl.cdms.profile.interfaces.db.Procedure;
 import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
-import no.osl.cdms.profile.log.ProcedureEntity;
+import no.osl.cdms.profile.persistence.ProcedureEntity;
 import org.joda.time.convert.ConverterManager;
 import org.joda.time.convert.DurationConverter;
 import org.joda.time.format.DateTimeFormat;

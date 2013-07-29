@@ -1,11 +1,11 @@
 package no.osl.cdms.profile.web;
 
+import com.google.common.collect.Maps;
 import no.osl.cdms.profile.interfaces.db.Procedure;
 import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
 import no.osl.cdms.profile.interfaces.DataAnalyzer;
-import no.osl.cdms.profile.jmx.DataRetrieverMBean;
-import no.osl.cdms.profile.log.LogRepository;
-import no.osl.cdms.profile.log.ProcedureEntity;
+import no.osl.cdms.profile.persistence.LogRepository;
+import no.osl.cdms.profile.persistence.ProcedureEntity;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,19 +17,17 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 
 @Repository
-public class DataRetriever implements DataRetrieverMBean{
+public class DataRetriever {
 
     @Autowired
     private LogRepository logRepository;
-
     @Autowired
     private DataAnalyzer analyzer;
 
     public DataRetriever() {
-
     }
 
-    public List<ProcedureEntity> getAllProcedures(){
+    public List<ProcedureEntity> getAllProcedures() {
         return logRepository.getAllProcedures();
     }
 
@@ -56,30 +54,29 @@ public class DataRetriever implements DataRetrieverMBean{
         return logRepository.getTimeMeasurementsByProcedure(fromDate, toDate, procedure, orderBy);
     }
 
-    public String[] getPercentileByProcedure(int procedureId, DateTime fromDate, DateTime toDate, int[] percentages) {
-        String[] percentiles = null;
-        if (percentiles == null) {
-            List<TimeMeasurement> timeMeasurements = logRepository.getTimeMeasurementsByProcedure(
-                    fromDate, toDate, logRepository.getProcedure(procedureId), TimeMeasurement.Field.DURATION);
-            percentiles = new String[percentages.length];
-            for (int i = 0; i < percentages.length; i++) {
-                percentiles[i] = new Duration((long) analyzer.percentile(timeMeasurements, percentages[i])).toString();
-            }
-        }
+    public Map<String, Object> getPercentileByProcedure(int procedureId, DateTime fromDate, DateTime toDate, int[] percentages) {
+        Map<String, Object> percentilesMap = Maps.newHashMap();
 
-        return percentiles;
+        List<TimeMeasurement> timeMeasurements = logRepository.getTimeMeasurementsByProcedure(
+                fromDate, toDate, logRepository.getProcedure(procedureId), TimeMeasurement.Field.DURATION);
+        String[] percentiles = new String[percentages.length];
+        for (int i = 0; i < percentages.length; i++) {
+            percentiles[i] = new Duration((long) analyzer.percentile(timeMeasurements, percentages[i])).toString();
+        }
+        percentilesMap.put("id", procedureId);
+        percentilesMap.put("percentiles", percentiles);
+        return percentilesMap;
     }
 
-    public Map<Procedure, String[]> getPercentile(DateTime fromDate, DateTime toDate, int[] percentages) {
-        Map<Procedure, String[]> percentileMap = new HashMap<Procedure, String[]>();
+    public Map<String, Object>[] getPercentile(DateTime fromDate, DateTime toDate, int[] percentages) {
         List<ProcedureEntity> procedures = logRepository.getAllProcedures();
-
+        Map<String, Object>[] percentilesMap = new HashMap[procedures.size()];
+        
         String[] percentiles;
-        for (Procedure procedure: procedures) {
-            percentiles = getPercentileByProcedure(procedure.getId(), fromDate, toDate, percentages);
-            percentileMap.put(procedure, percentiles);
+        int i = 0;
+        for (Procedure procedure : procedures) {
+            percentilesMap[i++] = getPercentileByProcedure(procedure.getId(), fromDate, toDate, percentages);
         }
-        return percentileMap;
+        return percentilesMap;
     }
-
 }

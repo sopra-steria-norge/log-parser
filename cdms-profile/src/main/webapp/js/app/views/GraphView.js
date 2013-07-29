@@ -122,7 +122,7 @@ app.GraphView = Backbone.View.extend({
             this.series = this.graphics.series;
         } else {
             this.series = [];
-            var grouped = _.groupBy(app.collections.measurementBuckets.models, function(mb){
+            var grouped = _.groupBy(app.collections.measurementCollection.models, function(mb){
                 return mb.get('procedureId');
             });
             var that = this;

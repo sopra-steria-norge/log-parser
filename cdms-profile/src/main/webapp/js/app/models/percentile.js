@@ -1,7 +1,6 @@
-app.Procedure = Backbone.Model.extend({
+app.Percentile = Backbone.Model.extend({
 	idAttribute: 'id',
 	initialize: function(options){
 		
 	},
-
-});
+})

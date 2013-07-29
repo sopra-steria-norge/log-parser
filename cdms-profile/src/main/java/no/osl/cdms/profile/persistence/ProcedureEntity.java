@@ -1,4 +1,4 @@
-package no.osl.cdms.profile.log;
+package no.osl.cdms.profile.persistence;
 
 import no.osl.cdms.profile.interfaces.db.Procedure;
 import javax.persistence.*;

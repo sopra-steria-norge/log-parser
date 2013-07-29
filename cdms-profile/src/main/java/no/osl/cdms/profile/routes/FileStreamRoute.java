@@ -19,9 +19,6 @@ public class FileStreamRoute extends RouteBuilder {
 
     private static final String LOG_FILE_ENDPOINT = "stream:file?fileName=%s/%s&scanStream=true&scanStreamDelay=%d";
 
-    @Autowired
-    private OldLogFetcherRoute oldLogFetcherRoute;
-
     private Timer pollingTimer;
 
     public FileStreamRoute() {

@@ -1,9 +1,9 @@
-package no.osl.cdms.profile.route;
+package no.osl.cdms.profile.routes.components;
 
 import no.osl.cdms.profile.interfaces.EntityFactory;
 import no.osl.cdms.profile.interfaces.db.Procedure;
-import no.osl.cdms.profile.log.LogRepository;
-import no.osl.cdms.profile.log.ProcedureEntity;
+import no.osl.cdms.profile.persistence.LogRepository;
+import no.osl.cdms.profile.persistence.ProcedureEntity;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

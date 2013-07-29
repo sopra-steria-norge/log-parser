@@ -261,6 +261,22 @@
                                 </configuration>
                             </execution>
                             <execution>
+                                <id>drop-job</id>
+                                <phase>compile</phase>
+                                <goals>
+                                    <goal>execute</goal>
+                                </goals>
+                                <configuration>
+                                    <delimiter>/</delimiter>
+                                    <autocommit>true</autocommit>
+                                    <srcFiles>
+                                        <srcFile>src/main/resources/sql/drop_job_schema.sql</srcFile>
+                                    </srcFiles>
+                                </configuration>
+
+                            </execution>
+
+                            <execution>
                                 <id>create-db</id>
                                 <phase>compile</phase>
                                 <goals>
@@ -273,6 +289,23 @@
                                     </srcFiles>
                                 </configuration>
                             </execution>
+
+                            <execution>
+                                <id>create-job</id>
+                                <phase>compile</phase>
+                                <goals>
+                                    <goal>execute</goal>
+                                </goals>
+                                <configuration>
+                                    <delimiter>/</delimiter>
+                                    <autocommit>true</autocommit>
+                                    <srcFiles>
+                                        <srcFile>src/main/resources/sql/create_job_schema.sql</srcFile>
+                                    </srcFiles>
+                                </configuration>
+
+                            </execution>
+
                         </executions>
                     </plugin>
                 </plugins>
@@ -283,8 +316,6 @@
 
 
     <dependencies>
-
-
         <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
@@ -294,14 +325,11 @@
             <artifactId>plexus-utils</artifactId>
             <version>1.1</version>
         </dependency>
-
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
-
-        <!-- Camel -->
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core</artifactId>
@@ -330,8 +358,6 @@
             <artifactId>camel-maven-plugin</artifactId>
             <version>${camel.version}</version>
         </dependency>
-
-        <!-- Testing -->
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-test-spring</artifactId>
@@ -358,21 +384,16 @@
             <groupId>net.sf.ehcache</groupId>
             <artifactId>ehcache-openjpa</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
             <scope>test</scope>
         </dependency>
-
-
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>org.springframework.orm</artifactId>
             <version>${spring.version}</version>
         </dependency>
-
-
         <dependency>
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-rt-bindings-soap</artifactId>
@@ -410,15 +431,10 @@
             <version>${spring.version}</version>
             <scope>test</scope>
         </dependency>
-
-
-
         <dependency>
             <groupId>org.apache.openjpa</groupId>
             <artifactId>openjpa</artifactId>
-
         </dependency>
-
         <dependency>
             <groupId>com.googlecode.guava-osgi</groupId>
             <artifactId>guava-osgi</artifactId>
@@ -454,13 +470,10 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
         </dependency>
-
-
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-cxf</artifactId>
         </dependency>
-
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
@@ -478,7 +491,6 @@
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-mapper-asl</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.osgi</groupId>
             <artifactId>core</artifactId>
@@ -495,8 +507,6 @@
             <version>1.9.5</version>
         </dependency>
     </dependencies>
-
-
     <repositories>
         <repository>
             <id>com.springsource.repository.bundles.release</id>
