@@ -1,4 +1,4 @@
-app.NavbarModel = Backbone.Model.extend({
+app.Navbar = Backbone.Model.extend({
 
 	initialize : function(options) {
 		this.set({'selectedView' : ''})
@@ -9,13 +9,13 @@ app.NavbarModel = Backbone.Model.extend({
 
 		switch (view) {
 			case 'last24h':
-				return '<h1>'+view+'</h1>'+templates.defaultPage();
+				return templates.defaultPage();
 			case 'last72h':
-				return '<h1>'+view+'</h1>'+templates.defaultPage();
+				return templates.defaultPage();
 			case 'last1w':
-				return '<h1>'+view+'</h1>'+templates.defaultPage();
+				return templates.defaultPage();
 			case 'last2w':
-				return '<h1>'+view+'</h1>'+templates.defaultPage();
+				return templates.defaultPage();
 		}
 	},
 
