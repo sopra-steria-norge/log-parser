@@ -4,12 +4,14 @@
  */
 package no.osl.cdms.profile.web;
 
+import com.google.common.collect.Lists;
 import no.osl.cdms.profile.web.helpers.TimeMeasurementBucket;
 import no.osl.cdms.profile.interfaces.DataAnalyzer;
 
 import java.util.*;
 
 import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
+import no.osl.cdms.profile.persistence.TimeMeasurementEntity;
 import org.joda.time.convert.ConverterManager;
 import org.joda.time.convert.DurationConverter;
 import org.springframework.stereotype.Component;
@@ -25,21 +27,6 @@ public class DataAnalyzerImpl implements DataAnalyzer {
     public DataAnalyzerImpl() {
     }
 
-//    private void delegate(List<TimeMeasurement> times) {
-//        if (times == null) {
-//            times = Lists.newArrayList();
-//        }
-//        for (TimeMeasurement tm : times) {
-//            map.put(tm.getProcedure().getId(), tm);
-////            map.put(tm.getProcedure().getClassName(), tm);
-////            map.put(tm.getProcedure().getClassName()+"."+tm.getProcedure().getMethod(), tm);
-//        }
-////        for (String key : map.keySet()) {
-//        for (int key : map.keySet()) {
-//            Collections.sort(new ArrayList(map.get(key)));
-//        }
-//    }
-
     @Override
     public double average(List<TimeMeasurement> timeMeasurements) {
         if (timeMeasurements == null || timeMeasurements.isEmpty()) {
@@ -52,35 +39,23 @@ public class DataAnalyzerImpl implements DataAnalyzer {
         return sum / timeMeasurements.size();
     }
 
-//    @Override
-//    public double stddev(int id) {
-//        if (col.isEmpty()) {
-//            return 0;
-//        }
-//        double mean = average(id);
-//        double stddevSum = 0;
-//        for (TimeMeasurement tm : col) {
-//            stddevSum += Math.pow(converter.getDurationMillis(tm.getDuration()) - mean, 2);
-//        }
-//        stddevSum /= map.get(id).size();
-//        return Math.sqrt(stddevSum);
-//    }
-
     @Override
-    public double percentile(List<TimeMeasurement> timeMeasurements, int k) {
+    public double percentile(List<TimeMeasurement> timeMeasurements, int k) {        
         if (timeMeasurements == null || timeMeasurements.isEmpty()) {
             return 0;
         }
-        if (k == 0) return converter.getDurationMillis(timeMeasurements.get(0).getDuration());
-        if (k == 100) return converter.getDurationMillis(timeMeasurements.get(timeMeasurements.size() - 1).getDuration());
-        double ind = k / 100.0 * timeMeasurements.size();
+        List<TimeMeasurement> timeMeasurementsCopy = Lists.newArrayList(timeMeasurements);
+        Collections.sort(timeMeasurementsCopy);        
+        
+        if (k == 0) return converter.getDurationMillis(timeMeasurementsCopy.get(0).getDuration());
+        if (k == 100) return converter.getDurationMillis(timeMeasurementsCopy.get(timeMeasurementsCopy.size() - 1).getDuration());
+        double ind = k / 100.0 * timeMeasurementsCopy.size();
         if (ind == (int) ind) {
-//            return converter.getDurationMillis(timeMeasurements.get((int) ind - 1).getDuration());
-            return (converter.getDurationMillis(timeMeasurements.get((int) ind).getDuration()) +
-                    converter.getDurationMillis(timeMeasurements.get((int) (ind) - 1).getDuration())) / 2;
+            return (converter.getDurationMillis(timeMeasurementsCopy.get((int) ind).getDuration()) +
+                    converter.getDurationMillis(timeMeasurementsCopy.get((int) (ind) - 1).getDuration())) / 2;
         } else {
             ind = ((int) ind) + 1;
-            return converter.getDurationMillis(timeMeasurements.get((int) (ind) - 1).getDuration());
+            return converter.getDurationMillis(timeMeasurementsCopy.get((int) (ind) - 1).getDuration());
         }
     }
 

@@ -1,9 +1,9 @@
 package no.osl.cdms.profile.web;
 
-import no.osl.cdms.profile.web.DataAnalyzerImpl;
 import no.osl.cdms.profile.interfaces.DataAnalyzer;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import no.osl.cdms.profile.interfaces.EntityFactory;
@@ -45,6 +45,7 @@ public class DataAnalyzerTest {
     private List<TimeMeasurement> timeMeasurements1;
     private List<TimeMeasurement> timeMeasurements2;
     private List<TimeMeasurement> timeMeasurements3;
+    private List<TimeMeasurement> timeMeasurements4;
 
     private LogRepository logRepository;
 
@@ -78,6 +79,7 @@ public class DataAnalyzerTest {
         timeMeasurements1 = new LinkedList<TimeMeasurement>();
         timeMeasurements2 = new LinkedList<TimeMeasurement>();
         timeMeasurements3 = new LinkedList<TimeMeasurement>();
+        
 
         ProcedureEntity procedure1 = logRepository.getProcedure(id1);
         ProcedureEntity procedure2 = logRepository.getProcedure(id2);
@@ -104,6 +106,21 @@ public class DataAnalyzerTest {
         timeMeasurements3.add(entityFactory.createTimeMeasurement(procedure3,
                 guavaHelpers.parseDateString("2014-06-02 16:05:10,876"), "PT" + String.valueOf(123.0 / 1000) + "S"));
         this.analyzer = new DataAnalyzerImpl();
+        
+        timeMeasurements4 = new LinkedList<TimeMeasurement>(timeMeasurements1);
+        timeMeasurements4.add(entityFactory.createTimeMeasurement(procedure3,
+                guavaHelpers.parseDateString("2014-06-02 16:05:08,876"), "PT" + String.valueOf(1.0 / 1000) + "S"));
+        timeMeasurements4.add(entityFactory.createTimeMeasurement(procedure3,
+                guavaHelpers.parseDateString("2014-06-02 16:05:08,876"), "PT" + String.valueOf(1234.0 / 1000) + "S"));
+        timeMeasurements4.add(entityFactory.createTimeMeasurement(procedure3,
+                guavaHelpers.parseDateString("2014-06-02 16:05:08,876"), "PT" + String.valueOf(234567.0 / 1000) + "S"));
+        timeMeasurements4.add(entityFactory.createTimeMeasurement(procedure3,
+                guavaHelpers.parseDateString("2014-06-02 16:05:08,876"), "PT" + String.valueOf(78794.0 / 1000) + "S"));
+        timeMeasurements4.add(entityFactory.createTimeMeasurement(procedure3,
+                guavaHelpers.parseDateString("2014-06-02 16:05:08,876"), "PT" + String.valueOf(999999.0 / 1000) + "S"));
+        
+        
+        
     }
 
     @After
@@ -287,6 +304,25 @@ public class DataAnalyzerTest {
         assertEquals(bucketSize, buckets.size());
         for (TimeMeasurement bucket : buckets) {
             assertNull(bucket);
+        }
+    }
+    @Test
+    public void sortable() {
+        Collections.sort(timeMeasurements4);
+        DurationConverter c = ConverterManager.getInstance().getDurationConverter("PT0.001S");
+        double d = -1;
+        boolean fail = false;
+        for(int i = 0; i < timeMeasurements4.size(); i++) {
+            System.out.println(timeMeasurements4.get(i));
+            long ms = c.getDurationMillis(timeMeasurements4.get(i).getDuration());
+            if (ms < d){
+                fail = true;
+            }else {
+                d = ms;
+            }
+        }
+        if (fail) {
+            assertTrue(false);
         }
     }
 }
