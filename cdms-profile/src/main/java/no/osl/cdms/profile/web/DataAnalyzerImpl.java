@@ -25,21 +25,6 @@ public class DataAnalyzerImpl implements DataAnalyzer {
     public DataAnalyzerImpl() {
     }
 
-//    private void delegate(List<TimeMeasurement> times) {
-//        if (times == null) {
-//            times = Lists.newArrayList();
-//        }
-//        for (TimeMeasurement tm : times) {
-//            map.put(tm.getProcedure().getId(), tm);
-////            map.put(tm.getProcedure().getClassName(), tm);
-////            map.put(tm.getProcedure().getClassName()+"."+tm.getProcedure().getMethod(), tm);
-//        }
-////        for (String key : map.keySet()) {
-//        for (int key : map.keySet()) {
-//            Collections.sort(new ArrayList(map.get(key)));
-//        }
-//    }
-
     @Override
     public double average(List<TimeMeasurement> timeMeasurements) {
         if (timeMeasurements == null || timeMeasurements.isEmpty()) {
@@ -52,22 +37,10 @@ public class DataAnalyzerImpl implements DataAnalyzer {
         return sum / timeMeasurements.size();
     }
 
-//    @Override
-//    public double stddev(int id) {
-//        if (col.isEmpty()) {
-//            return 0;
-//        }
-//        double mean = average(id);
-//        double stddevSum = 0;
-//        for (TimeMeasurement tm : col) {
-//            stddevSum += Math.pow(converter.getDurationMillis(tm.getDuration()) - mean, 2);
-//        }
-//        stddevSum /= map.get(id).size();
-//        return Math.sqrt(stddevSum);
-//    }
-
     @Override
     public double percentile(List<TimeMeasurement> timeMeasurements, int k) {
+        Collections.sort(timeMeasurements);
+        
         if (timeMeasurements == null || timeMeasurements.isEmpty()) {
             return 0;
         }
@@ -75,7 +48,6 @@ public class DataAnalyzerImpl implements DataAnalyzer {
         if (k == 100) return converter.getDurationMillis(timeMeasurements.get(timeMeasurements.size() - 1).getDuration());
         double ind = k / 100.0 * timeMeasurements.size();
         if (ind == (int) ind) {
-//            return converter.getDurationMillis(timeMeasurements.get((int) ind - 1).getDuration());
             return (converter.getDurationMillis(timeMeasurements.get((int) ind).getDuration()) +
                     converter.getDurationMillis(timeMeasurements.get((int) (ind) - 1).getDuration())) / 2;
         } else {
