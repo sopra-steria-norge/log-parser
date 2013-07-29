@@ -19,7 +19,7 @@ public interface DataRetrieverMBean {
 
     public List<TimeMeasurement> getTimeMeasurements(int procedureId, DateTime fromDate, DateTime toDate, TimeMeasurement.Field orderBy) throws NoSuchElementException;
 
-    public String[] getPercentileByProcedure(int procedureId, DateTime fromDate, DateTime toDate, int[] percentages);
+    public Map<String, Object> getPercentileByProcedure(int procedureId, DateTime fromDate, DateTime toDate, int[] percentages);
 
-    public Map<Procedure, String[]> getPercentile(DateTime fromDate, DateTime toDate, int[] percentages);
+    public Map<String, Object>[] getPercentile(DateTime fromDate, DateTime toDate, int[] percentages);
 }
