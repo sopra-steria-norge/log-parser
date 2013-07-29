@@ -1,4 +1,4 @@
-app.NavbarModel = Backbone.Model.extend({
+app.Navbar = Backbone.Model.extend({
 
 	initialize : function(options) {
 		this.set({'selectedView' : ''})
