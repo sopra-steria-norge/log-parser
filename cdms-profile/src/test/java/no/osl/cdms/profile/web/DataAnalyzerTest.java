@@ -1,5 +1,6 @@
-package no.osl.cdms.profile.analyzer;
+package no.osl.cdms.profile.web;
 
+import no.osl.cdms.profile.web.DataAnalyzerImpl;
 import no.osl.cdms.profile.interfaces.DataAnalyzer;
 
 import java.util.Arrays;
@@ -7,8 +8,8 @@ import java.util.LinkedList;
 import java.util.List;
 import no.osl.cdms.profile.interfaces.EntityFactory;
 import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
-import no.osl.cdms.profile.log.LogRepository;
-import no.osl.cdms.profile.log.ProcedureEntity;
+import no.osl.cdms.profile.persistence.LogRepository;
+import no.osl.cdms.profile.persistence.ProcedureEntity;
 import no.osl.cdms.profile.utilities.GuavaHelpers;
 import org.joda.time.DateTime;
 import org.joda.time.convert.ConverterManager;
@@ -34,7 +35,7 @@ import static org.mockito.Mockito.when;
 @ContextConfiguration(value = {"classpath:test-cdms-profile-ctx.xml",
         "classpath:test-cdms-profile-infra-ctx.xml"})
 @Transactional
-public class AnalyzerTest {
+public class DataAnalyzerTest {
 
     public final int[] data = {43, 54, 56, 61, 62, 66, 68, 69, 69, 70, 71, 72, 77, 78, 79, 85, 87, 88, 89, 93, 95, 96, 98, 99, 99};
     private DataAnalyzer analyzer;
@@ -55,7 +56,7 @@ public class AnalyzerTest {
 
     private static DurationConverter converter = ConverterManager.getInstance().getDurationConverter("PT0.123S");
 
-    public AnalyzerTest() {
+    public DataAnalyzerTest() {
     }
 
     @Before
@@ -102,7 +103,7 @@ public class AnalyzerTest {
                 guavaHelpers.parseDateString("2014-06-02 16:05:08,876"), "PT" + String.valueOf(455.0 / 1000) + "S"));
         timeMeasurements3.add(entityFactory.createTimeMeasurement(procedure3,
                 guavaHelpers.parseDateString("2014-06-02 16:05:10,876"), "PT" + String.valueOf(123.0 / 1000) + "S"));
-        this.analyzer = new Analyzer();
+        this.analyzer = new DataAnalyzerImpl();
     }
 
     @After
@@ -119,7 +120,7 @@ public class AnalyzerTest {
     public void setupNull() {
         System.out.println("AnalyzerSetup::null");
         System.out.println("Sending null");
-        Analyzer a = new Analyzer();
+        DataAnalyzerImpl a = new DataAnalyzerImpl();
         assertEquals(0, a.average(null), 0);
         //assertEquals(0, a.stddev(id), 0);
         assertEquals(0, a.percentile(null, 50), 0);
@@ -154,26 +155,6 @@ public class AnalyzerTest {
         double expResult = 0;
         assertEquals(expResult, analyzer.average(null), 0.0);
     }
-
-    /**
-     * Test of stddev method, of class Analyzer.
-     */
-//    @Test
-//    public void testStddev() {
-//        System.out.println("stddev");
-//        double expResult = 15.27214;
-//        double result = analyzer.stddev(id1);
-//        assertEquals(expResult, result, 0.00001);
-//    }
-
-//    @Test
-//    public void testStddev_null() {
-//        System.out.println("stddev_null");
-//        int id = 0;
-//        double expResult = 0;
-//        double result = analyzer.stddev(id);
-//        assertEquals(expResult, result, 0);
-//    }
 
     /**
      * Test of percentile method, of class Analyzer.

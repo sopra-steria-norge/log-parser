@@ -1,7 +1,7 @@
 package no.osl.cdms.profile.jmx;
 
 
-import no.osl.cdms.profile.log.ProcedureEntity;
+import no.osl.cdms.profile.persistence.ProcedureEntity;
 import org.joda.time.DateTime;
 import java.util.List;
 import java.util.Map;

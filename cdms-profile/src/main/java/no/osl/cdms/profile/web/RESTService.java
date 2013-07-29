@@ -3,8 +3,8 @@ package no.osl.cdms.profile.web;
 import com.google.common.collect.Lists;
 import java.io.StringWriter;
 
-import no.osl.cdms.profile.log.MultiContextEntity;
-import no.osl.cdms.profile.log.ProcedureEntity;
+import no.osl.cdms.profile.persistence.MultiContextEntity;
+import no.osl.cdms.profile.persistence.ProcedureEntity;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.NoSuchElementException;
 
-import no.osl.cdms.profile.log.TimeMeasurementEntity;
+import no.osl.cdms.profile.persistence.TimeMeasurementEntity;
 import org.joda.time.Duration;
 import org.springframework.beans.factory.annotation.Autowired;
 import javax.ws.rs.*;
@@ -28,7 +28,7 @@ import org.joda.time.DateTime;
 public class RESTService {
 
     @Autowired
-    DataRetriever dataRetriever;
+    DataRetrieverImpl dataRetriever;
     Logger logger = Logger.getLogger(getClass().getName());
     static int idCounter = 1;
     static int procedureCounter = 1;

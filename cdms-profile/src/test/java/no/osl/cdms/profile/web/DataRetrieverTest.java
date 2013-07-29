@@ -1,9 +1,9 @@
 package no.osl.cdms.profile.web;
 
 import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
-import no.osl.cdms.profile.log.LogRepository;
-import no.osl.cdms.profile.log.ProcedureEntity;
-import no.osl.cdms.profile.log.TimeMeasurementEntity;
+import no.osl.cdms.profile.persistence.LogRepository;
+import no.osl.cdms.profile.persistence.ProcedureEntity;
+import no.osl.cdms.profile.persistence.TimeMeasurementEntity;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.junit.Before;
@@ -30,7 +30,7 @@ public class DataRetrieverTest {
     private LogRepository logRepository;
 
     @Autowired
-    private DataRetriever dataRetriever;
+    private DataRetrieverImpl dataRetriever;
 
     private TimeMeasurementEntity timeMeasurement, timeMeasurement2, timeMeasurement3;
     private ProcedureEntity procedure;

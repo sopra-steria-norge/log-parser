@@ -5,12 +5,6 @@
         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/osgi http://www.springframework.org/schema/osgi/spring-osgi.xsd">
 
-    <!-- CORE API -->
-    <!--<osgi:service ref="flightService" interface="no.osl.cdms.core.api.flight.FlightService" />-->
-
-    <!-- REFERENCES -->
     <osgi:reference id="transactionManager" interface="org.springframework.transaction.PlatformTransactionManager" />
-    <!--<osgi:reference id="entityManagerFactory" interface="javax.persistence.EntityManagerFactory" filter="(entityManager.system=CDMS)" />-->
-    <!--<osgi:reference id="profileDataSource" interface="javax.sql.DataSource" />-->
 
 </beans>

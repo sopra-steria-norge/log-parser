@@ -4,8 +4,8 @@ import no.osl.cdms.profile.interfaces.db.Procedure;
 import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
 import no.osl.cdms.profile.interfaces.DataAnalyzer;
 import no.osl.cdms.profile.jmx.DataRetrieverMBean;
-import no.osl.cdms.profile.log.LogRepository;
-import no.osl.cdms.profile.log.ProcedureEntity;
+import no.osl.cdms.profile.persistence.LogRepository;
+import no.osl.cdms.profile.persistence.ProcedureEntity;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 
 @Repository
-public class DataRetriever implements DataRetrieverMBean{
+public class DataRetrieverImpl implements DataRetrieverMBean{
 
     @Autowired
     private LogRepository logRepository;
@@ -25,7 +25,7 @@ public class DataRetriever implements DataRetrieverMBean{
     @Autowired
     private DataAnalyzer analyzer;
 
-    public DataRetriever() {
+    public DataRetrieverImpl() {
 
     }
 

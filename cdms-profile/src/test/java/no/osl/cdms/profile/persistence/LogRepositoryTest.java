@@ -1,5 +1,9 @@
-package no.osl.cdms.profile.log;
+package no.osl.cdms.profile.persistence;
 
+import no.osl.cdms.profile.persistence.TimeMeasurementEntity;
+import no.osl.cdms.profile.persistence.ProcedureEntity;
+import no.osl.cdms.profile.persistence.LogRepository;
+import no.osl.cdms.profile.persistence.MultiContextEntity;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;

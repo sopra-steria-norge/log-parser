@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import no.osl.cdms.profile.interfaces.db.Procedure;
 import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
-import no.osl.cdms.profile.log.LogRepository;
+import no.osl.cdms.profile.persistence.LogRepository;
 import org.springframework.stereotype.Component;
 
 /**

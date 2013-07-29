@@ -14,7 +14,7 @@ import no.osl.cdms.profile.interfaces.EntityFactory;
 
 import no.osl.cdms.profile.interfaces.db.Procedure;
 import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
-import no.osl.cdms.profile.log.LogRepository;
+import no.osl.cdms.profile.persistence.LogRepository;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
