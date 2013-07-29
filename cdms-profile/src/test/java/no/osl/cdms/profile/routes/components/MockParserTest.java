@@ -2,9 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package no.osl.cdms.profile.route;
+package no.osl.cdms.profile.routes.components;
 
-import no.osl.cdms.profile.route.ParserImpl;
+import no.osl.cdms.profile.routes.components.ParserImpl;
 import java.util.Map;
 import no.osl.cdms.profile.interfaces.Parser;
 import org.junit.Test;

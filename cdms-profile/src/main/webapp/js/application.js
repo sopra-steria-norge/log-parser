@@ -4,7 +4,7 @@ var app = {
 	views : {},
 
 	initialize : function() {
-		app.collections.procedures = new app.Procedures();
+		app.collections.procedures = new app.ProcedureCollection();
 		app.collections.procedures.fetch({success: function(){
 			app.router = new app.Router();
 			Backbone.history.start();

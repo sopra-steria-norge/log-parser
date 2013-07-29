@@ -1,8 +1,8 @@
-package no.osl.cdms.profile.analyzer;
+package no.osl.cdms.profile.web.helpers;
 
 import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
-import no.osl.cdms.profile.log.MultiContextEntity;
-import no.osl.cdms.profile.log.ProcedureEntity;
+import no.osl.cdms.profile.persistence.MultiContextEntity;
+import no.osl.cdms.profile.persistence.ProcedureEntity;
 import org.joda.time.DateTime;
 import org.joda.time.Period;
 import org.joda.time.convert.ConverterManager;

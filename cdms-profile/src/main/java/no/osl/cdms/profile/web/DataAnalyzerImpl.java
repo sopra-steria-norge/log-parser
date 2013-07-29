@@ -2,18 +2,14 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package no.osl.cdms.profile.analyzer;
+package no.osl.cdms.profile.web;
 
-import no.osl.cdms.profile.interfaces.db.Procedure;
+import no.osl.cdms.profile.web.helpers.TimeMeasurementBucket;
 import no.osl.cdms.profile.interfaces.DataAnalyzer;
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Multimap;
 
 import java.util.*;
 
 import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
-import no.osl.cdms.profile.log.TimeMeasurementEntity;
 import org.joda.time.convert.ConverterManager;
 import org.joda.time.convert.DurationConverter;
 import org.springframework.stereotype.Component;
@@ -23,10 +19,10 @@ import org.springframework.stereotype.Component;
  * @author nutgaard
  */
 @Component
-public class Analyzer implements DataAnalyzer {
+public class DataAnalyzerImpl implements DataAnalyzer {
     private static DurationConverter converter = ConverterManager.getInstance().getDurationConverter("PT0.123S");
 
-    public Analyzer() {
+    public DataAnalyzerImpl() {
     }
 
 //    private void delegate(List<TimeMeasurement> times) {
@@ -79,9 +75,9 @@ public class Analyzer implements DataAnalyzer {
         if (k == 100) return converter.getDurationMillis(timeMeasurements.get(timeMeasurements.size() - 1).getDuration());
         double ind = k / 100.0 * timeMeasurements.size();
         if (ind == (int) ind) {
-            return converter.getDurationMillis(timeMeasurements.get((int) ind - 1).getDuration());
-//            return (converter.getDurationMillis(timeMeasurements.get((int) ind).getDuration()) +
-//                    converter.getDurationMillis(timeMeasurements.get((int) (ind) - 1).getDuration())) / 2;
+//            return converter.getDurationMillis(timeMeasurements.get((int) ind - 1).getDuration());
+            return (converter.getDurationMillis(timeMeasurements.get((int) ind).getDuration()) +
+                    converter.getDurationMillis(timeMeasurements.get((int) (ind) - 1).getDuration())) / 2;
         } else {
             ind = ((int) ind) + 1;
             return converter.getDurationMillis(timeMeasurements.get((int) (ind) - 1).getDuration());

@@ -363,7 +363,6 @@
             <artifactId>camel-maven-plugin</artifactId>
             <version>${camel.version}</version>
         </dependency>
-
         <!-- Testing -->
         <dependency>
             <groupId>org.apache.camel</groupId>

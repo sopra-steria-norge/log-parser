@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package no.osl.cdms.profile.route;
+package no.osl.cdms.profile.routes.components;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -16,10 +16,10 @@ import no.osl.cdms.profile.interfaces.db.Procedure;
 import no.osl.cdms.profile.interfaces.db.MultiContext;
 import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
 import no.osl.cdms.profile.interfaces.EntityFactory;
-import no.osl.cdms.profile.log.LogRepository;
-import no.osl.cdms.profile.log.ProcedureEntity;
-import no.osl.cdms.profile.log.MultiContextEntity;
-import no.osl.cdms.profile.log.TimeMeasurementEntity;
+import no.osl.cdms.profile.persistence.LogRepository;
+import no.osl.cdms.profile.persistence.ProcedureEntity;
+import no.osl.cdms.profile.persistence.MultiContextEntity;
+import no.osl.cdms.profile.persistence.TimeMeasurementEntity;
 import no.osl.cdms.profile.utilities.GuavaHelpers;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;

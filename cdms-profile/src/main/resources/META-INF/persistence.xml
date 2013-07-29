@@ -1,55 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<persistence xmlns="http://java.sun.com/xml/ns/persistence"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
-             http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
-             version="2.0">
-
+<persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence              http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
     <persistence-unit name="cdmsProfilePersistenceUnit" transaction-type="JTA">
         <provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider>
-
         <jta-data-source>osgi:service/javax.sql.DataSource/(osgi.jndi.service.name=jdbc/profile)</jta-data-source>
-
+        
         <!-- Keep this list sorted -->
-        <class>no.osl.cdms.profile.log.ProcedureEntity</class>
-        <class>no.osl.cdms.profile.log.MultiContextEntity</class>
-        <class>no.osl.cdms.profile.log.TimeMeasurementEntity</class>
-
+        <class>no.osl.cdms.profile.persistence.ProcedureEntity</class>
+        <class>no.osl.cdms.profile.persistence.MultiContextEntity</class>
+        <class>no.osl.cdms.profile.persistence.TimeMeasurementEntity</class>
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
-
         <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
+        
         <properties>
             <property name="openjpa.TransactionMode" value="managed"/>
             <property name="openjpa.ConnectionFactoryMode" value="managed"/>
-            <property name="openjpa.Log" value="commons" />
-
+            <property name="openjpa.Log" value="commons"/>
             <property name="openjpa.QueryCache" value="false"/>
             <property name="openjpa.DataCache" value="true"/>
         </properties>
-
+        
     </persistence-unit>
-
     <!-- Cannot use transaction-type="JTA" in unit tests, so we can do it this way..or the highway -->
     <persistence-unit name="cdmsProfilePersistenceUnitTest" transaction-type="RESOURCE_LOCAL">
         <provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider>
-
-        <class>no.osl.cdms.profile.log.ProcedureEntity</class>
-        <class>no.osl.cdms.profile.log.MultiContextEntity</class>
-        <class>no.osl.cdms.profile.log.TimeMeasurementEntity</class>
-
+        
+        <class>no.osl.cdms.profile.persistence.ProcedureEntity</class>
+        <class>no.osl.cdms.profile.persistence.MultiContextEntity</class>
+        <class>no.osl.cdms.profile.persistence.TimeMeasurementEntity</class>
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
-
         <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
-
+        
         <properties>
-            <property name="openjpa.ConnectionFactoryProperties" value="PrintParameters=true" />
-            <property name="openjpa.Log" value="commons" />
-
+            <property name="openjpa.ConnectionFactoryProperties" value="PrintParameters=true"/>
+            <property name="openjpa.Log" value="commons"/>
             <property name="openjpa.QueryCache" value="false"/>
             <property name="openjpa.DataCache" value="true"/>
-
         </properties>
-
+        
     </persistence-unit>
 </persistence>
-

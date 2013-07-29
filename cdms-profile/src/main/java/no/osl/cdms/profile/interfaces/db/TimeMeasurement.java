@@ -1,7 +1,7 @@
 package no.osl.cdms.profile.interfaces.db;
 
-import no.osl.cdms.profile.log.ProcedureEntity;
-import no.osl.cdms.profile.log.MultiContextEntity;
+import no.osl.cdms.profile.persistence.ProcedureEntity;
+import no.osl.cdms.profile.persistence.MultiContextEntity;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.joda.time.DateTime;
 

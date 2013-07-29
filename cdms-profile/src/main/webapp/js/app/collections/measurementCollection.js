@@ -1,7 +1,7 @@
-app.MeasurementBuckets = Backbone.Collection.extend({
-	model: app.MeasurementBucket,
+app.MeasurementCollection = Backbone.Collection.extend({
+	model: app.Measurement,
 	arr: _.uniq(_.flatten(app.graphOfs)),
-	url: function (from, to) {
+	url: function () {
 		return 'rest/timeMeasurement/' + this.arr;
 	},
 

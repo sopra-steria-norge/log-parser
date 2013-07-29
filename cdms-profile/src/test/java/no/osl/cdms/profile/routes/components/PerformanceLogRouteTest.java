@@ -1,4 +1,4 @@
-package no.osl.cdms.profile.route;
+package no.osl.cdms.profile.routes.components;
 
 //package no.osl.cdms.profile.routes;
 

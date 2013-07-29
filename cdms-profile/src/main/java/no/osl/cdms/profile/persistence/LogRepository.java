@@ -1,4 +1,4 @@
-package no.osl.cdms.profile.log;
+package no.osl.cdms.profile.persistence;
 
 import com.google.common.collect.Lists;
 import no.osl.cdms.profile.interfaces.db.Procedure;

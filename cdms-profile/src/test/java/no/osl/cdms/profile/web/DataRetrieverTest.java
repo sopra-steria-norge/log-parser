@@ -1,9 +1,9 @@
 package no.osl.cdms.profile.web;
 
 import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
-import no.osl.cdms.profile.log.LogRepository;
-import no.osl.cdms.profile.log.ProcedureEntity;
-import no.osl.cdms.profile.log.TimeMeasurementEntity;
+import no.osl.cdms.profile.persistence.LogRepository;
+import no.osl.cdms.profile.persistence.ProcedureEntity;
+import no.osl.cdms.profile.persistence.TimeMeasurementEntity;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.junit.Before;
@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -30,7 +31,7 @@ public class DataRetrieverTest {
     private LogRepository logRepository;
 
     @Autowired
-    private DataRetriever dataRetriever;
+    private DataRetrieverImpl dataRetriever;
 
     private TimeMeasurementEntity timeMeasurement, timeMeasurement2, timeMeasurement3;
     private ProcedureEntity procedure;
@@ -70,8 +71,9 @@ public class DataRetrieverTest {
         System.out.println("getPercentileByProcedure_test");
         int[] percentages = {0, 50, 87, 100};
 
-        String[] percentiles = dataRetriever.getPercentileByProcedure(procedure.getId(), new DateTime("2002-06-25T01:15:52.458Z"),
+        Map<String, Object> percentilesMap = dataRetriever.getPercentileByProcedure(procedure.getId(), new DateTime("2002-06-25T01:15:52.458Z"),
                 new DateTime(), percentages);
+        String[] percentiles = (String[])percentilesMap.get("percentiles");
         String[] expected = {new Duration(107).toString(), new Duration(207).toString(),
                 new Duration(307).toString(), new Duration(307).toString()};
         for(int i = 0; i < percentages.length; i++) {
