@@ -21,12 +21,16 @@ app.TableView = Backbone.View.extend({
 
 	createTableBody: function () {
 		body = '';
-		/*
+		
 		_.each(app.collections.procedures, function(pro){
 			console.log(pro);
-			body += '<tr>' + pro.get('name') + '</tr>';
+			body += '<tr>';
 			body += '<td>' + pro.get('name') + '</td>';
+			_.each(app.collections.percentileCollection.get(pro.id), function (per) {
+				body += '<td>' + per + '</td>';
+			});
+			body += '</tr>';
 		})
-		*/
+		return body;
 	}
 })

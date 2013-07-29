@@ -43,7 +43,6 @@ app.PageView = Backbone.View.extend({
         		table.render();
         	}
         });
-        
 	}
 
 
