@@ -1,4 +1,4 @@
-package no.osl.cdms.profile.web;
+package no.osl.cdms.profile.services;
 
 import com.google.common.collect.Maps;
 import no.osl.cdms.profile.interfaces.db.Procedure;

@@ -1,4 +1,4 @@
-package no.osl.cdms.profile.jmx;
+package no.osl.cdms.profile.services.jmx;
 
 import com.google.common.collect.Lists;
 import java.io.StringWriter;
@@ -11,7 +11,7 @@ import java.util.NoSuchElementException;
 
 import no.osl.cdms.profile.interfaces.db.Procedure;
 import no.osl.cdms.profile.persistence.ProcedureEntity;
-import no.osl.cdms.profile.web.DataRetriever;
+import no.osl.cdms.profile.services.DataRetriever;
 import org.springframework.beans.factory.annotation.Autowired;
 import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
 
