@@ -28,6 +28,10 @@ app.Router = Backbone.Router.extend({
     	if(this.activeView) {
     		this.activeView.remove();
     	}
+        _.each(app.xhrs, function (xhr) {
+            xhr.abort();
+        })
+
         this.activeView = new app.PageView({
             el: '#appcontainer'
         });
