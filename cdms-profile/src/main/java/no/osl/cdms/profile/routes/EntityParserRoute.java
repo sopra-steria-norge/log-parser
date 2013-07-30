@@ -5,7 +5,7 @@ import no.osl.cdms.profile.interfaces.Parser;
 import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
 import no.osl.cdms.profile.persistence.LogRepository;
 import no.osl.cdms.profile.persistence.TimeMeasurementEntity;
-import no.osl.cdms.profile.utilities.GuavaHelpers;
+import no.osl.cdms.profile.utilities.EntityFactoryHelpers;
 import org.apache.camel.Exchange;
 import org.apache.camel.Predicate;
 import org.apache.camel.builder.RouteBuilder;
@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class EntityParserRoute extends RouteBuilder {
 
-    public static final String ENTITY_PARSER_ROUTE_ID = "EntityParserRoute";
+    private static final String ENTITY_PARSER_ROUTE_ID = "EntityParserRoute";
 
     public static final String INPUT_ENDPOINT = "direct:entityParserRoute";
     private static final String DATABASE_ENDPOINT = "jpa:%s?usePersist=true";
@@ -29,36 +29,15 @@ public class EntityParserRoute extends RouteBuilder {
     private Parser parser;
 
     @Autowired
-    private GuavaHelpers guavaHelpers;
+    private EntityFactoryHelpers guavaHelpers;
 
     public EntityParserRoute() {
 
     }
 
-//    public EntityParserRoute(EntityFactory entityFactory, LogLineRegexParser logLineRegexParser) {
-//        this.entityFactory = entityFactory;
-//        this.logLineRegexParser = logLineRegexParser;
-//    }
-
-
     @Override
     public void configure() throws Exception{
-//        DateTime firstToRead = new DateTime().minusDays(14);
-//        TimeMeasurement oldestTimeMeasurement = logRepository.getOldestTimeMeasurement();
-//        if (oldestTimeMeasurement != null) {
-//            DateTime oldest = oldestTimeMeasurement.getJodaTimestamp();
-//            if (oldest.isAfter(firstToRead)) {
-//                firstToRead = oldest;
-//            }
-//        }
-
-        //from("file//:data/log").bean().choice(body().isNotNull()).
-
-        //String firstToReadTimestamp = firstToRead.getYear()+"-"+firstToRead.getMonthOfYear()+"-"+firstToRead.getDayOfMonth();
-
-
-        //"performance.log"+ firstToReadTimestamp;
-
+        
         from(INPUT_ENDPOINT).startupOrder(1)
                 .choice().when(isUnreadLine())
                 .bean(parser, "process")            // Parses log entry into String map
@@ -85,8 +64,12 @@ public class EntityParserRoute extends RouteBuilder {
             }
         };
     }
-
+    
+    @Override
     public String toString() {
+        return ENTITY_PARSER_ROUTE_ID;
+    }
+    public static String routeId() {
         return ENTITY_PARSER_ROUTE_ID;
     }
 }

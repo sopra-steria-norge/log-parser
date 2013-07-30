@@ -10,7 +10,7 @@ import no.osl.cdms.profile.interfaces.EntityFactory;
 import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
 import no.osl.cdms.profile.persistence.LogRepository;
 import no.osl.cdms.profile.persistence.ProcedureEntity;
-import no.osl.cdms.profile.utilities.GuavaHelpers;
+import no.osl.cdms.profile.utilities.EntityFactoryHelpers;
 import org.joda.time.DateTime;
 import org.joda.time.convert.ConverterManager;
 import org.joda.time.convert.DurationConverter;
@@ -53,7 +53,7 @@ public class DataAnalyzerTest {
     private EntityFactory entityFactory;
 
     @Autowired
-    private GuavaHelpers guavaHelpers;
+    private EntityFactoryHelpers guavaHelpers;
 
     private static DurationConverter converter = ConverterManager.getInstance().getDurationConverter("PT0.123S");
 

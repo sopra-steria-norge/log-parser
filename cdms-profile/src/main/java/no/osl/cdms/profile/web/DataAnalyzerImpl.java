@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package no.osl.cdms.profile.web;
 
 import com.google.common.collect.Lists;
@@ -15,10 +11,6 @@ import org.joda.time.convert.ConverterManager;
 import org.joda.time.convert.DurationConverter;
 import org.springframework.stereotype.Component;
 
-/**
- *
- * @author nutgaard
- */
 @Component
 public class DataAnalyzerImpl implements DataAnalyzer {
     private static DurationConverter converter = ConverterManager.getInstance().getDurationConverter("PT0.123S");

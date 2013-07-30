@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package no.osl.cdms.profile.routes.components;
 
 import com.google.common.collect.Iterables;
@@ -20,24 +16,20 @@ import no.osl.cdms.profile.persistence.LogRepository;
 import no.osl.cdms.profile.persistence.ProcedureEntity;
 import no.osl.cdms.profile.persistence.MultiContextEntity;
 import no.osl.cdms.profile.persistence.TimeMeasurementEntity;
-import no.osl.cdms.profile.utilities.GuavaHelpers;
+import no.osl.cdms.profile.utilities.EntityFactoryHelpers;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-/**
- *
- * @author nutgaard
- */
 @Component
 public class EntityFactoryImpl implements EntityFactory {
 
     @Autowired
-    private GuavaHelpers guavaHelpers = new GuavaHelpers(this);
-    
+    private EntityFactoryHelpers guavaHelpers = new EntityFactoryHelpers(this);
     @Autowired
     private LogRepository logRepository;
 
+    @Override
     public void setLogRepository(LogRepository logrepo) {
         this.logRepository = logrepo;
     }
@@ -46,6 +38,7 @@ public class EntityFactoryImpl implements EntityFactory {
         return (TimeMeasurement) (new TimeMeasurementEntity((ProcedureEntity) procedure, (MultiContextEntity) context, timestamp, duration));
     }
 
+    @Override
     public TimeMeasurement createTimeMeasurement(Procedure procedure, Date timestamp, String duration) {
         return (TimeMeasurement) (new TimeMeasurementEntity((ProcedureEntity) procedure, null, timestamp, duration));
     }
@@ -55,6 +48,7 @@ public class EntityFactoryImpl implements EntityFactory {
         return mc;
     }
 
+    @Override
     public Procedure createProcedure(String className, String methodName) {
         return createProcedure(null, className, methodName);
     }
@@ -79,7 +73,7 @@ public class EntityFactoryImpl implements EntityFactory {
         MultiContextEntity mcme = new MultiContextEntity(start.toDate(), end.toDate());
 
         Map<String, String> measuredFiltered = Maps.filterEntries(properties, guavaHelpers.isDuration());
-        List<TimeMeasurement> measured = Lists.newLinkedList(Iterables.transform(measuredFiltered.entrySet(), guavaHelpers.getConverter(properties)));
+        List<TimeMeasurement> measured = Lists.newLinkedList(Iterables.transform(measuredFiltered.entrySet(), guavaHelpers.getTimemeasurementConverter(properties)));
         for (TimeMeasurement tm : measured) {
             tm.setMultiContext(mcme);
         }
@@ -105,18 +99,6 @@ public class EntityFactoryImpl implements EntityFactory {
         } else {
             return createMultiContext(properties);
         }
-    }
-
-    public List<Object> splitTimeMeasurement(TimeMeasurement timeMeasurement) {
-        List<Object> databaseEntities = Lists.newLinkedList();
-        Object database_entity;
-        if ((database_entity = timeMeasurement.getProcedure()) != null) {
-            databaseEntities.add(database_entity);
-        }
-        if ((database_entity = timeMeasurement.getMultiContext()) != null) {
-            databaseEntities.add(database_entity);
-        }
-        return databaseEntities;
     }
 
     @Override

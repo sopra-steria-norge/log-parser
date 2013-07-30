@@ -41,7 +41,7 @@ public class TimeMeasurementBucket implements TimeMeasurement {
     }
 
     private void compress() {
-        if (timeMeasurements == null || timeMeasurements.size() == 0) {
+        if (timeMeasurements == null || timeMeasurements.isEmpty()) {
             return;
         }
         TimeMeasurement timeMeasurement = timeMeasurements.get(0);
@@ -85,9 +85,6 @@ public class TimeMeasurementBucket implements TimeMeasurement {
         this.procedure = procedure;
     }
 
-    /**
-     * @return null
-     */
     @Override
     public MultiContextEntity getMultiContext() {
         return null;
@@ -99,7 +96,6 @@ public class TimeMeasurementBucket implements TimeMeasurement {
      */
     @Override
     public void setMultiContext(MultiContextEntity multiContextMeasurement) {
-        return;
     }
 
     @Override
@@ -137,11 +133,8 @@ public class TimeMeasurementBucket implements TimeMeasurement {
 
     @Override
     public int compareTo(TimeMeasurement other) {
-//        long thisTime = this.getJodaTimestamp().getMillis();
-//        long otherTime = other.getJodaTimestamp().getMillis();
         DurationConverter c = ConverterManager.getInstance().getDurationConverter(this.getDuration());
         return (int)Math.signum(c.getDurationMillis(this.getDuration())-c.getDurationMillis(other.getDuration()));
-//        return (int) Math.signum(thisTime - otherTime);
     }
 
 }

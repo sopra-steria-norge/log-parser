@@ -5,7 +5,6 @@ import java.io.StringWriter;
 import java.util.List;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
 import javax.ws.rs.*;
 import no.osl.cdms.profile.interfaces.db.TimeMeasurement;

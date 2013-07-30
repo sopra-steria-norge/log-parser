@@ -15,6 +15,7 @@ public class MultiContextEntity implements MultiContext{
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MULTICONTEXT_SEQ_GEN")
     private int id;
 
+    
     @Column(name = "START_TIME")
     private Date start;
 

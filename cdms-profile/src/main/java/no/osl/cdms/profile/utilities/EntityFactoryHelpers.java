@@ -1,16 +1,9 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package no.osl.cdms.profile.utilities;
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 import java.util.Map;
 import no.osl.cdms.profile.interfaces.EntityFactory;
 
@@ -24,27 +17,21 @@ import org.joda.time.format.DateTimeFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-/**
- *
- * @author nutgaard
- */
 @Component
-public class GuavaHelpers {
+public class EntityFactoryHelpers {
 
     @Autowired
     private EntityFactory entityFactory;
 
-    public GuavaHelpers() {
-
+    public EntityFactoryHelpers() {
     }
-    public GuavaHelpers(EntityFactory entityFactory) {
+
+    public EntityFactoryHelpers(EntityFactory entityFactory) {
         this.entityFactory = entityFactory;
     }
-
     private static DurationConverter converter = ConverterManager.getInstance().getDurationConverter("PT0.012S");
     private static DateTimeFormatter dtf = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss,SSS");
-    
-    
+
     public Predicate<Map.Entry<String, String>> isDuration() {
         return new Predicate<Map.Entry<String, String>>() {
             @Override
@@ -57,7 +44,7 @@ public class GuavaHelpers {
         };
     }
 
-    public Function<Map.Entry<String, String>, TimeMeasurement> getConverter(final Map<String, String> properties) {
+    public Function<Map.Entry<String, String>, TimeMeasurement> getTimemeasurementConverter(final Map<String, String> properties) {
         return new Function<Map.Entry<String, String>, TimeMeasurement>() {
             @Override
             public TimeMeasurement apply(Map.Entry<String, String> input) {
@@ -71,7 +58,6 @@ public class GuavaHelpers {
             }
         };
     }
-
     public Date parseDateString(String string) {
         return dtf.parseDateTime(string).toDate();
     }

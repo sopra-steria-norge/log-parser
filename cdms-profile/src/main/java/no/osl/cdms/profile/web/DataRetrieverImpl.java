@@ -27,11 +27,13 @@ public class DataRetrieverImpl implements DataRetrieverMBean {
 
     public DataRetrieverImpl() {
     }
-
+    
+    @Override
     public List<ProcedureEntity> getAllProcedures() {
         return logRepository.getAllProcedures();
     }
 
+    @Override
     public List<TimeMeasurement> getTimeMeasurements(int procedureId, DateTime fromDate, DateTime toDate, int buckets) throws NoSuchElementException {
         List<TimeMeasurement> timeMeasurements = getTimeMeasurements(procedureId, fromDate, toDate, TimeMeasurement.Field.TIMESTAMP);
         if (buckets > 0) {
@@ -40,10 +42,12 @@ public class DataRetrieverImpl implements DataRetrieverMBean {
         return timeMeasurements;
     }
 
+    @Override
     public List<TimeMeasurement> getTimeMeasurements(int procedureId, DateTime fromDate, DateTime toDate) throws NoSuchElementException {
         return getTimeMeasurements(procedureId, fromDate, toDate, null);
     }
 
+    @Override
     public List<TimeMeasurement> getTimeMeasurements(int procedureId, DateTime fromDate, DateTime toDate, TimeMeasurement.Field orderBy) throws NoSuchElementException {
         if (toDate == null) {
             toDate = new DateTime();
@@ -55,6 +59,7 @@ public class DataRetrieverImpl implements DataRetrieverMBean {
         return logRepository.getTimeMeasurementsByProcedure(fromDate, toDate, procedure, orderBy);
     }
 
+    @Override
     public Map<String, Object> getPercentileByProcedure(int procedureId, DateTime fromDate, DateTime toDate, int[] percentages) {
         Map<String, Object> percentilesMap = Maps.newHashMap();
 
@@ -71,6 +76,7 @@ public class DataRetrieverImpl implements DataRetrieverMBean {
         return percentilesMap;
     }
 
+    @Override
     public Map<String, Object>[] getPercentile(DateTime fromDate, DateTime toDate, int[] percentages) {
         List<ProcedureEntity> procedures = logRepository.getAllProcedures();
         Map<String, Object>[] percentilesMap = new HashMap[procedures.size()];

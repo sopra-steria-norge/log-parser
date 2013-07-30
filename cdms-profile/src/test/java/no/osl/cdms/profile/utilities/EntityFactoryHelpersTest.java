@@ -34,9 +34,9 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(value = {"classpath:test-cdms-profile-ctx.xml",
         "classpath:test-cdms-profile-infra-ctx.xml"})
-public class GuavaHelpersTest {
+public class EntityFactoryHelpersTest {
 
-    public GuavaHelpersTest() {
+    public EntityFactoryHelpersTest() {
     }
 
     @Autowired
@@ -46,7 +46,7 @@ public class GuavaHelpersTest {
     private EntityFactory entityFactory;
 
     @Autowired
-    private GuavaHelpers guavaHelpers;
+    private EntityFactoryHelpers guavaHelpers;
 
     @BeforeClass
     public static void setUpClass() {
@@ -100,7 +100,7 @@ public class GuavaHelpersTest {
         map.put("LocalThreadContext.duration", "PT0.015S");
         map.put("LocalThreadContext.id", "myID.test");
         map.put("timestamp", "2013-06-25 15:02:08,876");
-        Function<Map.Entry<String, String>, TimeMeasurement> functor = guavaHelpers.getConverter(map);
+        Function<Map.Entry<String, String>, TimeMeasurement> functor = guavaHelpers.getTimemeasurementConverter(map);
 
         TimeMeasurement result = null;
         Procedure expSub = entityFactory.createProcedure("myID", "test");
@@ -123,7 +123,7 @@ public class GuavaHelpersTest {
         map.put("LocalThreadContext.duration", "15.0");
         map.put("LocalThreadContext.id", "myID.test");
         map.put("timestamp", "2013-06-25 15:02:08,876");
-        Function<Map.Entry<String, String>, TimeMeasurement> functor = guavaHelpers.getConverter(map);
+        Function<Map.Entry<String, String>, TimeMeasurement> functor = guavaHelpers.getTimemeasurementConverter(map);
 
         TimeMeasurement result = null;
         Procedure expSub = entityFactory.createProcedure("myID", "test");
@@ -146,7 +146,7 @@ public class GuavaHelpersTest {
         map.put("LocalThreadContext.duration", "15.0aasda");
         map.put("LocalThreadContext.id", "myID.test");
         map.put("timestamp", "2013-06-25 15:02:08,876");
-        Function<Map.Entry<String, String>, TimeMeasurement> functor = guavaHelpers.getConverter(map);
+        Function<Map.Entry<String, String>, TimeMeasurement> functor = guavaHelpers.getTimemeasurementConverter(map);
 
         TimeMeasurement result = null;
         Procedure expSub = entityFactory.createProcedure("myID", "test");
@@ -170,7 +170,7 @@ public class GuavaHelpersTest {
         map.put("DoesntNeedIt.Lap.Class.method:duration", "PT0.015S");
         map.put("DoesntNeedIt.Lap.Class.function:duration", "PT0.005S");
         map.put("timestamp", "2013-06-25 15:02:08,876");
-        Function<Map.Entry<String, String>, TimeMeasurement> functor = guavaHelpers.getConverter(map);
+        Function<Map.Entry<String, String>, TimeMeasurement> functor = guavaHelpers.getTimemeasurementConverter(map);
 
         Procedure[] expSub = new Procedure[]{
                 entityFactory.createProcedure("Total", ""),
@@ -212,7 +212,7 @@ public class GuavaHelpersTest {
         map.put("", "PT0.005S");
         map.put("JustTesting", "PT0.005S");
         map.put(null, "PT0.015S");
-        Function<Map.Entry<String, String>, TimeMeasurement> functor = guavaHelpers.getConverter(map);
+        Function<Map.Entry<String, String>, TimeMeasurement> functor = guavaHelpers.getTimemeasurementConverter(map);
 
         Class[] expExceptions = new Class[]{
             IllegalArgumentException.class,
@@ -242,7 +242,7 @@ public class GuavaHelpersTest {
         System.out.println("testGetConverterLocalMissingId");
         Map<String, String> map = Maps.newLinkedHashMap();
         map.put("LocalThreadContext.duration", "15.0");
-        Function<Map.Entry<String, String>, TimeMeasurement> functor = guavaHelpers.getConverter(map);
+        Function<Map.Entry<String, String>, TimeMeasurement> functor = guavaHelpers.getTimemeasurementConverter(map);
         for (Entry<String, String> e : map.entrySet()) {
             functor.apply(e);
         }
