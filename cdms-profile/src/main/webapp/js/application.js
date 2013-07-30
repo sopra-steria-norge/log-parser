@@ -19,11 +19,11 @@ $(document).ready(function() {
 });
 
 app.xhrs = [];
-app.percentiles = [100, 95, 92, 80, 50, 0];
-app.graphOfs= [[1],[18],[1,18]];
+app.percentiles = [100, 95, 90, 80, 50, 0];
+app.graphOfs= [[14],[18],[17]];
 app.nrOfBuckets = 200;
 app.percentileLimits = {
-	 1: {100: "PT0.2S", 95:"PT0.01S" , 90:"PT1S", 80:"PT1S", 50:"PT1S", 0:"PT1S"},
+	 1: {100: "PT1S", 95:"PT1S", 90:"PT1S", 80:"PT1S", 50:"PT1S", 0:"PT1S"},
 	 2: {100: "PT1S", 95:"PT1S", 90:"PT1S", 80:"PT1S", 50:"PT1S", 0:"PT1S"},
 	 3: {100: "PT1S", 95:"PT1S", 90:"PT1S", 80:"PT1S", 50:"PT1S", 0:"PT1S"},
 	 4: {100: "PT1S", 95:"PT1S", 90:"PT1S", 80:"PT1S", 50:"PT1S", 0:"PT1S"},
