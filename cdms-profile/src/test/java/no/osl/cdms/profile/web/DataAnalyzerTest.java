@@ -10,6 +10,7 @@ import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
 import no.osl.cdms.profile.persistence.LogRepository;
 import no.osl.cdms.profile.persistence.ProcedureEntity;
 import no.osl.cdms.profile.utilities.EntityFactoryHelpers;
+import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.convert.ConverterManager;
 import org.joda.time.convert.DurationConverter;
@@ -31,12 +32,12 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(value = {"classpath:test-cdms-profile-ctx.xml",
-        "classpath:test-cdms-profile-infra-ctx.xml"})
+    "classpath:test-cdms-profile-infra-ctx.xml"})
 @Transactional
 public class DataAnalyzerTest {
 
+    private static final Logger logger = Logger.getLogger(DataAnalyzerTest.class);
     private static DurationConverter converter = ConverterManager.getInstance().getDurationConverter("PT0.123S");
-
     public final int[] data = {43, 54, 56, 61, 62, 66, 68, 69, 69, 70, 71, 72, 77, 78, 79, 85, 87, 88, 89, 93, 95, 96, 98, 99, 99};
     private DataAnalyzer analyzer;
     private int id1 = 1;
@@ -46,12 +47,9 @@ public class DataAnalyzerTest {
     private List<TimeMeasurement> timeMeasurements2;
     private List<TimeMeasurement> timeMeasurements3;
     private List<TimeMeasurement> timeMeasurements4;
-
     private LogRepository logRepository;
-
     @Autowired
     private EntityFactory entityFactory;
-
     @Autowired
     private EntityFactoryHelpers guavaHelpers;
 
@@ -77,7 +75,7 @@ public class DataAnalyzerTest {
         timeMeasurements1 = new LinkedList<TimeMeasurement>();
         timeMeasurements2 = new LinkedList<TimeMeasurement>();
         timeMeasurements3 = new LinkedList<TimeMeasurement>();
-        
+
 
         ProcedureEntity procedure1 = logRepository.getProcedure(id1);
         ProcedureEntity procedure2 = logRepository.getProcedure(id2);
@@ -104,7 +102,7 @@ public class DataAnalyzerTest {
         timeMeasurements3.add(entityFactory.createTimeMeasurement(procedure3,
                 guavaHelpers.parseDateString("2014-06-02 16:05:10,876"), "PT" + String.valueOf(123.0 / 1000) + "S"));
         this.analyzer = new DataAnalyzerImpl();
-        
+
         timeMeasurements4 = new LinkedList<TimeMeasurement>(timeMeasurements1);
         timeMeasurements4.add(entityFactory.createTimeMeasurement(procedure3,
                 guavaHelpers.parseDateString("2014-06-02 16:05:08,876"), "PT" + String.valueOf(1.0 / 1000) + "S"));
@@ -116,9 +114,9 @@ public class DataAnalyzerTest {
                 guavaHelpers.parseDateString("2014-06-02 16:05:08,876"), "PT" + String.valueOf(78794.0 / 1000) + "S"));
         timeMeasurements4.add(entityFactory.createTimeMeasurement(procedure3,
                 guavaHelpers.parseDateString("2014-06-02 16:05:08,876"), "PT" + String.valueOf(999999.0 / 1000) + "S"));
-        
-        
-        
+
+
+
     }
 
     @After
@@ -133,21 +131,21 @@ public class DataAnalyzerTest {
 
     @Test
     public void setupNull() {
-        System.out.println("AnalyzerSetup::null");
-        System.out.println("Sending null");
+        logger.info("AnalyzerSetup::null");
+        logger.info("Sending null");
         DataAnalyzerImpl a = new DataAnalyzerImpl();
         assertEquals(0, a.average(null), 0);
         //assertEquals(0, a.stddev(id), 0);
         assertEquals(0, a.percentile(null, 50), 0);
         int[] buckets = a.buckets(null, 10);
-        for (int i : buckets){
+        for (int i : buckets) {
             assertEquals(0, i, 0);
         }
     }
 
     @Test
     public void testSorted() {
-        System.out.println("sorted");
+        logger.info("sorted");
         double expResult = 76.96;
         double result = analyzer.average(timeMeasurements1);
         assertEquals(expResult, result, 0.0);
@@ -158,7 +156,7 @@ public class DataAnalyzerTest {
      */
     @Test
     public void testAverage() {
-        System.out.println("average");
+        logger.info("average");
         double expResult = 76.96;
         double result = analyzer.average(timeMeasurements1);
         assertEquals(expResult, result, 0.0);
@@ -166,7 +164,7 @@ public class DataAnalyzerTest {
 
     @Test
     public void testAverage_null() {
-        System.out.println("average_null");
+        logger.info("average_null");
         double expResult = 0;
         assertEquals(expResult, analyzer.average(null), 0.0);
     }
@@ -176,7 +174,7 @@ public class DataAnalyzerTest {
      */
     @Test
     public void testPercentile() {
-        System.out.println("percentile 20");
+        logger.info("percentile 20");
         int k = 20;
         double expResult = 64.0;
         double result = analyzer.percentile(timeMeasurements1, k);
@@ -184,8 +182,8 @@ public class DataAnalyzerTest {
     }
 
     @Test
-     public void testPercentile2() {
-        System.out.println("percentile 50");
+    public void testPercentile2() {
+        logger.info("percentile 50");
         int k = 50;
         double expResult = 77.0;
         double result = analyzer.percentile(timeMeasurements1, k);
@@ -194,7 +192,7 @@ public class DataAnalyzerTest {
 
     @Test
     public void testPercentile3() {
-        System.out.println("percentile 0");
+        logger.info("percentile 0");
         int k = 0;
         double expResult = 43.0;
         double result = analyzer.percentile(timeMeasurements1, k);
@@ -203,7 +201,7 @@ public class DataAnalyzerTest {
 
     @Test
     public void testPercentile4() {
-        System.out.println("percentile 100");
+        logger.info("percentile 100");
         int k = 100;
         double expResult = 99.0;
         double result = analyzer.percentile(timeMeasurements1, k);
@@ -212,7 +210,7 @@ public class DataAnalyzerTest {
 
     @Test
     public void testPercentile_null() {
-        System.out.println("percentile 20_null");
+        logger.info("percentile 20_null");
         int k = 20;
         double expResult = 0;
         double result = analyzer.percentile(null, k);
@@ -221,7 +219,7 @@ public class DataAnalyzerTest {
 
     @Test
     public void testPercentileIndex() {
-        System.out.println("percentile 90");
+        logger.info("percentile 90");
         int k = 90;
         double expResult = 98.0;
         double result = analyzer.percentile(timeMeasurements1, k);
@@ -231,7 +229,7 @@ public class DataAnalyzerTest {
 
     @Test
     public void testPercentileIndex_null() {
-        System.out.println("percentile 90_null");
+        logger.info("percentile 90_null");
         int k = 90;
         double expResult = 0;
         double result = analyzer.percentile(null, k);
@@ -243,22 +241,23 @@ public class DataAnalyzerTest {
      */
     @Test
     public void testBuckets() {
-        System.out.println("buckets");
+        logger.info("buckets");
         int NOFBuckets = 5;
         int[] expResult = {3, 7, 5, 8, 2};
         int[] result = analyzer.buckets(timeMeasurements1, NOFBuckets);
-        System.out.println(Arrays.toString(result));
+        logger.info(Arrays.toString(result));
         for (int ind = 0; ind < expResult.length; ind++) {
             assertEquals(expResult[ind], result[ind], 0.00001);
         }
     }
+
     @Test
     public void testBuckets_null() {
-        System.out.println("buckets_null");
+        logger.info("buckets_null");
         int NOFBuckets = 5;
         int[] expResult = {0, 0, 0, 0, 0};
         int[] result = analyzer.buckets(null, NOFBuckets);
-        System.out.println(Arrays.toString(result));
+        logger.info(Arrays.toString(result));
         for (int ind = 0; ind < expResult.length; ind++) {
             assertEquals(expResult[ind], result[ind], 0.00001);
         }
@@ -285,7 +284,7 @@ public class DataAnalyzerTest {
         int count = 0;
         for (TimeMeasurement t : timeMeasurements3) {
             DateTime time = new DateTime(t.getTimestamp());
-            if (time.getYear() == 2013 && time.getMonthOfYear() == 6 ) {
+            if (time.getYear() == 2013 && time.getMonthOfYear() == 6) {
                 duration += converter.getDurationMillis(t.getDuration());
                 count++;
             }
@@ -304,18 +303,19 @@ public class DataAnalyzerTest {
             assertNull(bucket);
         }
     }
+
     @Test
     public void sortable() {
         Collections.sort(timeMeasurements4);
         DurationConverter c = ConverterManager.getInstance().getDurationConverter("PT0.001S");
         double d = -1;
         boolean fail = false;
-        for(int i = 0; i < timeMeasurements4.size(); i++) {
-            System.out.println(timeMeasurements4.get(i));
+        for (int i = 0; i < timeMeasurements4.size(); i++) {
+            logger.info(timeMeasurements4.get(i));
             long ms = c.getDurationMillis(timeMeasurements4.get(i).getDuration());
-            if (ms < d){
+            if (ms < d) {
                 fail = true;
-            }else {
+            } else {
                 d = ms;
             }
         }

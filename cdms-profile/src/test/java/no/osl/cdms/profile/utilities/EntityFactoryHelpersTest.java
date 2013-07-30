@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package no.osl.cdms.profile.utilities;
 
 import com.google.common.base.Function;
@@ -13,6 +9,7 @@ import no.osl.cdms.profile.interfaces.EntityFactory;
 import no.osl.cdms.profile.interfaces.db.Procedure;
 import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
 import no.osl.cdms.profile.persistence.LogRepository;
+import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.*;
@@ -24,15 +21,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-/**
- *
- * @author nutgaard
- */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(value = {"classpath:test-cdms-profile-ctx.xml",
         "classpath:test-cdms-profile-infra-ctx.xml"})
 public class EntityFactoryHelpersTest {
-
+    private static final Logger logger = Logger.getLogger(EntityFactoryHelpersTest.class);
     @BeforeClass
     public static void setUpClass() {
     }
@@ -68,7 +61,7 @@ public class EntityFactoryHelpersTest {
 @Test
     public void testIsDuration() {
 
-        System.out.println("isDuration");
+        logger.info("isDuration");
         Map<String, String> map = Maps.newLinkedHashMap();
         map.put("key", "value");
         map.put("key.duration", "value");
@@ -82,7 +75,7 @@ public class EntityFactoryHelpersTest {
         Set<Map.Entry<String, String>> entries = map.entrySet();
         int i = 0;
         for (Entry<String, String> entry : entries) {
-            System.out.println("Key: " + entry.getKey() + " Value: " + entry.getValue());
+            logger.info("Key: " + entry.getKey() + " Value: " + entry.getValue());
             assertEquals("Testing " + i, expResult[i++], guavaHelpers.isDuration().apply(entry));
         }
     }
@@ -92,7 +85,7 @@ public class EntityFactoryHelpersTest {
      */
     @Test
     public void testGetConverterLocalOK() {
-        System.out.println("getConverterLocalOK");
+        logger.info("getConverterLocalOK");
         Map<String, String> map = Maps.newLinkedHashMap();
         map.put("LocalThreadContext.duration", "PT0.015S");
         map.put("LocalThreadContext.id", "myID.test");
@@ -105,7 +98,7 @@ public class EntityFactoryHelpersTest {
                 guavaHelpers.parseDateString("2013-06-25 15:02:08,876"), "PT0.015S");
 
         for (Entry<String, String> e : map.entrySet()) {
-            System.out.println(e.getKey() + ": " + e.getValue());
+            logger.info(e.getKey() + ": " + e.getValue());
             if (e.getKey().endsWith("duration")) {
                 result = functor.apply(e);
             }
@@ -115,7 +108,7 @@ public class EntityFactoryHelpersTest {
 
     @Test
     public void testGetConverterLocalWierdTimeFormat() {
-        System.out.println("testGetConverterLocalWierdTimeFormat");
+        logger.info("testGetConverterLocalWierdTimeFormat");
         Map<String, String> map = Maps.newLinkedHashMap();
         map.put("LocalThreadContext.duration", "15.0");
         map.put("LocalThreadContext.id", "myID.test");
@@ -138,7 +131,7 @@ public class EntityFactoryHelpersTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testGetConverterLocalWrongFormat() {
-        System.out.println("testGetConverterLocalWrongFormat");
+        logger.info("testGetConverterLocalWrongFormat");
         Map<String, String> map = Maps.newLinkedHashMap();
         map.put("LocalThreadContext.duration", "15.0aasda");
         map.put("LocalThreadContext.id", "myID.test");
@@ -155,12 +148,12 @@ public class EntityFactoryHelpersTest {
                 result = functor.apply(e);
             }
         }
-        System.out.println("result: " + result);
+        logger.info("result: " + result);
     }
 
     @Test
     public void testGetConverterMultiOK() {
-        System.out.println("testGetConverterMultiOK");
+        logger.info("testGetConverterMultiOK");
         Map<String, String> map = Maps.newLinkedHashMap();
         map.put("DoesntNeedIt.Total.duration", "PT0.015S");
         map.put("DoesntNeedIt.Wait.duration", "PT47.061S");
@@ -190,8 +183,8 @@ public class EntityFactoryHelpersTest {
             if (e.getKey().endsWith("duration")) {
                 TimeMeasurement tm = functor.apply(e);
                 if (!tm.equals(expResult[expResultCounter])) {
-                    System.out.println(expResult[expResultCounter]);
-                    System.out.println(tm);
+                    logger.info(expResult[expResultCounter]);
+                    logger.info(tm);
                 }
                 assertEquals(expResult[expResultCounter++], tm);
             }
@@ -200,7 +193,7 @@ public class EntityFactoryHelpersTest {
 
     @Test
     public void testGetConverterMultiIllegalArguments() {
-        System.out.println("testGetConverterMultiIllegalArguments");
+        logger.info("testGetConverterMultiIllegalArguments");
         Map<String, String> map = Maps.newLinkedHashMap();
         map.put("DoesntNeedIt.Wait.duration", null);
         map.put("DoesntNeedIt.Lap.Class.method:duration", "");
@@ -222,8 +215,8 @@ public class EntityFactoryHelpersTest {
                 functor.apply(e);
             } catch (Exception ex) {
                 if (!ex.getClass().equals(expExceptions[expResultCounter])) {
-                    System.out.println("Key: " + e.getKey() + " Input: " + e.getValue());
-                    ex.printStackTrace();
+                    logger.error("Key: " + e.getKey() + " Input: " + e.getValue());
+                    logger.error(ex.getMessage());
                 }
                 assertEquals("Tested entry " + expResultCounter, expExceptions[expResultCounter], ex.getClass());
             } finally {
@@ -236,7 +229,7 @@ public class EntityFactoryHelpersTest {
 
     @Test(expected = NullPointerException.class)
     public void testGetConverterLocalMissingId() {
-        System.out.println("testGetConverterLocalMissingId");
+        logger.info("testGetConverterLocalMissingId");
         Map<String, String> map = Maps.newLinkedHashMap();
         map.put("LocalThreadContext.duration", "15.0");
         Function<Map.Entry<String, String>, TimeMeasurement> functor = guavaHelpers.getTimemeasurementConverter(map);

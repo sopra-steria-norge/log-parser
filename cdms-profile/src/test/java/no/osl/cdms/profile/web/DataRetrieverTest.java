@@ -3,11 +3,12 @@ package no.osl.cdms.profile.web;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
+
 import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
 import no.osl.cdms.profile.persistence.LogRepository;
 import no.osl.cdms.profile.persistence.ProcedureEntity;
 import no.osl.cdms.profile.persistence.TimeMeasurementEntity;
+import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import static org.junit.Assert.assertEquals;
@@ -22,16 +23,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(value = {"classpath:test-cdms-profile-ctx.xml",
-        "classpath:test-cdms-profile-infra-ctx.xml"})
+    "classpath:test-cdms-profile-infra-ctx.xml"})
 @Transactional
 public class DataRetrieverTest {
 
+    private static final Logger logger = Logger.getLogger(DataRetrieverTest.class);
     @Autowired
     private LogRepository logRepository;
-
     @Autowired
     private DataRetrieverImpl dataRetriever;
-
     private TimeMeasurementEntity timeMeasurement, timeMeasurement2, timeMeasurement3;
     private ProcedureEntity procedure;
 
@@ -52,7 +52,7 @@ public class DataRetrieverTest {
 
     @Test
     public void getTimeMeasurementBetweenDatesByProcedure_test() {
-        System.out.println("getTimeMeasurementAfterDateByProcedure_test");
+        logger.info("getTimeMeasurementAfterDateByProcedure_test");
 
 
         List<TimeMeasurement> expected = new ArrayList<TimeMeasurement>();
@@ -67,20 +67,18 @@ public class DataRetrieverTest {
 
     @Test
     public void getPercentileByProcedure_test() {
-        System.out.println("getPercentileByProcedure_test");
+        logger.info("getPercentileByProcedure_test");
         int[] percentages = {0, 50, 87, 100};
 
         Map<String, Object> percentilesMap = dataRetriever.getPercentileByProcedure(procedure.getId(), new DateTime("2002-06-25T01:15:52.458Z"),
                 new DateTime(), percentages);
-        Map<Integer, String> percentiles = (Map)percentilesMap.get("percentiles");
+        Map<Integer, String> percentiles = (Map) percentilesMap.get("percentiles");
         String[] expected = {new Duration(107).toString(), new Duration(207).toString(),
-                new Duration(307).toString(), new Duration(307).toString()};
-        for(int i = 0; i < percentages.length; i++) {
+            new Duration(307).toString(), new Duration(307).toString()};
+        for (int i = 0; i < percentages.length; i++) {
             assertTrue(expected[i].equals(percentiles.get(percentages[i])));
         }
 
 
     }
-    private static final Logger LOG = Logger.getLogger(DataRetrieverTest.class.getName());
-
 }
