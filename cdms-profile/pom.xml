@@ -260,7 +260,7 @@
                                     <onError>continue</onError>
                                 </configuration>
                             </execution>
-                            <execution>
+<!--                            <execution>
                                 <id>drop-job</id>
                                 <phase>compile</phase>
                                 <goals>
@@ -274,7 +274,7 @@
                                     </srcFiles>
                                 </configuration>
 
-                            </execution>
+                            </execution>-->
 
                             <execution>
                                 <id>create-db</id>
@@ -300,6 +300,7 @@
                                     <delimiter>/</delimiter>
                                     <autocommit>true</autocommit>
                                     <srcFiles>
+                                        <srcFile>src/main/resources/sql/drop_job_schema.sql</srcFile>
                                         <srcFile>src/main/resources/sql/create_job_schema.sql</srcFile>
                                     </srcFiles>
                                 </configuration>
