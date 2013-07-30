@@ -35,30 +35,8 @@ public class EntityParserRoute extends RouteBuilder {
 
     }
 
-//    public EntityParserRoute(EntityFactory entityFactory, LogLineRegexParser logLineRegexParser) {
-//        this.entityFactory = entityFactory;
-//        this.logLineRegexParser = logLineRegexParser;
-//    }
-
-
     @Override
     public void configure() throws Exception{
-//        DateTime firstToRead = new DateTime().minusDays(14);
-//        TimeMeasurement oldestTimeMeasurement = logRepository.getOldestTimeMeasurement();
-//        if (oldestTimeMeasurement != null) {
-//            DateTime oldest = oldestTimeMeasurement.getJodaTimestamp();
-//            if (oldest.isAfter(firstToRead)) {
-//                firstToRead = oldest;
-//            }
-//        }
-
-        //from("file//:data/log").bean().choice(body().isNotNull()).
-
-        //String firstToReadTimestamp = firstToRead.getYear()+"-"+firstToRead.getMonthOfYear()+"-"+firstToRead.getDayOfMonth();
-
-
-        //"performance.log"+ firstToReadTimestamp;
-
         from(INPUT_ENDPOINT).startupOrder(1)
                 .choice().when(isUnreadLine())
                 .bean(parser, "process")            // Parses log entry into String map

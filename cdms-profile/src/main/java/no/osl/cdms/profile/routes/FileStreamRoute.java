@@ -2,7 +2,6 @@ package no.osl.cdms.profile.routes;
 
 import org.apache.camel.builder.RouteBuilder;
 import org.joda.time.DateTime;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -63,6 +62,4 @@ public class FileStreamRoute extends RouteBuilder {
     public String toString() {
         return FILE_STREAM_ROUTE_ID;
     }
-
-
 }
