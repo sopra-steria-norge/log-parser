@@ -3,7 +3,6 @@ package no.osl.cdms.profile.services.helpers;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Logger;
 import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
 import no.osl.cdms.profile.persistence.MultiContextEntity;
 import no.osl.cdms.profile.persistence.ProcedureEntity;
