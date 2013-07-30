@@ -55,7 +55,7 @@ public class DeleteRoute extends RouteBuilder {
             logger.info("Cleaning DB of entries older than 14 days");
             long start = System.currentTimeMillis();
             logRepository.deleteOldLogEntries();
-            //logRepository.deleteUnusedProcedures(); TODO does not work (deletes all procedures)
+//            logRepository.deleteUnusedProcedures(); TODO uncomment to enable automatic deletion of unused procedures
             logger.info("DB cleaning completed in "+(System.currentTimeMillis()-start)+"ms");
 
         } catch( Exception e) {

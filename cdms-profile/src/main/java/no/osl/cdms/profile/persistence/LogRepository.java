@@ -145,7 +145,7 @@ public class LogRepository {
 
             // Delete multi context if exists
             if (timeMeasurement.getMultiContext() != null) {
-                deleteQuery = entityManager.createQuery("DELETE FROM MultiContextEntity WHERE id = :id");
+                deleteQuery = entityManager.createQuery("DELETE FROM MultiContextEntity a WHERE a.id = :id");
                 deleteQuery.setParameter("id", timeMeasurement.getMultiContext().getId());
                 deleteQuery.executeUpdate();
             }
@@ -159,35 +159,37 @@ public class LogRepository {
     }
 
     public void deleteUnusedProcedures() {
-        TypedQuery<ProcedureEntity> query = entityManager.createQuery("SELECT DISTINCT a.procedure FROM TimeMeasurementEntity a",
-                ProcedureEntity.class);
-        List<ProcedureEntity> allProcedures = getAllProcedures();
-        List<ProcedureEntity> unusedProcedures = new ArrayList<ProcedureEntity>();
-        List<ProcedureEntity> queryResult =  query.getResultList();
+        List<ProcedureEntity> procedures = getAllProcedures();
+        List<ProcedureEntity> unusedProcedures = new ArrayList<ProcedureEntity>(procedures);
+        String deletedProcedures = "";
 
-        logger.info("ALL: \t" + allProcedures);
-        logger.info("RESULT: \t" + queryResult);
-
-        for (ProcedureEntity r : allProcedures) {
-            boolean found = false;
-            for (ProcedureEntity q : queryResult) {
-                if (q.equals(r)) {
-                    found = true;
-                    break;
+        // Find unused procedures
+        for (Procedure procedure : procedures) {
+            TypedQuery<TimeMeasurement> query = entityManager.createQuery(
+                    "SELECT a FROM TimeMeasurementEntity a WHERE a.procedure = :procedure",
+                    TimeMeasurement.class);
+            query.setParameter("procedure", procedure);
+            try {
+                if (!query.getResultList().isEmpty()) {
+                    unusedProcedures.remove(procedure);
                 }
-            }
-            if (!found) {
-                logger.info(r.getName());
-                unusedProcedures.add(r);
+            } catch (NoResultException e) {
+                // Do nothing, the procedure is kept in the delete list
             }
         }
 
-        logger.info(unusedProcedures);
-        for (ProcedureEntity procedure : unusedProcedures) {
+        if (unusedProcedures.isEmpty()) {
+            return;
+        }
+
+        // Delete unused procedures
+        for (Procedure procedure : unusedProcedures) {
             Query deleteQuery = entityManager.createQuery("DELETE FROM ProcedureEntity a WHERE a.id = :id ");
             deleteQuery.setParameter("id", procedure.getId());
             deleteQuery.executeUpdate();
+            deletedProcedures += "\t" + procedure.toString() + "\n";
         }
+        logger.info("Deleted following unused procedures: \n" + deletedProcedures);
     }
 
     /**
