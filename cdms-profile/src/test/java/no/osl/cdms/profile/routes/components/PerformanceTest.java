@@ -39,7 +39,7 @@ public class PerformanceTest {
     /**
      * Test of parse method, of class Parser.
      */
-    @Test
+//    @Test
     public void localMockLogLine() {
         Parser parser = new ParserImpl();
         EntityFactory factory = new EntityFactoryImpl();
