@@ -60,9 +60,11 @@ public class DataRetrieverImpl implements DataRetrieverMBean {
 
         List<TimeMeasurement> timeMeasurements = logRepository.getTimeMeasurementsByProcedure(
                 fromDate, toDate, logRepository.getProcedure(procedureId), TimeMeasurement.Field.DURATION);
-        String[] percentiles = new String[percentages.length];
+        Map<Integer, String> percentiles = Maps.newHashMap();
+        
         for (int i = 0; i < percentages.length; i++) {
-            percentiles[i] = new Duration((long) analyzer.percentile(timeMeasurements, percentages[i])).toString();
+            String percentile = new Duration((long) analyzer.percentile(timeMeasurements, percentages[i])).toString();
+            percentiles.put(percentages[i], percentile);
         }
         percentilesMap.put("id", procedureId);
         percentilesMap.put("percentiles", percentiles);
