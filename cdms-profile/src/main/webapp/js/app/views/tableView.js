@@ -41,22 +41,20 @@ app.TableView = Backbone.View.extend({
             _.each(tr.find("td"), function(td) {
                 td = $(td);
                 var per = td.data('percentile');
+                td.addClass('success');
                 if (typeof per !== 'undefined') {
-                    var limit = 2000;
+                    var actual = moment.duration(td.html());
+                    var limit = moment.duration("PT2S");
+                    
                     if (typeof app.percentileLimits[id] !== 'undefined') {
                         if (typeof app.percentileLimits[id][per] !== 'undefined') {
-                            var actual = moment.duration(td[0].innerHTML);
                             limit = moment.duration(app.percentileLimits[id][per]);
                         }
                     }
                     
                     if (actual._milliseconds > limit._milliseconds) {
-                        td.removeClass('success');
-                        td.addClass('error');
-                        tr.find("td").first().removeClass('success');
-                        tr.find("td").first().addClass('error');
-                    }else {
-                        td.addClass('success');
+                        td.removeClass('success').addClass('error');
+                        tr.find("td").first().removeClass('success').addClass('error');
                     }
                 }
             })
