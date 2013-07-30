@@ -260,7 +260,7 @@
                                     <onError>continue</onError>
                                 </configuration>
                             </execution>
-                            <execution>
+<!--                            <execution>
                                 <id>drop-job</id>
                                 <phase>compile</phase>
                                 <goals>
@@ -274,7 +274,7 @@
                                     </srcFiles>
                                 </configuration>
 
-                            </execution>
+                            </execution>-->
 
                             <execution>
                                 <id>create-db</id>
@@ -300,6 +300,7 @@
                                     <delimiter>/</delimiter>
                                     <autocommit>true</autocommit>
                                     <srcFiles>
+                                        <srcFile>src/main/resources/sql/drop_job_schema.sql</srcFile>
                                         <srcFile>src/main/resources/sql/create_job_schema.sql</srcFile>
                                     </srcFiles>
                                 </configuration>
@@ -554,4 +555,6 @@
         <org.springframework.version>3.0.2.RELEASE</org.springframework.version>
         <jetty.version>7.2.0.v20101020</jetty.version>
     </properties>
+    <description>Collaborative Decision Making Services - Profile
+        osgi:install mvn:no.osl.cdms/cdms-profile/1.0-SNAPSHOT</description>
 </project>

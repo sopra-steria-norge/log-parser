@@ -5,7 +5,7 @@ import no.osl.cdms.profile.interfaces.Parser;
 import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
 import no.osl.cdms.profile.persistence.LogRepository;
 import no.osl.cdms.profile.persistence.TimeMeasurementEntity;
-import no.osl.cdms.profile.utilities.GuavaHelpers;
+import no.osl.cdms.profile.utilities.EntityFactoryHelpers;
 import org.apache.camel.Exchange;
 import org.apache.camel.Predicate;
 import org.apache.camel.builder.RouteBuilder;
@@ -14,10 +14,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class EntityParserRoute extends RouteBuilder {
 
-    public static final String ENTITY_PARSER_ROUTE_ID = "EntityParserRoute";
+    private static final String ENTITY_PARSER_ROUTE_ID = "EntityParserRoute";
 
     public static final String INPUT_ENDPOINT = "direct:entityParserRoute";
     private static final String DATABASE_ENDPOINT = "jpa:%s?usePersist=true";
+    public static String routeId() {
+        return ENTITY_PARSER_ROUTE_ID;
+    }
 
     @Autowired
     private EntityFactory entityFactory;
@@ -29,7 +32,7 @@ public class EntityParserRoute extends RouteBuilder {
     private Parser parser;
 
     @Autowired
-    private GuavaHelpers guavaHelpers;
+    private EntityFactoryHelpers guavaHelpers;
 
     private TimeMeasurement lastInsertedTimeMeasurement;
 
@@ -65,7 +68,8 @@ public class EntityParserRoute extends RouteBuilder {
             }
         };
     }
-
+    
+    @Override
     public String toString() {
         return ENTITY_PARSER_ROUTE_ID;
     }

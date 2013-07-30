@@ -27,46 +27,13 @@ var templates = templates || {};
 	'	</div>'+
 	'</div>';
 
-	templates.percentileTable = function(){
-		
-		return '' +
-		'<table class="table table-striped">'+
+	templates.percentileTable = '' +
+		'<table class="table table-hover table-bordered">'+
 		'	<thead id="tablehead">' +
 		'	</thead>' +
 		'	<tbody id="tablebody">' +
 		'	</tbody>'+
 		'</table>';
-
-		/*
-		temp = '' +
-		'<table class="table table-striped">'+
-		'	<thead>' +
-		'		<tr>' +
-		'			<th>Name/Percentiles</th>';
-		for (var i = 0; i < app.percentiles.length; i++) {
-			temp += '			<th>'+app.percentiles[i]+'</th>';
-		}
-		temp += '' +
-		'		</tr>' +
-		'	</thead>' +
-		'	<tbody>';
-		console.log(app.procedureMapping)
-		for (var i = 0; i < app.procedureMapping.length; i++) {
-			temp += '		<tr data-name="'+app.procedureMapping[i].name+'" data-rowOf="'+app.procedureMapping[i].id+'" class="success">'
-			temp += '			<td>'+app.procedureMapping[i].name+'</td>';
-			for (var j = 0; j < app.percentiles.length; j++) {
-				temp += '			<td data-percentile="'+app.percentiles[j]+'">PT0S</td>';
-			};
-			temp += '		</tr>'
-		};
-		temp += ''+
-		'	</tbody>'+
-		'</table>';
-
-		return temp;
-		*/
-		
-	}
 
 	templates.defaultPage = function(){
 		temp = '' +
@@ -77,7 +44,7 @@ var templates = templates || {};
 		temp += '' +
 		'</div>'+
 		'<div class="row">'+
-			templates.percentileTable() +
+			templates.percentileTable+
 		'</div>';
 		return temp;
 	}

@@ -1,22 +1,16 @@
 package no.osl.cdms.profile.persistence;
 
-import no.osl.cdms.profile.persistence.TimeMeasurementEntity;
-import no.osl.cdms.profile.persistence.ProcedureEntity;
-import no.osl.cdms.profile.persistence.MultiContextEntity;
+import java.util.logging.Logger;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import static junit.framework.Assert.assertEquals;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertTrue;
 
 /**
  * User: apalfi
@@ -47,7 +41,6 @@ public class EntitiesTest {
 
     @Test
     public void persisting_timemeasurement_should_cascade_persist() {
-        System.out.println("persisting_timemeasurement_should_cascade_persist");
 
         assertEquals(timeMeasurementEntity.getMultiContext(), entityManager.find(MultiContextEntity.class,
                 multiContextEntity.getId()));
@@ -55,5 +48,6 @@ public class EntitiesTest {
                 procedureEntity.getId()));
 
     }
+    private static final Logger LOG = Logger.getLogger(EntitiesTest.class.getName());
 
 }
