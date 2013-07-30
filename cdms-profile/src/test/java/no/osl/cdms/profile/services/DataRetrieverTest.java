@@ -1,4 +1,4 @@
-package no.osl.cdms.profile.web;
+package no.osl.cdms.profile.services;
 
 import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
 import no.osl.cdms.profile.persistence.LogRepository;

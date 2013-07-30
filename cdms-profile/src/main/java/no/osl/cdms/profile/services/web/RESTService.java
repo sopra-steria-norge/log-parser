@@ -1,4 +1,4 @@
-package no.osl.cdms.profile.web;
+package no.osl.cdms.profile.services.web;
 
 import com.google.common.collect.Lists;
 import java.io.StringWriter;
@@ -6,10 +6,11 @@ import java.util.List;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
+import no.osl.cdms.profile.services.DataRetriever;
 import org.springframework.beans.factory.annotation.Autowired;
 import javax.ws.rs.*;
 import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
-import no.osl.cdms.profile.web.helpers.RestInputParser;
+import no.osl.cdms.profile.services.helpers.RestInputParser;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.map.MappingJsonFactory;

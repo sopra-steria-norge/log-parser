@@ -16,12 +16,12 @@
         </jaxrs:serviceBeans>
     </jaxrs:server>
 
-    <bean id="serviceBean" class="no.osl.cdms.profile.web.RESTService"/>
+    <bean id="serviceBean" class="no.osl.cdms.profile.services.web.RESTService"/>
 
     <context:component-scan base-package="no.osl.cdms.profile" />
     <context:annotation-config/>
 
-    <bean id="jmxServiceBean" class="no.osl.cdms.profile.jmx.JMXService" />
+    <bean id="jmxServiceBean" class="no.osl.cdms.profile.services.jmx.JMXService" />
 
     <bean id="exporter" class="org.springframework.jmx.export.MBeanExporter">
         <property name="assembler" ref="assembler"/>
