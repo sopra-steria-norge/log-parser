@@ -21,7 +21,7 @@ public class OldLogFetcherRoute extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
-        lastRead = new DateTime();
+        heartbeat();
 
         fromF(LOG_FILE_ENDPOINT, LOG_DIRECTORY).startupOrder(2)
                 .choice().when(shouldRead())
@@ -52,7 +52,6 @@ public class OldLogFetcherRoute extends RouteBuilder {
     public void heartbeat() {
         lastRead = new DateTime();
     }
-
 
     public static DateTime lastReadDate() {
         return lastRead;
