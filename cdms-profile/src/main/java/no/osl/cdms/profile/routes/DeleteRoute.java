@@ -4,6 +4,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import no.osl.cdms.profile.persistence.LogRepository;
 import no.osl.cdms.profile.routes.components.RouteExceptionHandler;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.log4j.Logger;
@@ -17,11 +18,14 @@ public class DeleteRoute extends RouteBuilder {
 
     private static final String DELETE_ROUTE_ID = "DeleteRoute";
     
-    @PersistenceContext
-    private EntityManager em;
+//    @PersistenceContext
+//    private EntityManager em;
 
     @Autowired
     private RouteExceptionHandler exceptionHandler;
+
+    @Autowired
+    private LogRepository logRepository;
 
     @Override
     public void configure() throws Exception {
@@ -39,18 +43,28 @@ public class DeleteRoute extends RouteBuilder {
         logger.info("Scheduled first DB cleaning for: "+d);
 
         onException(Exception.class).process(exceptionHandler).markRollbackOnly().handled(true);
-        fromF("timer://DBClean?time="+d+"&period=86400000&fixedRate=true&daemon=true")
+        fromF("timer://"+this.getClass().getSimpleName()+"?time="+d+"&period=86400000&fixedRate=true&daemon=true")
+                .transacted()
                 .bean(this, "cleanDB")
                 .routeId(DELETE_ROUTE_ID);
     }
 
     @Transactional
     public void cleanDB() {
-        logger.info("Cleaning DB of entries older than 14 days");
-        long start = System.currentTimeMillis();
-        Query query = em.createNativeQuery("DELETE FROM SYSTEM.CDM_PROFILE_MULTICONTEXT WHERE MULTICONTEXT_ID = (SELECT MULTICONTEXT_ID FROM SYSTEM.CDM_PROFILE_TIMEMEASUREMENT WHERE TIMESTAMP < SYSDATE - 15); DELETE FROM SYSTEM.CDM_PROFILE_TIMEMEASUREMENT WHERE TIMESTAMP < SYSDATE - 15;");
-        query.executeUpdate();
-        logger.info("DB cleaning completed in "+(System.currentTimeMillis()-start)+"ms");
+        try {
+            logger.info("Cleaning DB of entries older than 14 days");
+            long start = System.currentTimeMillis();
+            logRepository.deleteOldLogEntries();
+            //logRepository.deleteUnusedProcedures(); TODO does not work (deletes all procedures)
+            logger.info("DB cleaning completed in "+(System.currentTimeMillis()-start)+"ms");
+
+        } catch( Exception e) {
+            String stackTrace="";
+            for (StackTraceElement s : e.getStackTrace()) {
+                stackTrace += "\t" + s + "\n";
+            }
+            logger.error("Failed to clean database, stack trace:\n" + e.getClass().getSimpleName() + "\n" + stackTrace);
+        }
     }
        
     @Override
