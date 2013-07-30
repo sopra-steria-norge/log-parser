@@ -81,12 +81,10 @@ public class DataRetrieverImpl implements DataRetrieverMBean {
         List<ProcedureEntity> procedures = logRepository.getAllProcedures();
         Map<String, Object>[] percentilesMap = new HashMap[procedures.size()];
         
-        String[] percentiles;
         int i = 0;
         for (Procedure procedure : procedures) {
             percentilesMap[i++] = getPercentileByProcedure(procedure.getId(), fromDate, toDate, percentages);
         }
         return percentilesMap;
     }
-    private static final Logger LOG = Logger.getLogger(DataRetrieverImpl.class.getName());
 }

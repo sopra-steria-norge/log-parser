@@ -60,5 +60,4 @@ public class MultiContextEntity implements MultiContext{
     public void setEnd(Date end) {
         this.end = end;
     }
-    private static final Logger LOG = Logger.getLogger(MultiContextEntity.class.getName());
 }

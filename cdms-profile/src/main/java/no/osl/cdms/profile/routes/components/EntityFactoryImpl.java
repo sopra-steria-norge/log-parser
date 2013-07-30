@@ -104,5 +104,5 @@ public class EntityFactoryImpl implements EntityFactory {
     public List<TimeMeasurement> process(Map<String, String> s) {
         return createTimemeasurement(s);
     }
-    private static final Logger LOG = Logger.getLogger(EntityFactoryImpl.class.getName());
+    private static final Logger logger = Logger.getLogger(EntityFactoryImpl.class.getName());
 }

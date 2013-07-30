@@ -55,5 +55,4 @@ public class RestInputParser {
         }
         return bucketsInt;
     }
-    private static final java.util.logging.Logger LOG = java.util.logging.Logger.getLogger(RestInputParser.class.getName());
 }

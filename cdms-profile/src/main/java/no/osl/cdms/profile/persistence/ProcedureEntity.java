@@ -104,9 +104,5 @@ public class ProcedureEntity implements Procedure {
             return false;
         }
         return true;
-    }
-    private static final Logger LOG = Logger.getLogger(ProcedureEntity.class.getName());
-    
-
-    
+    } 
 }

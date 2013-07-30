@@ -96,5 +96,4 @@ public class DataAnalyzerImpl implements DataAnalyzer {
         }
         return Arrays.asList(buckets);
     }
-    private static final Logger LOG = Logger.getLogger(DataAnalyzerImpl.class.getName());
 }

@@ -57,5 +57,5 @@ public class OldLogFetcherRoute extends RouteBuilder {
     public static String routeId() {
         return OLD_LOG_FETCHER_ROUTE_ID;
     }
-    private static final Logger LOG = Logger.getLogger(OldLogFetcherRoute.class.getName());
+    private static final Logger logger = Logger.getLogger(OldLogFetcherRoute.class.getName());
 }

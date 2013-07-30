@@ -148,6 +148,6 @@ public class TimeMeasurementBucket implements TimeMeasurement {
         DurationConverter c = ConverterManager.getInstance().getDurationConverter(this.getDuration());
         return (int)Math.signum(c.getDurationMillis(this.getDuration())-c.getDurationMillis(other.getDuration()));
     }
-    private static final Logger LOG = Logger.getLogger(TimeMeasurementBucket.class.getName());
+    
 
 }

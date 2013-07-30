@@ -152,7 +152,4 @@ public class TimeMeasurementEntity implements TimeMeasurement {
     public String toString() {
         return "TimeMeasurementEntity{" + "id=" + id + ", procedure=" + procedure + ", multiContext=" + multiContext + ", timestamp=" + timestamp + ", duration=" + duration + '}';
     }
-    private static final Logger LOG = Logger.getLogger(TimeMeasurementEntity.class.getName());
-    
-    
 }
