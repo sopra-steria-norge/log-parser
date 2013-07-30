@@ -83,7 +83,7 @@ Insert into CDM_PROFILE_PROCEDURE (PROCEDURE_ID,NAME,CLASS,METHOD) values (PROCE
 Insert into CDM_PROFILE_PROCEDURE (PROCEDURE_ID,NAME,CLASS,METHOD) values (PROCEDURE_SEQ.nextval, 'TSAT','TsatCalculatorServiceImpl','calculateTtotAndTsatFor');
 Insert into CDM_PROFILE_PROCEDURE (PROCEDURE_ID,NAME,CLASS,METHOD) values (PROCEDURE_SEQ.nextval, NULL,'FlightPlanActivationOutbound','execute');
 Insert into CDM_PROFILE_PROCEDURE (PROCEDURE_ID,NAME,CLASS,METHOD) values (PROCEDURE_SEQ.nextval, NULL,'UpdateMessageFactory','createUpdatesForPublishing');
-Insert into CDM_PROFILE_PROCEDURE (PROCEDURE_ID,NAME,CLASS,METHOD) values (PROCEDURE_SEQ.nextval, NULL,'Wait',null);
+Insert into CDM_PROFILE_PROCEDURE (PROCEDURE_ID,NAME,CLASS,METHOD) values (PROCEDURE_SEQ.nextval, 'Wait','Wait',null);
 Insert into CDM_PROFILE_PROCEDURE (PROCEDURE_ID,NAME,CLASS,METHOD) values (PROCEDURE_SEQ.nextval,'ICW','Total',null);
 Insert into CDM_PROFILE_PROCEDURE (PROCEDURE_ID,NAME,CLASS,METHOD) values (PROCEDURE_SEQ.nextval, NULL,'IcwMessageProcessorBean','process');
 Insert into CDM_PROFILE_PROCEDURE (PROCEDURE_ID,NAME,CLASS,METHOD) values (PROCEDURE_SEQ.nextval, NULL,'Landed','execute');
