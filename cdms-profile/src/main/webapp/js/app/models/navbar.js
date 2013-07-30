@@ -8,6 +8,8 @@ app.Navbar = Backbone.Model.extend({
 		var view = this.get('selectedView');
 
 		switch (view) {
+			case 'last3h':
+				return templates.defaultPage();
 			case 'last24h':
 				return templates.defaultPage();
 			case 'last72h':
@@ -16,6 +18,8 @@ app.Navbar = Backbone.Model.extend({
 				return templates.defaultPage();
 			case 'last2w':
 				return templates.defaultPage();
+			case 'overview':
+				return templates.overviewPage();
 		}
 	},
 
@@ -23,6 +27,12 @@ app.Navbar = Backbone.Model.extend({
 		var view = this.get('selectedView');
 
 		switch (view) {
+			case 'last3h':
+				return {
+            		realtime: false,
+            		pollInterval: 1000,
+            		pt: ['PT3H/']
+        		}
 			case 'last24h':
 				return {
             		realtime: false,
@@ -46,6 +56,12 @@ app.Navbar = Backbone.Model.extend({
             		realtime: false,
             		pollInterval: 1000,
             		pt: ['P2W/']
+        		}
+        	case 'overview':
+				return {
+            		realtime: false,
+            		pollInterval: 1000,
+            		pt: ['PT3H/']
         		}
 		}
 	}

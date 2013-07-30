@@ -18,32 +18,34 @@ app.PageView = Backbone.View.extend({
         var from = interval.start().toISOString();
         var to = interval.end().toISOString();
         var that = this;
-        app.collections.measurementCollection = new app.MeasurementCollection();
-        var xhr = app.collections.measurementCollection.fetch({
-            data: $.param({from:from, to:to, buckets:app.nrOfBuckets}),
-            success:function(){
-            	console.log('measurementCollection', app.collections.measurementCollection)
-				_.each(that.$el.find('.graph'), function(element) {
-					var graph = new app.GraphView({
-						el: $(element)
-					});
-					graph.render();
-				});
-        	}
-    	});
-        app.xhrs.push(xhr);
-        app.collections.percentileCollection = new app.PercentileCollection();
-        var xhr = app.collections.percentileCollection.fetch({
-        	data: $.param({from:from, to:to, percentages:app.percentiles+''}),
-        	success:function () {
-        		console.log('percentileCollection', app.collections.percentileCollection);
-        		var table = new app.TableView({
-        			el: that.$el.find('.table').first()
-        		});
-        		table.render();
-        	}
-        });
-        app.xhrs.push(xhr);
+        if(this.$el.find('.graph').length !== 0) {
+            app.collections.measurementCollection = new app.MeasurementCollection();
+            var xhr = app.collections.measurementCollection.fetch({
+                data: $.param({from:from, to:to, buckets:app.nrOfBuckets}),
+                success:function(){
+    				_.each(that.$el.find('.graph'), function(element) {
+    					var graph = new app.GraphView({
+    						el: $(element)
+    					});
+    					graph.render();
+    				});
+            	}
+        	});
+            app.xhrs.push(xhr);
+        }
+        if(this.$el.find('.table').length !== 0) {
+            app.collections.percentileCollection = new app.PercentileCollection();
+            var xhr = app.collections.percentileCollection.fetch({
+            	data: $.param({from:from, to:to, percentages:app.percentiles+''}),
+            	success:function () {
+            		var table = new app.TableView({
+            			el: that.$el.find('.table').first()
+            		});
+            		table.render();
+            	}
+            });
+            app.xhrs.push(xhr);
+        }
 	}
 
 
