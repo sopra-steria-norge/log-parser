@@ -39,7 +39,6 @@ app.GraphView = Backbone.View.extend({
     },
     createDestroyHandler: function() {
         $('body').on('destroy_view', function() {
-            console.log("hei");
             this.destroy_view();
         }.bind(this));
     },
