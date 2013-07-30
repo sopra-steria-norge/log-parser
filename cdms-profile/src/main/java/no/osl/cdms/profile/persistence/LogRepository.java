@@ -1,25 +1,26 @@
 package no.osl.cdms.profile.persistence;
 
 import com.google.common.collect.Lists;
-import no.osl.cdms.profile.interfaces.db.Procedure;
-import no.osl.cdms.profile.interfaces.db.MultiContext;
-import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
-import org.joda.time.DateTime;
-import org.springframework.stereotype.Repository;
-
+import java.util.*;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import java.util.*;
-import javax.persistence.Query;
+import no.osl.cdms.profile.interfaces.db.MultiContext;
+import no.osl.cdms.profile.interfaces.db.Procedure;
+import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
 import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
+import org.springframework.stereotype.Repository;
 
 @Repository
 public class LogRepository {
-    Logger logger = Logger.getRootLogger();
     
     private static List<Procedure> cache = Lists.newArrayList();
+    private static int inCache(Procedure p){
+        return cache.indexOf(p);
+    }
+    Logger logger = Logger.getRootLogger();
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -150,8 +151,5 @@ public class LogRepository {
                 break;
         }
         return querySuffix;
-    }
-    private static int inCache(Procedure p){
-        return cache.indexOf(p);
     }
 }

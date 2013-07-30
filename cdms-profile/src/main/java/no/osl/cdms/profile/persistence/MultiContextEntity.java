@@ -1,9 +1,9 @@
 package no.osl.cdms.profile.persistence;
 
-import no.osl.cdms.profile.interfaces.db.MultiContext;
-
-import javax.persistence.*;
 import java.util.Date;
+import java.util.logging.Logger;
+import javax.persistence.*;
+import no.osl.cdms.profile.interfaces.db.MultiContext;
 
 @Entity
 @Table(name = "CDM_PROFILE_MULTICONTEXT")
@@ -15,6 +15,7 @@ public class MultiContextEntity implements MultiContext{
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MULTICONTEXT_SEQ_GEN")
     private int id;
 
+    
     @Column(name = "START_TIME")
     private Date start;
 
@@ -30,26 +31,32 @@ public class MultiContextEntity implements MultiContext{
         this.end = end;
     }
 
+    @Override
     public int getId() {
         return id;
     }
 
+    @Override
     public void setId(int id) {
         this.id = id;
     }
 
+    @Override
     public Date getStart() {
         return start;
     }
 
+    @Override
     public void setStart(Date start) {
         this.start = start;
     }
 
+    @Override
     public Date getEnd() {
         return end;
     }
 
+    @Override
     public void setEnd(Date end) {
         this.end = end;
     }

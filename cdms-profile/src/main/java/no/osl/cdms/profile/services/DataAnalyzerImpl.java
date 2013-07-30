@@ -1,24 +1,17 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package no.osl.cdms.profile.services;
 
 import com.google.common.collect.Lists;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import no.osl.cdms.profile.services.helpers.TimeMeasurementBucket;
 import no.osl.cdms.profile.interfaces.DataAnalyzer;
-
-import java.util.*;
-
 import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
+
 import org.joda.time.convert.ConverterManager;
 import org.joda.time.convert.DurationConverter;
 import org.springframework.stereotype.Component;
 
-/**
- *
- * @author nutgaard
- */
 @Component
 public class DataAnalyzerImpl implements DataAnalyzer {
     private static DurationConverter converter = ConverterManager.getInstance().getDurationConverter("PT0.123S");
@@ -46,8 +39,12 @@ public class DataAnalyzerImpl implements DataAnalyzer {
         List<TimeMeasurement> timeMeasurementsCopy = Lists.newArrayList(timeMeasurements);
         Collections.sort(timeMeasurementsCopy);        
         
-        if (k == 0) return converter.getDurationMillis(timeMeasurementsCopy.get(0).getDuration());
-        if (k == 100) return converter.getDurationMillis(timeMeasurementsCopy.get(timeMeasurementsCopy.size() - 1).getDuration());
+        if (k == 0) {
+            return converter.getDurationMillis(timeMeasurementsCopy.get(0).getDuration());
+        }
+        if (k == 100) {
+            return converter.getDurationMillis(timeMeasurementsCopy.get(timeMeasurementsCopy.size() - 1).getDuration());
+        }
         double ind = k / 100.0 * timeMeasurementsCopy.size();
         if (ind == (int) ind) {
             return (converter.getDurationMillis(timeMeasurementsCopy.get((int) ind).getDuration()) +

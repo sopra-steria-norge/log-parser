@@ -1,20 +1,19 @@
 package no.osl.cdms.profile.services;
 
 import com.google.common.collect.Maps;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import no.osl.cdms.profile.interfaces.DataAnalyzer;
 import no.osl.cdms.profile.interfaces.db.Procedure;
 import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
-import no.osl.cdms.profile.interfaces.DataAnalyzer;
 import no.osl.cdms.profile.persistence.LogRepository;
 import no.osl.cdms.profile.persistence.ProcedureEntity;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
 
 @Repository
 public class DataRetriever {
@@ -26,7 +25,7 @@ public class DataRetriever {
 
     public DataRetriever() {
     }
-
+    
     public List<ProcedureEntity> getAllProcedures() {
         return logRepository.getAllProcedures();
     }
@@ -74,7 +73,6 @@ public class DataRetriever {
         List<ProcedureEntity> procedures = logRepository.getAllProcedures();
         Map<String, Object>[] percentilesMap = new HashMap[procedures.size()];
         
-        String[] percentiles;
         int i = 0;
         for (Procedure procedure : procedures) {
             percentilesMap[i++] = getPercentileByProcedure(procedure.getId(), fromDate, toDate, percentages);

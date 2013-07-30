@@ -1,35 +1,27 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package no.osl.cdms.profile.routes.components;
 
-import no.osl.cdms.profile.routes.components.EntityFactoryImpl;
-import no.osl.cdms.profile.routes.components.ParserImpl;
 import com.google.common.collect.Lists;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
+
+import no.osl.cdms.profile.interfaces.EntityFactory;
 import no.osl.cdms.profile.interfaces.Parser;
 import no.osl.cdms.profile.interfaces.db.Procedure;
 import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
 import no.osl.cdms.profile.persistence.LogRepository;
-import no.osl.cdms.profile.interfaces.EntityFactory;
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 import static org.mockito.Mockito.*;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import static org.junit.Assert.*;
 
-/**
- *
- * @author nutgaard
- */
 public class PerformanceTest {
+    private static final Logger logger = Logger.getLogger(PerformanceTest.class);
 
-    private Long prev;
     private List<Long> avg;
     private List<String> lines;
 
@@ -78,8 +70,8 @@ public class PerformanceTest {
             factoryTime += f-p;
             
             if (modDebug(i++, prev)) {
-                System.out.println("Parser: " + parseTime);
-                System.out.println("Factory: " + factoryTime);
+                logger.debug("Parser: " + parseTime);
+                logger.debug("Factory: " + factoryTime);
                 parseTime = 0;
                 factoryTime = 0;
                 prev = System.currentTimeMillis();
@@ -87,7 +79,7 @@ public class PerformanceTest {
 
         }
         timestamp(startParse);
-        System.out.println("AVGPerLine: " + ((System.currentTimeMillis() - startParse) / (lines.size() * 1.0)));
+        logger.info("AVGPerLine: " + ((System.currentTimeMillis() - startParse) / (lines.size() * 1.0)));
         avgCalc();
     }
     
@@ -109,18 +101,18 @@ public class PerformanceTest {
         for (long l : avg) {
             sum += l;
         }
-        System.out.println("AVG Time: " + (sum / avg.size()) + "ms");
+        logger.info("AVG Time: " + (sum / avg.size()) + "ms");
     }
 
     private void timestamp(long start) {
         long t = System.currentTimeMillis() - start;
         avg.add(t);
-        System.out.println("Time " + t + "ms");
+        logger.debug("Time " + t + "ms");
     }
 
     private boolean modDebug(long i, long prev) {
         if (i % 1000 == 0) {
-            System.out.print("Line " + i + " parsed at ");
+            logger.debug("Line " + i + " parsed at ");
             timestamp(prev);
             return true;
         }

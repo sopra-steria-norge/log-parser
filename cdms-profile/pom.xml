@@ -554,4 +554,6 @@
         <org.springframework.version>3.0.2.RELEASE</org.springframework.version>
         <jetty.version>7.2.0.v20101020</jetty.version>
     </properties>
+    <description>Collaborative Decision Making Services - Profile
+        osgi:install mvn:no.osl.cdms/cdms-profile/1.0-SNAPSHOT</description>
 </project>

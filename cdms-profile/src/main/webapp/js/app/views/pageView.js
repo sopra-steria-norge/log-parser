@@ -6,7 +6,8 @@ app.PageView = Backbone.View.extend({
 	},
 
 	remove: function() {
-		this.$el.empty();
+        $('body').trigger('destroy_view');
+        this.$el.empty();
 	},
 
 	render: function() {
@@ -18,8 +19,7 @@ app.PageView = Backbone.View.extend({
         var to = interval.end().toISOString();
         var that = this;
         app.collections.measurementCollection = new app.MeasurementCollection();
-        console.log('fetch measurementCollection')
-        app.collections.measurementCollection.fetch({
+        var xhr = app.collections.measurementCollection.fetch({
             data: $.param({from:from, to:to, buckets:app.nrOfBuckets}),
             success:function(){
             	console.log('measurementCollection', app.collections.measurementCollection)
@@ -31,10 +31,10 @@ app.PageView = Backbone.View.extend({
 				});
         	}
     	});
+        app.xhrs.push(xhr);
         app.collections.percentileCollection = new app.PercentileCollection();
-        console.log('fetch percentileCollection');
-        app.collections.percentileCollection.fetch({
-        	data: $.param({from:from, to:to, percentages:app.percentiles}),
+        var xhr = app.collections.percentileCollection.fetch({
+        	data: $.param({from:from, to:to, percentages:app.percentiles+''}),
         	success:function () {
         		console.log('percentileCollection', app.collections.percentileCollection);
         		var table = new app.TableView({
@@ -43,6 +43,7 @@ app.PageView = Backbone.View.extend({
         		table.render();
         	}
         });
+        app.xhrs.push(xhr);
 	}
 
 

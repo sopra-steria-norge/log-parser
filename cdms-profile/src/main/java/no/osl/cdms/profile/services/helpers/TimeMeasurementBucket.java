@@ -1,5 +1,9 @@
 package no.osl.cdms.profile.services.helpers;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.logging.Logger;
 import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
 import no.osl.cdms.profile.persistence.MultiContextEntity;
 import no.osl.cdms.profile.persistence.ProcedureEntity;
@@ -7,10 +11,6 @@ import org.joda.time.DateTime;
 import org.joda.time.Period;
 import org.joda.time.convert.ConverterManager;
 import org.joda.time.convert.DurationConverter;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 public class TimeMeasurementBucket implements TimeMeasurement {
 
@@ -41,7 +41,7 @@ public class TimeMeasurementBucket implements TimeMeasurement {
     }
 
     private void compress() {
-        if (timeMeasurements == null || timeMeasurements.size() == 0) {
+        if (timeMeasurements == null || timeMeasurements.isEmpty()) {
             return;
         }
         TimeMeasurement timeMeasurement = timeMeasurements.get(0);
@@ -59,7 +59,9 @@ public class TimeMeasurementBucket implements TimeMeasurement {
 
     @Override
     public int getId() {
-        if (!compressed) compress();
+        if (!compressed) {
+            compress();
+        }
         return id;
     }
 
@@ -70,13 +72,17 @@ public class TimeMeasurementBucket implements TimeMeasurement {
 
     @Override
     public ProcedureEntity getProcedure() {
-        if (!compressed) compress();
+        if (!compressed) {
+            compress();
+        }
         return procedure;
     }
 
     @Override
     public int getProcedureId() {
-        if (!compressed) compress();
+        if (!compressed) {
+            compress();
+        }
         return procedure.getId();
     }
 
@@ -85,9 +91,6 @@ public class TimeMeasurementBucket implements TimeMeasurement {
         this.procedure = procedure;
     }
 
-    /**
-     * @return null
-     */
     @Override
     public MultiContextEntity getMultiContext() {
         return null;
@@ -99,18 +102,21 @@ public class TimeMeasurementBucket implements TimeMeasurement {
      */
     @Override
     public void setMultiContext(MultiContextEntity multiContextMeasurement) {
-        return;
     }
 
     @Override
     public Date getTimestamp() {
-        if (!compressed) compress();
+        if (!compressed) {
+            compress();
+        }
         return timestamp;
     }
 
     @Override
     public DateTime getJodaTimestamp() {
-        if (!compressed) compress();
+        if (!compressed) {
+            compress();
+        }
         return new DateTime(timestamp);
     }
 
@@ -121,7 +127,9 @@ public class TimeMeasurementBucket implements TimeMeasurement {
 
     @Override
     public String getDuration() {
-        if (!compressed) compress();
+        if (!compressed) {
+            compress();
+        }
         return duration;
     }
 
@@ -137,11 +145,9 @@ public class TimeMeasurementBucket implements TimeMeasurement {
 
     @Override
     public int compareTo(TimeMeasurement other) {
-//        long thisTime = this.getJodaTimestamp().getMillis();
-//        long otherTime = other.getJodaTimestamp().getMillis();
         DurationConverter c = ConverterManager.getInstance().getDurationConverter(this.getDuration());
         return (int)Math.signum(c.getDurationMillis(this.getDuration())-c.getDurationMillis(other.getDuration()));
-//        return (int) Math.signum(thisTime - otherTime);
     }
+    
 
 }

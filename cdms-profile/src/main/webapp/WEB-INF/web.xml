@@ -27,6 +27,8 @@
                 (\S)+\.html
                 (\S)+\.css
                 (\S)+\.js
+                (\S)+\.png
+                (\S)+\.jpg
             </param-value>
         </init-param>
         <init-param>
