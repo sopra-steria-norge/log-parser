@@ -31,12 +31,15 @@ public class EntityParserRoute extends RouteBuilder {
     @Autowired
     private GuavaHelpers guavaHelpers;
 
+    private TimeMeasurement lastInsertedTimeMeasurement;
+
     public EntityParserRoute() {
 
     }
 
     @Override
     public void configure() throws Exception{
+        lastInsertedTimeMeasurement = logRepository.getLatestTimeMeasurement();
         from(INPUT_ENDPOINT).startupOrder(1)
                 .choice().when(isUnreadLine())
                 .bean(parser, "process")            // Parses log entry into String map
@@ -48,7 +51,6 @@ public class EntityParserRoute extends RouteBuilder {
     }
 
     private Predicate isUnreadLine() {
-        final TimeMeasurement lastInsertedTimeMeasurement = logRepository.getLatestTimeMeasurement();
         return new Predicate() {
             @Override
             public boolean matches(Exchange exchange) {
