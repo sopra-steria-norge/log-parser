@@ -132,7 +132,7 @@ app.GraphView = Backbone.View.extend({
                 var serie = {
                     data: [],
                     procedureid: id,
-                    label: that.getNameFromProcedureId(id)
+                    //label: that.getNameFromProcedureId(id)
                 };
                 _.each(grouped[id], function (measurment){
                     serie.data.push(that.parseTimestamp(measurment));
@@ -146,14 +146,15 @@ app.GraphView = Backbone.View.extend({
         return graph;
     },
     getNameFromProcedureId: function(id) {
-        if (typeof app.collections.procedures.get(id) !== 'undefined') {
-            return app.collections.procedures.get(id).get('name');
+        if (typeof app.collections.procedureCollection.get(id) !== 'undefined') {
+            return app.collections.procedureCollection.get(id).get('name');
         };
         return 'Unknown';
     },
 
 	graphOptions: function() {
-		return {
+        var that = this;
+		var options = {
                 series: {
                     lines: {
                         show: true,
@@ -169,7 +170,11 @@ app.GraphView = Backbone.View.extend({
                 xaxis: {
                     mode: 'time'
                 },
+                yaxis: {
+                    max: that.$el.data('maxyvalue'),
+                },
                 tooltip: true
             }
+        return options;
 	}
 })
