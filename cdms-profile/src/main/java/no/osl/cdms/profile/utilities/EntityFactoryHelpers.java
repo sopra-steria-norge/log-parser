@@ -2,11 +2,9 @@ package no.osl.cdms.profile.utilities;
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
-
 import java.util.Date;
 import java.util.Map;
 import no.osl.cdms.profile.interfaces.EntityFactory;
-
 import no.osl.cdms.profile.interfaces.db.Procedure;
 import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
 import no.osl.cdms.profile.persistence.ProcedureEntity;
@@ -19,6 +17,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class EntityFactoryHelpers {
+    private static DurationConverter converter = ConverterManager.getInstance().getDurationConverter("PT0.012S");
+    private static DateTimeFormatter dtf = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss,SSS");
 
     @Autowired
     private EntityFactory entityFactory;
@@ -29,8 +29,6 @@ public class EntityFactoryHelpers {
     public EntityFactoryHelpers(EntityFactory entityFactory) {
         this.entityFactory = entityFactory;
     }
-    private static DurationConverter converter = ConverterManager.getInstance().getDurationConverter("PT0.012S");
-    private static DateTimeFormatter dtf = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss,SSS");
 
     public Predicate<Map.Entry<String, String>> isDuration() {
         return new Predicate<Map.Entry<String, String>>() {
@@ -58,6 +56,7 @@ public class EntityFactoryHelpers {
             }
         };
     }
+
     public Date parseDateString(String string) {
         return dtf.parseDateTime(string).toDate();
     }

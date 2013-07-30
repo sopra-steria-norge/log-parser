@@ -1,11 +1,10 @@
 package no.osl.cdms.profile.web;
 
-import no.osl.cdms.profile.interfaces.DataAnalyzer;
-
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import no.osl.cdms.profile.interfaces.DataAnalyzer;
 import no.osl.cdms.profile.interfaces.EntityFactory;
 import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
 import no.osl.cdms.profile.persistence.LogRepository;
@@ -15,17 +14,16 @@ import org.joda.time.DateTime;
 import org.joda.time.convert.ConverterManager;
 import org.joda.time.convert.DurationConverter;
 import org.junit.After;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
-
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 /**
  *
@@ -36,6 +34,8 @@ import static org.mockito.Mockito.when;
         "classpath:test-cdms-profile-infra-ctx.xml"})
 @Transactional
 public class DataAnalyzerTest {
+
+    private static DurationConverter converter = ConverterManager.getInstance().getDurationConverter("PT0.123S");
 
     public final int[] data = {43, 54, 56, 61, 62, 66, 68, 69, 69, 70, 71, 72, 77, 78, 79, 85, 87, 88, 89, 93, 95, 96, 98, 99, 99};
     private DataAnalyzer analyzer;
@@ -54,8 +54,6 @@ public class DataAnalyzerTest {
 
     @Autowired
     private EntityFactoryHelpers guavaHelpers;
-
-    private static DurationConverter converter = ConverterManager.getInstance().getDurationConverter("PT0.123S");
 
     public DataAnalyzerTest() {
     }

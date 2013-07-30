@@ -2,10 +2,9 @@ package no.osl.cdms.profile.web;
 
 import com.google.common.collect.Lists;
 import java.io.StringWriter;
-import java.util.List;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
 import javax.ws.rs.*;
 import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
 import no.osl.cdms.profile.web.helpers.RestInputParser;
@@ -14,6 +13,7 @@ import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.map.MappingJsonFactory;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.joda.time.DateTime;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Path("/")
 public class RESTService {
@@ -127,4 +127,5 @@ public class RESTService {
             throw new IllegalArgumentException();
         }
     }
+    private static final java.util.logging.Logger LOG = java.util.logging.Logger.getLogger(RESTService.class.getName());
 }

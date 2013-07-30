@@ -6,17 +6,16 @@ package no.osl.cdms.profile.utilities;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Maps;
-
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import no.osl.cdms.profile.interfaces.EntityFactory;
-
 import no.osl.cdms.profile.interfaces.db.Procedure;
 import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
 import no.osl.cdms.profile.persistence.LogRepository;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -24,8 +23,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import static org.junit.Assert.*;
 
 /**
  *
@@ -36,7 +33,12 @@ import static org.junit.Assert.*;
         "classpath:test-cdms-profile-infra-ctx.xml"})
 public class EntityFactoryHelpersTest {
 
-    public EntityFactoryHelpersTest() {
+    @BeforeClass
+    public static void setUpClass() {
+    }
+
+    @AfterClass
+    public static void tearDownClass() {
     }
 
     @Autowired
@@ -48,12 +50,7 @@ public class EntityFactoryHelpersTest {
     @Autowired
     private EntityFactoryHelpers guavaHelpers;
 
-    @BeforeClass
-    public static void setUpClass() {
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
+        public EntityFactoryHelpersTest() {
     }
 
     @Before
@@ -68,7 +65,7 @@ public class EntityFactoryHelpersTest {
     /**
      * Test of isDuration method, of class guavaHelpers.
      */
-    @Test
+@Test
     public void testIsDuration() {
 
         System.out.println("isDuration");
@@ -201,8 +198,6 @@ public class EntityFactoryHelpersTest {
         }
     }
 
-
-
     @Test
     public void testGetConverterMultiIllegalArguments() {
         System.out.println("testGetConverterMultiIllegalArguments");
@@ -236,6 +231,8 @@ public class EntityFactoryHelpersTest {
             }
         }
     }
+
+
 
     @Test(expected = NullPointerException.class)
     public void testGetConverterLocalMissingId() {

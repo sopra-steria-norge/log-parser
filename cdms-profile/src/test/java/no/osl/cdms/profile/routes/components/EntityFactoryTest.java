@@ -1,9 +1,11 @@
 package no.osl.cdms.profile.routes.components;
 
+import java.util.logging.Logger;
 import no.osl.cdms.profile.interfaces.EntityFactory;
 import no.osl.cdms.profile.interfaces.db.Procedure;
 import no.osl.cdms.profile.persistence.LogRepository;
 import no.osl.cdms.profile.persistence.ProcedureEntity;
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,9 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
-
-
-import static org.junit.Assert.assertEquals;
 
 @Transactional
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -42,4 +41,5 @@ public class EntityFactoryTest {
 
         assertEquals(old, current);
     }
+    private static final Logger LOG = Logger.getLogger(EntityFactoryTest.class.getName());
 }

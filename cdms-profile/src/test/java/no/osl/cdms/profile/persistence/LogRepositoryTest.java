@@ -1,9 +1,9 @@
 package no.osl.cdms.profile.persistence;
 
-import no.osl.cdms.profile.persistence.TimeMeasurementEntity;
-import no.osl.cdms.profile.persistence.ProcedureEntity;
-import no.osl.cdms.profile.persistence.LogRepository;
-import no.osl.cdms.profile.persistence.MultiContextEntity;
+import java.util.logging.Logger;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import static junit.framework.Assert.*;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,13 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
-import java.util.List;
-
-import static junit.framework.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(value = {"classpath:test-cdms-profile-ctx.xml",
@@ -130,6 +123,7 @@ public class LogRepositoryTest {
     public void getLatestTimeMeasurement_test() {
         assertEquals(logRepository.getLatestTimeMeasurement(), timeMeasurementEntity1);
     }
+    private static final Logger LOG = Logger.getLogger(LogRepositoryTest.class.getName());
 
 
 }

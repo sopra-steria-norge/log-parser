@@ -4,24 +4,23 @@
  */
 package no.osl.cdms.profile.routes.components;
 
-import no.osl.cdms.profile.routes.components.EntityFactoryImpl;
-import no.osl.cdms.profile.routes.components.ParserImpl;
 import com.google.common.collect.Lists;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
+import no.osl.cdms.profile.interfaces.EntityFactory;
 import no.osl.cdms.profile.interfaces.Parser;
 import no.osl.cdms.profile.interfaces.db.Procedure;
 import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
 import no.osl.cdms.profile.persistence.LogRepository;
-import no.osl.cdms.profile.interfaces.EntityFactory;
 import org.apache.commons.io.FileUtils;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 import static org.mockito.Mockito.*;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -126,4 +125,5 @@ public class PerformanceTest {
         }
         return false;
     }
+    private static final Logger LOG = Logger.getLogger(PerformanceTest.class.getName());
 }

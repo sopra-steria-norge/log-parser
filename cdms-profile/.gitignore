@@ -4,3 +4,4 @@ logs
 cdms-profile.iml
 *RealParserTest.java
 .idea/
+nb-configuration.xml

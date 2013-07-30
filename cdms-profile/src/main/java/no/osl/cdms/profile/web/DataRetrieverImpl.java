@@ -1,9 +1,14 @@
 package no.osl.cdms.profile.web;
 
 import com.google.common.collect.Maps;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.logging.Logger;
+import no.osl.cdms.profile.interfaces.DataAnalyzer;
 import no.osl.cdms.profile.interfaces.db.Procedure;
 import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
-import no.osl.cdms.profile.interfaces.DataAnalyzer;
 import no.osl.cdms.profile.jmx.DataRetrieverMBean;
 import no.osl.cdms.profile.persistence.LogRepository;
 import no.osl.cdms.profile.persistence.ProcedureEntity;
@@ -11,11 +16,6 @@ import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
 
 @Repository
 public class DataRetrieverImpl implements DataRetrieverMBean {
@@ -88,4 +88,5 @@ public class DataRetrieverImpl implements DataRetrieverMBean {
         }
         return percentilesMap;
     }
+    private static final Logger LOG = Logger.getLogger(DataRetrieverImpl.class.getName());
 }

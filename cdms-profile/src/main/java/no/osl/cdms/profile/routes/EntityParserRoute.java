@@ -18,6 +18,9 @@ public class EntityParserRoute extends RouteBuilder {
 
     public static final String INPUT_ENDPOINT = "direct:entityParserRoute";
     private static final String DATABASE_ENDPOINT = "jpa:%s?usePersist=true";
+    public static String routeId() {
+        return ENTITY_PARSER_ROUTE_ID;
+    }
 
     @Autowired
     private EntityFactory entityFactory;
@@ -67,9 +70,6 @@ public class EntityParserRoute extends RouteBuilder {
     
     @Override
     public String toString() {
-        return ENTITY_PARSER_ROUTE_ID;
-    }
-    public static String routeId() {
         return ENTITY_PARSER_ROUTE_ID;
     }
 }

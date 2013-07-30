@@ -1,7 +1,8 @@
 package no.osl.cdms.profile.persistence;
 
-import no.osl.cdms.profile.interfaces.db.Procedure;
+import java.util.logging.Logger;
 import javax.persistence.*;
+import no.osl.cdms.profile.interfaces.db.Procedure;
 
 @Entity
 @Table(name = "CDM_PROFILE_PROCEDURE")
@@ -32,34 +33,42 @@ public class ProcedureEntity implements Procedure {
         this.method = method;
     }
 
+    @Override
     public int getId() {
         return id;
     }
 
+    @Override
     public void setId(int id) {
         this.id = id;
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public void setName(String name) {
         this.name = name;
     }
 
+    @Override
     public String getClassName() {
         return className;
     }
 
+    @Override
     public void setClassName(String className) {
         this.className = className;
     }
 
+    @Override
     public String getMethod() {
         return method;
     }
 
+    @Override
     public void setMethod(String method) {
         this.method = method;
     }
@@ -96,6 +105,7 @@ public class ProcedureEntity implements Procedure {
         }
         return true;
     }
+    private static final Logger LOG = Logger.getLogger(ProcedureEntity.class.getName());
     
 
     

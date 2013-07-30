@@ -1,15 +1,12 @@
 package no.osl.cdms.profile.routes;
 
-import org.apache.camel.builder.RouteBuilder;
-import org.joda.time.DateTime;
-
 import java.util.Timer;
 import java.util.TimerTask;
+import org.apache.camel.builder.RouteBuilder;
 import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
 
 public class FileStreamRoute extends RouteBuilder {
-
-    private Logger logger = Logger.getLogger(FileStreamRoute.class);
     private static final String FILE_STREAM_ROUTE_ID = "FileStreamRoute";
     private static final String LOG_DIRECTORY = "data/log";
     private static final String LOG_FILE = "performance.log";
@@ -17,6 +14,11 @@ public class FileStreamRoute extends RouteBuilder {
     private static final long POLLING_DELAY = 10000;
     private static final long NO_MORE_FILES_TIMEOUT = 10000;
     private static final String LOG_FILE_ENDPOINT = "stream:file?fileName=%s/%s&scanStream=true&scanStreamDelay=%d";
+    public static String routeId() {
+        return FILE_STREAM_ROUTE_ID;
+    }
+
+    private Logger logger = Logger.getLogger(FileStreamRoute.class);
     private Timer pollingTimer;
 
     public FileStreamRoute() {
@@ -61,9 +63,6 @@ public class FileStreamRoute extends RouteBuilder {
 
     @Override
     public String toString() {
-        return FILE_STREAM_ROUTE_ID;
-    }
-    public static String routeId() {
         return FILE_STREAM_ROUTE_ID;
     }
 }

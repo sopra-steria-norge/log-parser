@@ -1,12 +1,11 @@
 package no.osl.cdms.profile.web;
 
 import com.google.common.collect.Lists;
-import no.osl.cdms.profile.web.helpers.TimeMeasurementBucket;
-import no.osl.cdms.profile.interfaces.DataAnalyzer;
-
 import java.util.*;
-
+import java.util.logging.Logger;
+import no.osl.cdms.profile.interfaces.DataAnalyzer;
 import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
+import no.osl.cdms.profile.web.helpers.TimeMeasurementBucket;
 import org.joda.time.convert.ConverterManager;
 import org.joda.time.convert.DurationConverter;
 import org.springframework.stereotype.Component;
@@ -38,8 +37,12 @@ public class DataAnalyzerImpl implements DataAnalyzer {
         List<TimeMeasurement> timeMeasurementsCopy = Lists.newArrayList(timeMeasurements);
         Collections.sort(timeMeasurementsCopy);        
         
-        if (k == 0) return converter.getDurationMillis(timeMeasurementsCopy.get(0).getDuration());
-        if (k == 100) return converter.getDurationMillis(timeMeasurementsCopy.get(timeMeasurementsCopy.size() - 1).getDuration());
+        if (k == 0) {
+            return converter.getDurationMillis(timeMeasurementsCopy.get(0).getDuration());
+        }
+        if (k == 100) {
+            return converter.getDurationMillis(timeMeasurementsCopy.get(timeMeasurementsCopy.size() - 1).getDuration());
+        }
         double ind = k / 100.0 * timeMeasurementsCopy.size();
         if (ind == (int) ind) {
             return (converter.getDurationMillis(timeMeasurementsCopy.get((int) ind).getDuration()) +
@@ -93,4 +96,5 @@ public class DataAnalyzerImpl implements DataAnalyzer {
         }
         return Arrays.asList(buckets);
     }
+    private static final Logger LOG = Logger.getLogger(DataAnalyzerImpl.class.getName());
 }

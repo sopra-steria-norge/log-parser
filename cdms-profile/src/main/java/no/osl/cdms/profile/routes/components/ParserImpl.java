@@ -16,28 +16,7 @@ public class ParserImpl implements Parser {
     private static final Pattern MTCPattern = Pattern.compile("(\\w+)\\{([^=]+)=([^;\\]\\}]+)" + repetition + repetition + repetition + repetition + repetition + repetition + "\\}");
     private static final int timestampLength = "2013-06-25 15:02:10,063".length();
 
-    @Override
-    public Map<String, String> process(String s) {
-        HashMap<String, String> m = Maps.newHashMap();
-        if (s == null || s.length() < timestampLength) {
-            return m;
-        }
-        return parse(m, s);
-    }
-
-    private Map<String, String> parse(Map<String, String> properties, String obj) {
-        if (isMultiThreadContext(obj)) {
-            handleMultiThreadContext(properties, obj);
-        } else if (isLocalThreadContext(obj)) {
-            handleLocalThreadContext(properties, obj);
-        } else {
-            return properties;
-        }
-        appendTimestamp(properties, obj);
-        return properties;
-    }
-
-    private static void appendTimestamp(Map<String, String> map, String obj) {
+        private static void appendTimestamp(Map<String, String> map, String obj) {
         String timestamp = obj.substring(0, timestampLength);
         map.put("timestamp", timestamp);
     }
@@ -73,5 +52,26 @@ public class ParserImpl implements Parser {
             map.put("LocalThreadContext.id", m.group(1));
             map.put("LocalThreadContext.duration", m.group(2));
         }
+    }
+
+    @Override
+    public Map<String, String> process(String s) {
+        HashMap<String, String> m = Maps.newHashMap();
+        if (s == null || s.length() < timestampLength) {
+            return m;
+        }
+        return parse(m, s);
+    }
+
+    private Map<String, String> parse(Map<String, String> properties, String obj) {
+        if (isMultiThreadContext(obj)) {
+            handleMultiThreadContext(properties, obj);
+        } else if (isLocalThreadContext(obj)) {
+            handleLocalThreadContext(properties, obj);
+        } else {
+            return properties;
+        }
+        appendTimestamp(properties, obj);
+        return properties;
     }
 }

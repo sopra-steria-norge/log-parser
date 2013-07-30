@@ -12,8 +12,8 @@ import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.List;
 import org.apache.log4j.Logger;
-import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Test;
 /**
  *
  * @author nutgaard
@@ -44,10 +44,12 @@ public class FileHelper {
         } finally {
             try {
                 logger.debug("Closing reader: "+filename);
-                if (br != null)
+                if (br != null) {
                     br.close();
-                else
+                }
+                else {
                     logger.fatal("Somehow bufferedreader was not inited");
+                }
             } catch (IOException ex) {
                 logger.fatal("Error while closing bufferedreader:", ex);
             }
@@ -80,4 +82,5 @@ public class FileHelper {
         assertNotNull(lines);
         assertEquals(3, lines.length);
     }
+    private static final java.util.logging.Logger LOG = java.util.logging.Logger.getLogger(FileHelper.class.getName());
 }

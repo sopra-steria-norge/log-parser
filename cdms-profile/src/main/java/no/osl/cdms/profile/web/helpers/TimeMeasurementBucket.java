@@ -1,5 +1,9 @@
 package no.osl.cdms.profile.web.helpers;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.logging.Logger;
 import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
 import no.osl.cdms.profile.persistence.MultiContextEntity;
 import no.osl.cdms.profile.persistence.ProcedureEntity;
@@ -7,10 +11,6 @@ import org.joda.time.DateTime;
 import org.joda.time.Period;
 import org.joda.time.convert.ConverterManager;
 import org.joda.time.convert.DurationConverter;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 public class TimeMeasurementBucket implements TimeMeasurement {
 
@@ -59,7 +59,9 @@ public class TimeMeasurementBucket implements TimeMeasurement {
 
     @Override
     public int getId() {
-        if (!compressed) compress();
+        if (!compressed) {
+            compress();
+        }
         return id;
     }
 
@@ -70,13 +72,17 @@ public class TimeMeasurementBucket implements TimeMeasurement {
 
     @Override
     public ProcedureEntity getProcedure() {
-        if (!compressed) compress();
+        if (!compressed) {
+            compress();
+        }
         return procedure;
     }
 
     @Override
     public int getProcedureId() {
-        if (!compressed) compress();
+        if (!compressed) {
+            compress();
+        }
         return procedure.getId();
     }
 
@@ -100,13 +106,17 @@ public class TimeMeasurementBucket implements TimeMeasurement {
 
     @Override
     public Date getTimestamp() {
-        if (!compressed) compress();
+        if (!compressed) {
+            compress();
+        }
         return timestamp;
     }
 
     @Override
     public DateTime getJodaTimestamp() {
-        if (!compressed) compress();
+        if (!compressed) {
+            compress();
+        }
         return new DateTime(timestamp);
     }
 
@@ -117,7 +127,9 @@ public class TimeMeasurementBucket implements TimeMeasurement {
 
     @Override
     public String getDuration() {
-        if (!compressed) compress();
+        if (!compressed) {
+            compress();
+        }
         return duration;
     }
 
@@ -136,5 +148,6 @@ public class TimeMeasurementBucket implements TimeMeasurement {
         DurationConverter c = ConverterManager.getInstance().getDurationConverter(this.getDuration());
         return (int)Math.signum(c.getDurationMillis(this.getDuration())-c.getDurationMillis(other.getDuration()));
     }
+    private static final Logger LOG = Logger.getLogger(TimeMeasurementBucket.class.getName());
 
 }

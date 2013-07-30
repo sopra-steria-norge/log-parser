@@ -4,12 +4,12 @@
  */
 package no.osl.cdms.profile.routes.components;
 
-import no.osl.cdms.profile.routes.components.ParserImpl;
 import java.util.Map;
+import java.util.logging.Logger;
 import no.osl.cdms.profile.interfaces.Parser;
-import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Before;
+import org.junit.Test;
 
 /**
  *
@@ -104,4 +104,5 @@ public class MockParserTest {
             fail("null-string should not cause an exception");
         }
     }
+    private static final Logger LOG = Logger.getLogger(MockParserTest.class.getName());
 }

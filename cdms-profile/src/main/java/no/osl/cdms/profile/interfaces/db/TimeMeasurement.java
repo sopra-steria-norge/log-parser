@@ -1,11 +1,10 @@
 package no.osl.cdms.profile.interfaces.db;
 
-import no.osl.cdms.profile.persistence.ProcedureEntity;
+import java.util.Date;
 import no.osl.cdms.profile.persistence.MultiContextEntity;
+import no.osl.cdms.profile.persistence.ProcedureEntity;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.joda.time.DateTime;
-
-import java.util.Date;
 
 public interface TimeMeasurement extends Comparable<TimeMeasurement>{
 

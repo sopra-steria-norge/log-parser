@@ -3,18 +3,17 @@ package no.osl.cdms.profile.routes.components;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
-import no.osl.cdms.profile.interfaces.db.Procedure;
-import no.osl.cdms.profile.interfaces.db.MultiContext;
-import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
+import java.util.logging.Logger;
 import no.osl.cdms.profile.interfaces.EntityFactory;
+import no.osl.cdms.profile.interfaces.db.MultiContext;
+import no.osl.cdms.profile.interfaces.db.Procedure;
+import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
 import no.osl.cdms.profile.persistence.LogRepository;
-import no.osl.cdms.profile.persistence.ProcedureEntity;
 import no.osl.cdms.profile.persistence.MultiContextEntity;
+import no.osl.cdms.profile.persistence.ProcedureEntity;
 import no.osl.cdms.profile.persistence.TimeMeasurementEntity;
 import no.osl.cdms.profile.utilities.EntityFactoryHelpers;
 import org.joda.time.DateTime;
@@ -54,13 +53,13 @@ public class EntityFactoryImpl implements EntityFactory {
     }
 
     public Procedure createProcedure(String name, String className, String methodName) {
-        if (name != null && name.equals("")) {
+        if (name != null && name.isEmpty()) {
             name = null;
         }
-        if (className != null && className.equals("")) {
+        if (className != null && className.isEmpty()) {
             className = null;
         }
-        if (methodName != null && methodName.equals("")) {
+        if (methodName != null && methodName.isEmpty()) {
             methodName = null;
         }
         Procedure p = new ProcedureEntity(name, className, methodName);
@@ -105,4 +104,5 @@ public class EntityFactoryImpl implements EntityFactory {
     public List<TimeMeasurement> process(Map<String, String> s) {
         return createTimemeasurement(s);
     }
+    private static final Logger LOG = Logger.getLogger(EntityFactoryImpl.class.getName());
 }

@@ -1,13 +1,12 @@
 package no.osl.cdms.profile.persistence;
 
-import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
+import java.util.Date;
+import java.util.logging.Logger;
 import javax.persistence.*;
-
+import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
 import org.joda.time.DateTime;
 import org.joda.time.convert.ConverterManager;
 import org.joda.time.convert.DurationConverter;
-
-import java.util.Date;
 
 @Entity
 @Table(name = "CDM_PROFILE_TIMEMEASUREMENT")
@@ -45,50 +44,62 @@ public class TimeMeasurementEntity implements TimeMeasurement {
         this.duration = duration;
     }
 
+    @Override
     public int getId() {
         return id;
     }
 
+    @Override
     public void setId(int id) {
         this.id = id;
     }
 
+    @Override
     public ProcedureEntity getProcedure() {
         return procedure;
     }
 
+    @Override
     public int getProcedureId() {
         return procedure.getId();
     }
 
+    @Override
     public void setProcedure(ProcedureEntity procedure) {
         this.procedure = procedure;
     }
 
+    @Override
     public MultiContextEntity getMultiContext() {
         return multiContext;
     }
 
+    @Override
     public void setMultiContext(MultiContextEntity multiContextMeasurement) {
         this.multiContext = multiContextMeasurement;
     }
 
+    @Override
     public Date getTimestamp() {
         return timestamp;
     }
 
+    @Override
     public DateTime getJodaTimestamp() {
         return new DateTime(timestamp);
     }
 
+    @Override
     public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
     }
 
+    @Override
     public String getDuration() {
         return duration;
     }
 
+    @Override
     public void setDuration(String duration) {
         this.duration = duration;
     }
@@ -141,6 +152,7 @@ public class TimeMeasurementEntity implements TimeMeasurement {
     public String toString() {
         return "TimeMeasurementEntity{" + "id=" + id + ", procedure=" + procedure + ", multiContext=" + multiContext + ", timestamp=" + timestamp + ", duration=" + duration + '}';
     }
+    private static final Logger LOG = Logger.getLogger(TimeMeasurementEntity.class.getName());
     
     
 }
