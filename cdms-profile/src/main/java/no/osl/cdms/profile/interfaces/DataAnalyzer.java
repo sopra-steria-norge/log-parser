@@ -4,7 +4,6 @@
  */
 package no.osl.cdms.profile.interfaces;
 
-import no.osl.cdms.profile.web.helpers.TimeMeasurementBucket;
 import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
 import org.springframework.stereotype.Component;
 

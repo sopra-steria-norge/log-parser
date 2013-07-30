@@ -1,4 +1,4 @@
-package no.osl.cdms.profile.web;
+package no.osl.cdms.profile.services;
 
 import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
 import no.osl.cdms.profile.persistence.LogRepository;
@@ -31,7 +31,7 @@ public class DataRetrieverTest {
     private LogRepository logRepository;
 
     @Autowired
-    private DataRetrieverImpl dataRetriever;
+    private DataRetriever dataRetriever;
 
     private TimeMeasurementEntity timeMeasurement, timeMeasurement2, timeMeasurement3;
     private ProcedureEntity procedure;

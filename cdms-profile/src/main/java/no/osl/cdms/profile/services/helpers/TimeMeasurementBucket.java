@@ -1,4 +1,4 @@
-package no.osl.cdms.profile.web.helpers;
+package no.osl.cdms.profile.services.helpers;
 
 import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
 import no.osl.cdms.profile.persistence.MultiContextEntity;

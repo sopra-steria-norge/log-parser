@@ -1,10 +1,9 @@
-package no.osl.cdms.profile.web;
+package no.osl.cdms.profile.services;
 
 import com.google.common.collect.Maps;
 import no.osl.cdms.profile.interfaces.db.Procedure;
 import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
 import no.osl.cdms.profile.interfaces.DataAnalyzer;
-import no.osl.cdms.profile.jmx.DataRetrieverMBean;
 import no.osl.cdms.profile.persistence.LogRepository;
 import no.osl.cdms.profile.persistence.ProcedureEntity;
 import org.joda.time.DateTime;
@@ -18,14 +17,14 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 
 @Repository
-public class DataRetrieverImpl implements DataRetrieverMBean {
+public class DataRetriever {
 
     @Autowired
     private LogRepository logRepository;
     @Autowired
     private DataAnalyzer analyzer;
 
-    public DataRetrieverImpl() {
+    public DataRetriever() {
     }
 
     public List<ProcedureEntity> getAllProcedures() {

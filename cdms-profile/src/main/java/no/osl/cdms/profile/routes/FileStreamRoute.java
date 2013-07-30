@@ -2,7 +2,6 @@ package no.osl.cdms.profile.routes;
 
 import org.apache.camel.builder.RouteBuilder;
 import org.joda.time.DateTime;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -18,9 +17,6 @@ public class FileStreamRoute extends RouteBuilder {
     private static final long NO_MORE_FILES_TIMEOUT = 10000;
 
     private static final String LOG_FILE_ENDPOINT = "stream:file?fileName=%s/%s&scanStream=true&scanStreamDelay=%d";
-
-    @Autowired
-    private OldLogFetcherRoute oldLogFetcherRoute;
 
     private Timer pollingTimer;
 
@@ -66,6 +62,4 @@ public class FileStreamRoute extends RouteBuilder {
     public String toString() {
         return FILE_STREAM_ROUTE_ID;
     }
-
-
 }
