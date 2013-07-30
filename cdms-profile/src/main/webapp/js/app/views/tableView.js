@@ -21,14 +21,15 @@ app.TableView = Backbone.View.extend({
 	},
 
 	createTableBody: function () {
+                var that = this;
 		body = '';
 		app.collections.procedures.each(function (pro){
 			body += '<tr data-tableof="'+ pro.id+'">';
 			if (_.flatten(app.graphOfs).indexOf(pro.id) !== -1){
-				body += '<td>' + pro.get('name') + ' <i class="icon-eye-open"></i></td>';
+				body += '<td>' + that._getProcedureName(pro) + ' <i class="icon-eye-open"></i></td>';
 			}
 			else{
-				body += '<td>' + pro.get('name') + '</td>';
+				body += '<td>' + that._getProcedureName(pro) + '</td>';
 			}
 			_.each(app.percentiles, function (per) {
 				body += '<td data-percentile="'+per+'">' + app.collections.percentileCollection.get(pro.id)['attributes']['percentiles'][per] + '</td>';
@@ -66,5 +67,20 @@ app.TableView = Backbone.View.extend({
 				}
 			})
 		})
-	}
+	},
+        _getProcedureName: function(procedure) {
+            function isValid(str) {
+                var ans = typeof str !== 'undefined' && str !== null;
+                return ans;
+            }
+            if (isValid(procedure.get('name'))) {
+                return procedure.get('name');
+            }else {
+                var out = procedure.get('className');
+                if (isValid(procedure.get('method'))){
+                    out += "."+procedure.get('method');
+                }
+                return out;
+            }
+        }
 })
