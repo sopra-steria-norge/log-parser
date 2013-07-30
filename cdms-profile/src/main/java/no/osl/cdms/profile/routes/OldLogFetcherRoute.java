@@ -1,6 +1,8 @@
 package no.osl.cdms.profile.routes;
 
 import java.util.logging.Logger;
+
+import no.osl.cdms.profile.routes.components.RouteExceptionHandler;
 import org.apache.camel.Exchange;
 import org.apache.camel.Predicate;
 import org.apache.camel.builder.RouteBuilder;
@@ -8,6 +10,7 @@ import org.apache.camel.component.file.GenericFile;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class OldLogFetcherRoute extends RouteBuilder {
 
@@ -18,11 +21,14 @@ public class OldLogFetcherRoute extends RouteBuilder {
 
     private static DateTime lastRead;
 
+    @Autowired
+    private RouteExceptionHandler exceptionHandler;
 
     @Override
     public void configure() throws Exception {
         heartbeat();
 
+        onException(Exception.class).process(exceptionHandler).markRollbackOnly().handled(true);
         fromF(LOG_FILE_ENDPOINT, LOG_DIRECTORY).startupOrder(2)
                 .choice().when(shouldRead())
                 .split(body().tokenize("\n")).streaming()

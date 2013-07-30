@@ -7,9 +7,11 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import no.osl.cdms.profile.routes.components.RouteExceptionHandler;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class FileStreamRoute extends RouteBuilder {
 
@@ -20,7 +22,7 @@ public class FileStreamRoute extends RouteBuilder {
     private static final String LOG_FILE = "performance.log";
     private static final int INITIAL_DELAY = 0;
     private static final int PERIOD = 10000;
-    private static long fileOffset = 0;
+    private long fileOffset = 0;
 
     // Polling of OldLogFetcherRoute
     private static final long LOG_FETCHER_POLLING_DELAY = 10000;
@@ -29,6 +31,9 @@ public class FileStreamRoute extends RouteBuilder {
 
     private Logger logger = Logger.getLogger(FileStreamRoute.class);
 
+    @Autowired
+    private RouteExceptionHandler exceptionHandler;
+
     public FileStreamRoute() {
         super();
         waitForOldLogFetcherRoute();
@@ -36,6 +41,7 @@ public class FileStreamRoute extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
+        onException(Exception.class).process(exceptionHandler).markRollbackOnly().handled(true);
         fromF(TIMER_ENDPOINT, this.getClass().getSimpleName(), PERIOD, INITIAL_DELAY).autoStartup(false)
                 .bean(this, "readLines")
                 .split(body())
