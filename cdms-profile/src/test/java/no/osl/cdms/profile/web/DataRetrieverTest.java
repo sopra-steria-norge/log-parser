@@ -73,11 +73,11 @@ public class DataRetrieverTest {
 
         Map<String, Object> percentilesMap = dataRetriever.getPercentileByProcedure(procedure.getId(), new DateTime("2002-06-25T01:15:52.458Z"),
                 new DateTime(), percentages);
-        String[] percentiles = (String[])percentilesMap.get("percentiles");
+        Map<Integer, String> percentiles = (Map)percentilesMap.get("percentiles");
         String[] expected = {new Duration(107).toString(), new Duration(207).toString(),
                 new Duration(307).toString(), new Duration(307).toString()};
         for(int i = 0; i < percentages.length; i++) {
-            assertTrue(expected[i].equals(percentiles[i]));
+            assertTrue(expected[i].equals(percentiles.get(percentages[i])));
         }
 
 

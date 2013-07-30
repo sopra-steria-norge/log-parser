@@ -11,7 +11,6 @@ import no.osl.cdms.profile.interfaces.DataAnalyzer;
 import java.util.*;
 
 import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
-import no.osl.cdms.profile.persistence.TimeMeasurementEntity;
 import org.joda.time.convert.ConverterManager;
 import org.joda.time.convert.DurationConverter;
 import org.springframework.stereotype.Component;
