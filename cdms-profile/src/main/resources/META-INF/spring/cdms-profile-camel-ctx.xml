@@ -9,18 +9,6 @@
     <bean id="fileStreamRoute" class="no.osl.cdms.profile.routes.FileStreamRoute"/>
     <bean id="oldLogFetcherRoute" class="no.osl.cdms.profile.routes.OldLogFetcherRoute"/>
 
-
-    <bean id="PROPAGATION_REQUIRED" class="org.apache.camel.spring.spi.SpringTransactionPolicy">
-        <property name="transactionManager" ref="transactionManager" />
-        <property name="propagationBehaviorName" value="PROPAGATION_REQUIRED" />
-    </bean>
-
-    <bean id="PROPAGATION_REQUIRES_NEW" class="org.apache.camel.spring.spi.SpringTransactionPolicy">
-        <property name="transactionManager" ref="transactionManager" />
-        <property name="propagationBehaviorName" value="PROPAGATION_REQUIRES_NEW" />
-    </bean>
-
-
     <camel:camelContext id="cdms-profile-camel-context">
         <camel:routeBuilder ref="entityParserRoute" />
         <camel:routeBuilder ref="oldLogFetcherRoute" />
