@@ -79,4 +79,20 @@ public class DataRetriever {
         }
         return percentilesMap;
     }
+
+    public TimeMeasurement getMaxDurationTimeMeasurement(int procedureId, DateTime from, DateTime to) {
+        List<TimeMeasurement> timeMeasurements = logRepository.getTimeMeasurementsByProcedure(from, to, logRepository.getProcedure(procedureId));
+        Duration maxDuration = new Duration(0);
+        Duration checkDuration;
+        TimeMeasurement maxDurationTimeMeasurement = null;
+        for (TimeMeasurement tm : timeMeasurements) {
+               checkDuration = new Duration(tm.getDuration());
+            if (checkDuration.isLongerThan(maxDuration)) {
+                maxDuration = checkDuration;
+                maxDurationTimeMeasurement = tm;
+            }
+        }
+        return maxDurationTimeMeasurement;
+
+    }
 }
