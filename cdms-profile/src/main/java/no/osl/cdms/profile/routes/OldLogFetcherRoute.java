@@ -13,7 +13,7 @@ public class OldLogFetcherRoute extends RouteBuilder {
     public static final String OLD_LOG_FETCHER_ROUTE_ID = "OldLogFetcherRoute";
     private static final String LOG_DIRECTORY = "data/log";
 
-    private static final String LOG_FILE_ENDPOINT = "file:%s?include=performance.log\\.\\d{4}-\\d{2}-\\d{2}";
+    private static final String LOG_FILE_ENDPOINT = "file:%s?include=performance.log\\.\\d{4}-\\d{2}-\\d{2}&noop=true";
 
     public static DateTime lastRead;
 
