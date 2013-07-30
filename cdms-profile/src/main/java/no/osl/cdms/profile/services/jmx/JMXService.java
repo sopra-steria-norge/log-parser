@@ -12,6 +12,7 @@ import java.util.NoSuchElementException;
 import no.osl.cdms.profile.interfaces.db.Procedure;
 import no.osl.cdms.profile.persistence.ProcedureEntity;
 import no.osl.cdms.profile.services.DataRetriever;
+import org.joda.time.Duration;
 import org.springframework.beans.factory.annotation.Autowired;
 import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
 
@@ -24,10 +25,44 @@ import org.springframework.jmx.export.annotation.*;
 
 @ManagedResource(description="CDMS profile MBean")
 public class JMXService {
+    private DateTime total_lastPull, tsat_lastPull;
+    private long total_last_duration = 0, tsat_last_duration = 0;
 
     @Autowired
     DataRetriever dataRetriever;
     Logger logger = Logger.getLogger(getClass().getName());
+
+    @ManagedAttribute
+     public long getICW() {
+        List<TimeMeasurement> measurements;
+        if (total_lastPull == null) {
+            measurements = dataRetriever.getTimeMeasurements(18, new DateTime().minusHours(1), new DateTime(), 1);
+        } else {
+            measurements = dataRetriever.getTimeMeasurements(18, total_lastPull, new DateTime(), 1);
+        }
+        if (measurements.get(0) == null) {
+            return total_last_duration;
+        }
+        total_last_duration = new Duration(measurements.get(0).getDuration()).getMillis();
+        total_lastPull = new DateTime();
+        return total_last_duration;
+    }
+
+    @ManagedAttribute
+     public long getTSATCalc() {
+        List<TimeMeasurement> measurements;
+        if (tsat_lastPull == null) {
+            measurements = dataRetriever.getTimeMeasurements(14, new DateTime().minusHours(1), new DateTime(), 1);
+        } else {
+            measurements = dataRetriever.getTimeMeasurements(14, tsat_lastPull, new DateTime(), 1);
+        }
+        if (measurements.get(0) == null) {
+            return tsat_last_duration;
+        }
+        tsat_last_duration = new Duration(measurements.get(0).getDuration()).getMillis();
+        tsat_lastPull = new DateTime();
+        return tsat_last_duration;
+    }
 
     @ManagedOperation(description="All procedures")
     public String procedures() {
