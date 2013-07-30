@@ -33,7 +33,7 @@ public class DataRetriever {
     public List<TimeMeasurement> getTimeMeasurements(int procedureId, DateTime fromDate, DateTime toDate, int buckets) throws NoSuchElementException {
         List<TimeMeasurement> timeMeasurements = getTimeMeasurements(procedureId, fromDate, toDate, TimeMeasurement.Field.TIMESTAMP);
         if (buckets > 0) {
-            timeMeasurements = analyzer.splitIntoBuckets(timeMeasurements, buckets);
+            timeMeasurements = analyzer.splitIntoBuckets(timeMeasurements, fromDate, toDate, buckets);
         }
         return timeMeasurements;
     }
@@ -78,5 +78,21 @@ public class DataRetriever {
             percentilesMap[i++] = getPercentileByProcedure(procedure.getId(), fromDate, toDate, percentages);
         }
         return percentilesMap;
+    }
+
+    public TimeMeasurement getMaxDurationTimeMeasurement(int procedureId, DateTime from, DateTime to) {
+        List<TimeMeasurement> timeMeasurements = logRepository.getTimeMeasurementsByProcedure(from, to, logRepository.getProcedure(procedureId));
+        Duration maxDuration = new Duration(0);
+        Duration checkDuration;
+        TimeMeasurement maxDurationTimeMeasurement = null;
+        for (TimeMeasurement tm : timeMeasurements) {
+               checkDuration = new Duration(tm.getDuration());
+            if (checkDuration.isLongerThan(maxDuration)) {
+                maxDuration = checkDuration;
+                maxDurationTimeMeasurement = tm;
+            }
+        }
+        return maxDurationTimeMeasurement;
+
     }
 }

@@ -11,8 +11,10 @@ import java.util.NoSuchElementException;
 
 import no.osl.cdms.profile.interfaces.db.Procedure;
 import no.osl.cdms.profile.persistence.ProcedureEntity;
+import no.osl.cdms.profile.persistence.TimeMeasurementEntity;
 import no.osl.cdms.profile.services.DataRetriever;
 import org.joda.time.Duration;
+import org.joda.time.Period;
 import org.springframework.beans.factory.annotation.Autowired;
 import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
 
@@ -25,8 +27,10 @@ import org.springframework.jmx.export.annotation.*;
 
 @ManagedResource(description="CDMS profile MBean")
 public class JMXService {
-    private DateTime total_lastPull, tsat_lastPull;
-    private long total_last_duration = 0, tsat_last_duration = 0;
+    private DateTime icw_snapshot_time = new DateTime(), tsatcalc_snapshot_time = new DateTime();
+    private long icw_snapshot = 0, tsatcalc_snapshot = 0;
+    private int snapshot_update_rate = 10000;
+    private int lastSeconds = 20;
 
     @Autowired
     DataRetriever dataRetriever;
@@ -34,34 +38,36 @@ public class JMXService {
 
     @ManagedAttribute
      public long getICW() {
-        List<TimeMeasurement> measurements;
-        if (total_lastPull == null) {
-            measurements = dataRetriever.getTimeMeasurements(18, new DateTime().minusHours(1), new DateTime(), 1);
-        } else {
-            measurements = dataRetriever.getTimeMeasurements(18, total_lastPull, new DateTime(), 1);
+
+        if (new DateTime().minusMillis(snapshot_update_rate).isBefore(icw_snapshot_time)) {
+            return icw_snapshot;
         }
-        if (measurements.get(0) == null) {
-            return total_last_duration;
+        TimeMeasurement maxDurationTimeMeasurement = dataRetriever.getMaxDurationTimeMeasurement(18, new DateTime().minusSeconds(lastSeconds), new DateTime());
+        icw_snapshot_time = new DateTime();
+
+        if (maxDurationTimeMeasurement == null) {
+            return icw_snapshot;
         }
-        total_last_duration = new Duration(measurements.get(0).getDuration()).getMillis();
-        total_lastPull = new DateTime();
-        return total_last_duration;
+
+        icw_snapshot = new Duration(maxDurationTimeMeasurement.getDuration()).getMillis();
+        return icw_snapshot;
     }
 
     @ManagedAttribute
      public long getTSATCalc() {
-        List<TimeMeasurement> measurements;
-        if (tsat_lastPull == null) {
-            measurements = dataRetriever.getTimeMeasurements(14, new DateTime().minusHours(1), new DateTime(), 1);
-        } else {
-            measurements = dataRetriever.getTimeMeasurements(14, tsat_lastPull, new DateTime(), 1);
+
+        if (new DateTime().minusMillis(snapshot_update_rate).isBefore(tsatcalc_snapshot_time)) {
+            return tsatcalc_snapshot;
         }
-        if (measurements.get(0) == null) {
-            return tsat_last_duration;
+        TimeMeasurement maxDurationTimeMeasurement = dataRetriever.getMaxDurationTimeMeasurement(14, new DateTime().minusSeconds(lastSeconds), new DateTime());
+        tsatcalc_snapshot_time = new DateTime();
+
+        if (maxDurationTimeMeasurement == null) {
+            return tsatcalc_snapshot;
         }
-        tsat_last_duration = new Duration(measurements.get(0).getDuration()).getMillis();
-        tsat_lastPull = new DateTime();
-        return tsat_last_duration;
+
+        tsatcalc_snapshot = new Duration(maxDurationTimeMeasurement.getDuration()).getMillis();
+        return tsatcalc_snapshot;
     }
 
     @ManagedOperation(description="All procedures")

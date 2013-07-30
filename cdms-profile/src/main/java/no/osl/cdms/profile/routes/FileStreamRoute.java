@@ -23,12 +23,13 @@ public class FileStreamRoute extends RouteBuilder {
     private static final int INITIAL_DELAY = 0;
     private static final int PERIOD = 10000;
     private long fileOffset = 0;
+    private final long timeoutThreshold = 10000; 
 
     // Polling of OldLogFetcherRoute
     private static final long LOG_FETCHER_POLLING_DELAY = 10000;
     private static final long LOG_FETCHER_NO_MORE_FILES_TIMEOUT = 10000;
     private Timer pollingTimer;
-
+    private long timeout;
     private Logger logger = Logger.getLogger(FileStreamRoute.class);
 
     @Autowired
@@ -41,6 +42,7 @@ public class FileStreamRoute extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
+        getContext().getShutdownStrategy().setTimeout(1);
         onException(Exception.class).process(exceptionHandler).markRollbackOnly().handled(true);
         fromF(TIMER_ENDPOINT, this.getClass().getSimpleName(), PERIOD, INITIAL_DELAY).autoStartup(false)
                 .bean(this, "readLines")
@@ -50,13 +52,19 @@ public class FileStreamRoute extends RouteBuilder {
     }
 
     public List<String> readLines() throws IOException {
+        this.timeout = System.currentTimeMillis();
         List<String> lines = new LinkedList<String>();
         String line;
 
         RandomAccessFile file = new RandomAccessFile(LOG_DIRECTORY + "/" + LOG_FILE, "r");
+        if (file.length() < fileOffset) {
+            logger.warn("Detected file change, resetting fileOffset");
+            fileOffset = 0;
+        }
         file.seek(fileOffset);
 
-        while ((line=file.readLine()) != null) {
+        while ((line=file.readLine()) != null && !isTimeout()) {
+            Thread.yield();
             if (line.length() > 0) {
                 lines.add(line);
             }
@@ -104,6 +112,10 @@ public class FileStreamRoute extends RouteBuilder {
 
     public static String routeId() {
         return FILE_STREAM_ROUTE_ID;
+    }
+
+    private boolean isTimeout() {
+        return (System.currentTimeMillis() - timeout) > timeoutThreshold;
     }
 }
 

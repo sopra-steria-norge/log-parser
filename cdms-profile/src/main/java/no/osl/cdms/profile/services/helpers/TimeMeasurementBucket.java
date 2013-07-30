@@ -7,7 +7,7 @@ import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
 import no.osl.cdms.profile.persistence.MultiContextEntity;
 import no.osl.cdms.profile.persistence.ProcedureEntity;
 import org.joda.time.DateTime;
-import org.joda.time.Period;
+import org.joda.time.Duration;
 import org.joda.time.convert.ConverterManager;
 import org.joda.time.convert.DurationConverter;
 
@@ -55,7 +55,7 @@ public class TimeMeasurementBucket implements TimeMeasurement {
                 durationMax = tmVal;
             }
         }
-        duration = new Period(durationMax).toString();
+        duration = new Duration(durationMax).toString();
         compressed = true;
     }
 

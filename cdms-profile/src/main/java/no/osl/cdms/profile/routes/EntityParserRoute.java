@@ -44,7 +44,7 @@ public class EntityParserRoute extends RouteBuilder {
     @Override
     public void configure() throws Exception{
         lastInsertedTimeMeasurement = logRepository.getLatestTimeMeasurement();
-
+        getContext().getShutdownStrategy().setTimeout(1);
         onException(Exception.class).process(exceptionHandler).markRollbackOnly().handled(true);
         from(INPUT_ENDPOINT).startupOrder(1)
                 .choice().when(isUnreadLine())

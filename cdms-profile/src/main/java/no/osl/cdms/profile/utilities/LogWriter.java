@@ -13,8 +13,8 @@ import java.util.Locale;
 
 public class LogWriter {
 
-    private static String inputFilePath = "C:/Data/input.log";
-    private static String outputFilePath = "C:/Data/performance.log";
+    private static String inputFilePath = "C:/Program Files/fuse-esb-7.1.0.fuse-047/data/log/input.log";
+    private static String outputFilePath = "C:/Program Files/fuse-esb-7.1.0.fuse-047/data/log/performance.log";
 
     public static void main(String[] args) throws IOException {
         final FileWriter writer = new FileWriter(outputFilePath, true);
@@ -25,7 +25,6 @@ public class LogWriter {
 
         String line = bufferedReader.readLine();
         if (line == null || line.equals("")) {
-            JOptionPane.showMessageDialog(null, "no lines in log");
             System.exit(0);
         }
         lastPrintLog = parseDateString(line.substring(0, 23));
@@ -34,8 +33,7 @@ public class LogWriter {
 
         while (true) {
             line = bufferedReader.readLine();
-            System.out.println("Next line to log: "+line);
-            
+
             if (line != null && !line.equals("")) {
                 thisPrintLog = parseDateString(line.substring(0, 23));
                 while (true) {
@@ -50,14 +48,15 @@ public class LogWriter {
                     break;
                 }
             } else {
-                JOptionPane.showMessageDialog(null, "end of log");
                 System.exit(0);
             }
         }
     }
 
     private static String fromLogDateTimeToSystemLogTimeFormat(DateTime logDateTime) {
-        return logDateTime.toString().substring(0, 23).replaceAll("T", " ").replaceAll("\\.", ",");
+        String k = logDateTime.toString().substring(0, 23).replaceAll("T", " ").replaceAll("\\.", ",");
+        System.out.println("Next line to log: "+k);
+        return k;
     }
 
     public static DateTime parseDateString(String string) {
