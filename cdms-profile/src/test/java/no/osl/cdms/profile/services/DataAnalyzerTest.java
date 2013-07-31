@@ -47,10 +47,8 @@ public class DataAnalyzerTest {
     private List<TimeMeasurement> timeMeasurements2;
     private List<TimeMeasurement> timeMeasurements3;
     private List<TimeMeasurement> timeMeasurements4;
-    
-    private DateTime fromDate = DateTime.parse("2013-04-25T15:02:08,876");
-    private DateTime toDate = DateTime.parse("2013-08-25T15:03:08,876");
-    
+    private DateTime fromDate = DateTime.parse("2010-04-25T15:02:08,876");
+    private DateTime toDate = DateTime.parse("2020-08-25T15:03:08,876");
     private LogRepository logRepository;
     @Autowired
     private EntityFactory entityFactory;
@@ -127,7 +125,7 @@ public class DataAnalyzerTest {
     public void tearDown() {
         timeMeasurements1.clear();
         timeMeasurements2.clear();
-        timeMeasurements3.clear();  
+        timeMeasurements3.clear();
         timeMeasurements1 = null;
         timeMeasurements2 = null;
         timeMeasurements3 = null;
@@ -273,27 +271,40 @@ public class DataAnalyzerTest {
         int bucketSize = 2;
         buckets = this.analyzer.splitIntoBuckets(timeMeasurements1, fromDate, toDate, bucketSize);
 
-        assertTrue(buckets.size() > 0);
-        
+        assertTrue("Bucket size: " + buckets.size(), buckets.size() > 0);
+
         bucketSize = 4;
         buckets = this.analyzer.splitIntoBuckets(timeMeasurements3, fromDate, toDate, bucketSize);
 
         assertNotNull(buckets.get(0));
         assertNull(buckets.get(1));
         assertNull(buckets.get(2));
-        assertNotNull(buckets.get(3));
+        assertNull(buckets.get(3));
 
-        long duration = 0;
-        int count = 0;
+        long duration = -1;
         for (TimeMeasurement t : timeMeasurements3) {
             DateTime time = new DateTime(t.getTimestamp());
-            if (time.getYear() == 2013 && time.getMonthOfYear() == 6) {
-                duration += converter.getDurationMillis(t.getDuration());
-                count++;
+            long ms = converter.getDurationMillis(t.getDuration());
+            if (duration < ms) {
+                duration = ms;
             }
         }
-        duration /= count;
         assertEquals(duration, converter.getDurationMillis(buckets.get(0).getDuration()));
+    }
+    
+    
+    @Test
+    public void bucketSplit() {
+        DateTime now = new DateTime().withTime(12, 0, 0, 0);
+        DateTime last24h = now.minusDays(1);
+        
+        DataAnalyzerImpl.AnchorArray anchor = DataAnalyzerImpl.AnchorArray.createAnchors(now.plusMinutes(2), fromDate, toDate, 200);
+        DataAnalyzerImpl.AnchorArray anchor2 = DataAnalyzerImpl.AnchorArray.createAnchors(now.plusMinutes(4), fromDate, toDate, 200);
+        
+        logger.info(anchor);
+        logger.info(anchor2);
+        
+        assertEquals(anchor.anchorFromDate, anchor2.anchorFromDate);
     }
 
     @Test

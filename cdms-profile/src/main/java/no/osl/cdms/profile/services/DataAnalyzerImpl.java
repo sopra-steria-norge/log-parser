@@ -9,7 +9,6 @@ import no.osl.cdms.profile.interfaces.DataAnalyzer;
 import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
-import org.joda.time.Days;
 import org.joda.time.Minutes;
 
 import org.joda.time.convert.ConverterManager;
@@ -18,6 +17,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class DataAnalyzerImpl implements DataAnalyzer {
+
     private static final DurationConverter converter = ConverterManager.getInstance().getDurationConverter("PT0.123S");
     private static final Logger logger = Logger.getLogger(DataAnalyzerImpl.class);
 
@@ -37,13 +37,13 @@ public class DataAnalyzerImpl implements DataAnalyzer {
     }
 
     @Override
-    public double percentile(List<TimeMeasurement> timeMeasurements, int k) {        
+    public double percentile(List<TimeMeasurement> timeMeasurements, int k) {
         if (timeMeasurements == null || timeMeasurements.isEmpty()) {
             return 0;
         }
         List<TimeMeasurement> timeMeasurementsCopy = Lists.newArrayList(timeMeasurements);
-        Collections.sort(timeMeasurementsCopy);        
-        
+        Collections.sort(timeMeasurementsCopy);
+
         if (k == 0) {
             return converter.getDurationMillis(timeMeasurementsCopy.get(0).getDuration());
         }
@@ -52,8 +52,8 @@ public class DataAnalyzerImpl implements DataAnalyzer {
         }
         double ind = k / 100.0 * timeMeasurementsCopy.size();
         if (ind == (int) ind) {
-            return (converter.getDurationMillis(timeMeasurementsCopy.get((int) ind).getDuration()) +
-                    converter.getDurationMillis(timeMeasurementsCopy.get((int) (ind) - 1).getDuration())) / 2;
+            return (converter.getDurationMillis(timeMeasurementsCopy.get((int) ind).getDuration())
+                    + converter.getDurationMillis(timeMeasurementsCopy.get((int) (ind) - 1).getDuration())) / 2;
         } else {
             ind = ((int) ind) + 1;
             return converter.getDurationMillis(timeMeasurementsCopy.get((int) (ind) - 1).getDuration());
@@ -83,32 +83,18 @@ public class DataAnalyzerImpl implements DataAnalyzer {
         if (timeMeasurements == null || timeMeasurements.isEmpty()) {
             return Arrays.asList(buckets);
         }
-        DateTime midnightAnchor = fromDate.withTime(0, 0, 0, 0);
-        DateTime firstTimemeasurement = timeMeasurements.get(0).getJodaTimestamp();
-        
-        int dateRange = Minutes.minutesBetween(fromDate, toDate).getMinutes();
-        int bucketSizeInMinutes = Math.max(1, dateRange/nBuckets);
-        logger.warn("minutesRange: "+dateRange+" BucketSize: "+bucketSizeInMinutes);
-        
-        int firstAnchorDiff = Minutes.minutesBetween(midnightAnchor, firstTimemeasurement).getMinutes();
-        int numberOfBucketsInDiff = firstAnchorDiff/bucketSizeInMinutes;
-        logger.warn("AnchorDiff: "+firstAnchorDiff+" BucketsInDiff: "+numberOfBucketsInDiff);
-        
-        DateTime anchorFromDate = midnightAnchor.plusMinutes(numberOfBucketsInDiff*bucketSizeInMinutes);
-        logger.warn("AnchorDate: "+anchorFromDate+" ms: "+anchorFromDate.getMillis());
-        int numberOfBucketsInDateRange = (int)Math.ceil((dateRange*1.0) /bucketSizeInMinutes);
-        logger.warn("BucketsInRange: "+numberOfBucketsInDateRange);
-        
+        AnchorArray anchor = AnchorArray.createAnchors(timeMeasurements.get(0).getJodaTimestamp(), fromDate, toDate, nBuckets);
+
         int index;
-        long first = anchorFromDate.getMillis();
-        buckets = new TimeMeasurement[numberOfBucketsInDateRange];
-        
-        int milliesInMinutes = 60000;
-        
+        long first = anchor.anchorFromDate.getMillis();
+        buckets = new TimeMeasurement[anchor.numberOfBucketsInDateRange];
+
+        long milliesInMinutes = 60000;
+
         for (TimeMeasurement tm : timeMeasurements) {
             try {
-                logger.warn("TM: "+tm.getTimestamp()+" ms: "+tm.getTimestamp().getTime()+" Anchor: "+first);
-                index = (int) ((tm.getTimestamp().getTime() - first) / (bucketSizeInMinutes*milliesInMinutes));
+                index = (int) ((tm.getTimestamp().getTime() - first) / (anchor.bucketSizeInMinutes * milliesInMinutes));
+                logger.warn("TM: " + tm.getTimestamp().getTime() + " Anchor: " + first + " Buckets: " + anchor.bucketSizeInMinutes + " millies: " + milliesInMinutes + " INDEX: " + index);
             } catch (ArithmeticException e) {
                 index = 0;
             }
@@ -119,5 +105,41 @@ public class DataAnalyzerImpl implements DataAnalyzer {
             ((TimeMeasurementBucket) buckets[index]).addTimeMeasurement(tm);
         }
         return Arrays.asList(buckets);
+    }
+
+    public static class AnchorArray {
+        DateTime midnightAnchor;
+        long dateRange;
+        int bucketSizeInMinutes;
+        int firstAnchorDiff;
+        int numberOfBucketsInDiff;
+        DateTime anchorFromDate;
+        int numberOfBucketsInDateRange;
+
+        public static AnchorArray createAnchors(DateTime first, DateTime fromDate, DateTime toDate, int nBuckets) {
+            AnchorArray aa = new AnchorArray();
+            aa.midnightAnchor = fromDate.withTime(0, 0, 0, 0);
+
+            aa.dateRange = Minutes.minutesBetween(fromDate, toDate).getMinutes();
+            aa.bucketSizeInMinutes = (int) Math.max(1, aa.dateRange / nBuckets);
+            logger.debug("minutesRange: " + aa.dateRange + " BucketSize: " + aa.bucketSizeInMinutes);
+
+            aa.firstAnchorDiff = Minutes.minutesBetween(aa.midnightAnchor, first).getMinutes();
+            aa.numberOfBucketsInDiff = (int) (aa.firstAnchorDiff / aa.bucketSizeInMinutes);
+            logger.debug("AnchorDiff: " + aa.firstAnchorDiff + " BucketsInDiff: " + aa.numberOfBucketsInDiff);
+
+            aa.anchorFromDate = aa.midnightAnchor.plusMinutes(aa.numberOfBucketsInDiff * aa.bucketSizeInMinutes);
+            logger.debug("AnchorDate: " + aa.anchorFromDate + " ms: " + aa.anchorFromDate.getMillis());
+            aa.numberOfBucketsInDateRange = (int) Math.ceil((aa.dateRange * 1.0) / aa.bucketSizeInMinutes);
+            logger.debug("BucketsInRange: " + aa.numberOfBucketsInDateRange);
+            
+            return aa;
+        }
+
+        @Override
+        public String toString() {
+            return "AnchorArray{" + "midnightAnchor=" + midnightAnchor + ", dateRange=" + dateRange + ", bucketSizeInMinutes=" + bucketSizeInMinutes + ", firstAnchorDiff=" + firstAnchorDiff + ", numberOfBucketsInDiff=" + numberOfBucketsInDiff + ", anchorFromDate=" + anchorFromDate + ", numberOfBucketsInDateRange=" + numberOfBucketsInDateRange + '}';
+        }
+        
     }
 }
