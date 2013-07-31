@@ -3,7 +3,6 @@ package no.osl.cdms.profile.services.helpers;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Logger;
 import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
 import no.osl.cdms.profile.persistence.MultiContextEntity;
 import no.osl.cdms.profile.persistence.ProcedureEntity;
@@ -49,11 +48,14 @@ public class TimeMeasurementBucket implements TimeMeasurement {
         this.timestamp = timeMeasurement.getTimestamp();
         this.id = timeMeasurement.getId();
 
-        long durationSum = 0;
+        long durationMax = -1;
         for (TimeMeasurement tm: timeMeasurements) {
-            durationSum += converter.getDurationMillis(tm.getDuration());
+            long tmVal = converter.getDurationMillis(tm.getDuration());
+            if (tmVal > durationMax){
+                durationMax = tmVal;
+            }
         }
-        duration = new Period(durationSum / timeMeasurements.size()).toString();
+        duration = new Period(durationMax).toString();
         compressed = true;
     }
 
