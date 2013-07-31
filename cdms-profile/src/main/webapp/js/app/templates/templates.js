@@ -2,10 +2,11 @@ var templates = templates || {};
 
 (function () {
 
-	templates.graph = function(graphOf) {
+	templates.graph = function(graphOf, maxYValue) {
 		return ''+
 		'<div class="span4">'+
-		'	<div class="graph" data-graphOf="'+graphOf+'">' +
+		'	<h6>'+app.collections.procedureCollection.getProcedureName(graphOf)+'</h6>' +
+		'	<div class="graph" data-graphOf="'+graphOf+'" data-maxYValue="'+maxYValue+'">' +
 		'	</div>'+
 		'</div>';
 	}
@@ -41,7 +42,7 @@ var templates = templates || {};
 		temp = '' +
 		'<div class="row">';
 		_.each(app.graphOfs, function (graphOf) {
-			temp += templates.graph(graphOf);
+			temp += templates.graph(graphOf, null);
 		})
 		temp += '' +
 		'</div>'+
@@ -55,12 +56,12 @@ var templates = templates || {};
 		temp = '';
 		var i = 0;
 		temp += '<div class="row">';
-		app.collections.procedures.each(function (pro) {
+		app.collections.procedureCollection.each(function (pro) {
 			if (i % 3 === 0) {
-				temp += '</div>';
+				temp += '</div><hr/>';
 				temp += '<div class="row">';
 			};
-			temp += templates.graph(pro.id);
+			temp += templates.graph(pro.id, 3000);
 			i++;
 		});
 		temp += '</div>';
