@@ -48,8 +48,8 @@ public class DataAnalyzerTest {
     private List<TimeMeasurement> timeMeasurements3;
     private List<TimeMeasurement> timeMeasurements4;
     
-    private DateTime fromDate = DateTime.parse("2013-06-25T15:02:08,876");
-    private DateTime toDate = DateTime.parse("2013-06-25T15:03:08,876");
+    private DateTime fromDate = DateTime.parse("2013-04-25T15:02:08,876");
+    private DateTime toDate = DateTime.parse("2013-08-25T15:03:08,876");
     
     private LogRepository logRepository;
     @Autowired
@@ -274,7 +274,7 @@ public class DataAnalyzerTest {
         buckets = this.analyzer.splitIntoBuckets(timeMeasurements1, fromDate, toDate, bucketSize);
 
         assertTrue(buckets.size() > 0);
-
+        
         bucketSize = 4;
         buckets = this.analyzer.splitIntoBuckets(timeMeasurements3, fromDate, toDate, bucketSize);
 
