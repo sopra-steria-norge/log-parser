@@ -173,7 +173,11 @@ app.GraphView = Backbone.View.extend({
                 yaxis: {
                     max: that.$el.data('maxyvalue'),
                 },
-                tooltip: true
+                tooltip: true,
+                tooltipOpts: {
+                    content: "Timestamp: %x <br> Duration: %yms",
+                    xDateFormat: "%y-%m-%d %H:%M:%S"
+                }
             }
         return options;
 	}
