@@ -33,7 +33,7 @@ public class DataRetriever {
     public List<TimeMeasurement> getTimeMeasurements(int procedureId, DateTime fromDate, DateTime toDate, int buckets) throws NoSuchElementException {
         List<TimeMeasurement> timeMeasurements = getTimeMeasurements(procedureId, fromDate, toDate, TimeMeasurement.Field.TIMESTAMP);
         if (buckets > 0) {
-            timeMeasurements = analyzer.splitIntoBuckets(timeMeasurements, buckets);
+            timeMeasurements = analyzer.splitIntoBuckets(timeMeasurements, fromDate, toDate, buckets);
         }
         return timeMeasurements;
     }

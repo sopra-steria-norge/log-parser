@@ -7,6 +7,10 @@ import java.util.List;
 import no.osl.cdms.profile.services.helpers.TimeMeasurementBucket;
 import no.osl.cdms.profile.interfaces.DataAnalyzer;
 import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
+import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
+import org.joda.time.Days;
+import org.joda.time.Minutes;
 
 import org.joda.time.convert.ConverterManager;
 import org.joda.time.convert.DurationConverter;
@@ -14,7 +18,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class DataAnalyzerImpl implements DataAnalyzer {
-    private static DurationConverter converter = ConverterManager.getInstance().getDurationConverter("PT0.123S");
+    private static final DurationConverter converter = ConverterManager.getInstance().getDurationConverter("PT0.123S");
+    private static final Logger logger = Logger.getLogger(DataAnalyzerImpl.class);
 
     public DataAnalyzerImpl() {
     }
@@ -72,21 +77,38 @@ public class DataAnalyzerImpl implements DataAnalyzer {
     }
 
     @Override
-    public List<TimeMeasurement> splitIntoBuckets(List<TimeMeasurement> timeMeasurements, int nBuckets) {
+    public List<TimeMeasurement> splitIntoBuckets(List<TimeMeasurement> timeMeasurements, DateTime fromDate, DateTime toDate, int nBuckets) {
         TimeMeasurement[] buckets = new TimeMeasurementBucket[nBuckets];
 
         if (timeMeasurements == null || timeMeasurements.isEmpty()) {
             return Arrays.asList(buckets);
         }
-
-        long first = timeMeasurements.get(0).getTimestamp().getTime();
-        long last = timeMeasurements.get(timeMeasurements.size()-1).getTimestamp().getTime();
-        double timeInterval = (double)((last - first + 1)) / (double)nBuckets;
+        DateTime midnightAnchor = fromDate.withTime(0, 0, 0, 0);
+        DateTime firstTimemeasurement = timeMeasurements.get(0).getJodaTimestamp();
+        
+        int dateRange = Minutes.minutesBetween(fromDate, toDate).getMinutes();
+        int bucketSizeInMinutes = Math.max(1, dateRange/nBuckets);
+        logger.warn("minutesRange: "+dateRange+" BucketSize: "+bucketSizeInMinutes);
+        
+        int firstAnchorDiff = Minutes.minutesBetween(midnightAnchor, firstTimemeasurement).getMinutes();
+        int numberOfBucketsInDiff = firstAnchorDiff/bucketSizeInMinutes;
+        logger.warn("AnchorDiff: "+firstAnchorDiff+" BucketsInDiff: "+numberOfBucketsInDiff);
+        
+        DateTime anchorFromDate = midnightAnchor.plusMinutes(numberOfBucketsInDiff*bucketSizeInMinutes);
+        logger.warn("AnchorDate: "+anchorFromDate+" ms: "+anchorFromDate.getMillis());
+        int numberOfBucketsInDateRange = (int)Math.ceil((dateRange*1.0) /bucketSizeInMinutes);
+        logger.warn("BucketsInRange: "+numberOfBucketsInDateRange);
+        
         int index;
-
+        long first = anchorFromDate.getMillis();
+        buckets = new TimeMeasurement[numberOfBucketsInDateRange];
+        
+        int milliesInMinutes = 60000;
+        
         for (TimeMeasurement tm : timeMeasurements) {
             try {
-                index = (int) ((tm.getTimestamp().getTime() - first) / timeInterval);
+                logger.warn("TM: "+tm.getTimestamp()+" ms: "+tm.getTimestamp().getTime()+" Anchor: "+first);
+                index = (int) ((tm.getTimestamp().getTime() - first) / (bucketSizeInMinutes*milliesInMinutes));
             } catch (ArithmeticException e) {
                 index = 0;
             }
