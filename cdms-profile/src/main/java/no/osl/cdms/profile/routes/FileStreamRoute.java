@@ -1,39 +1,82 @@
 package no.osl.cdms.profile.routes;
 
 
+import java.io.*;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import javax.ws.rs.HEAD;
+
+import no.osl.cdms.profile.routes.components.RouteExceptionHandler;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class FileStreamRoute extends RouteBuilder {
+
+    // Reading of file
     private static final String FILE_STREAM_ROUTE_ID = "FileStreamRoute";
+    private static final String TIMER_ENDPOINT = "timer://%s?period=%d&delay=%d";
     private static final String LOG_DIRECTORY = "data/log";
     private static final String LOG_FILE = "performance.log";
-    private static final int DELAY = 0;
-    private static final long POLLING_DELAY = 10000;
-    private static final long NO_MORE_FILES_TIMEOUT = 10000;
-    private static final String LOG_FILE_ENDPOINT = "stream:file?fileName=%s/%s&scanStream=true&scanStreamDelay=%d";
-    public static String routeId() {
-        return FILE_STREAM_ROUTE_ID;
-    }
+    private static final int INITIAL_DELAY = 0;
+    private static final int PERIOD = 10000;
+    private long fileOffset = 0;
+
+    // Polling of OldLogFetcherRoute
+    private static final long LOG_FETCHER_POLLING_DELAY = 10000;
+    private static final long LOG_FETCHER_NO_MORE_FILES_TIMEOUT = 10000;
+    private Timer pollingTimer;
 
     private Logger logger = Logger.getLogger(FileStreamRoute.class);
 
-    private Timer pollingTimer;
+    @Autowired
+    private RouteExceptionHandler exceptionHandler;
 
     public FileStreamRoute() {
         super();
+        waitForOldLogFetcherRoute();
+    }
 
+    @Override
+    public void configure() throws Exception {
+        onException(Exception.class).process(exceptionHandler).markRollbackOnly().handled(true);
+        fromF(TIMER_ENDPOINT, this.getClass().getSimpleName(), PERIOD, INITIAL_DELAY).autoStartup(false)
+                .bean(this, "readLines")
+                .split(body())
+                .to(EntityParserRoute.INPUT_ENDPOINT)
+                .routeId(FILE_STREAM_ROUTE_ID);
+    }
+
+    public List<String> readLines() throws IOException {
+        List<String> lines = new LinkedList<String>();
+        String line;
+
+        RandomAccessFile file = new RandomAccessFile(LOG_DIRECTORY + "/" + LOG_FILE, "r");
+        file.seek(fileOffset);
+
+        while ((line=file.readLine()) != null) {
+            if (line.length() > 0) {
+                lines.add(line);
+            }
+        }
+        fileOffset = file.getFilePointer();
+        file.close();
+        return lines;
+    }
+
+    /**
+     * Waits for OldLogFetcherRoute to complete, and then starts this route.
+     */
+    private void waitForOldLogFetcherRoute() {
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
                 try {
                     DateTime now = new DateTime();
                     long difference = now.getMillis() - OldLogFetcherRoute.lastReadDate().getMillis();
-                    if (difference < NO_MORE_FILES_TIMEOUT) {
+                    if (difference < LOG_FETCHER_NO_MORE_FILES_TIMEOUT) {
                         return;
                     }
 
@@ -45,8 +88,7 @@ public class FileStreamRoute extends RouteBuilder {
         };
 
         pollingTimer = new Timer();
-        pollingTimer.schedule(timerTask, POLLING_DELAY, POLLING_DELAY);
-
+        pollingTimer.schedule(timerTask, LOG_FETCHER_POLLING_DELAY, LOG_FETCHER_POLLING_DELAY);
     }
 
     private void startRoute() throws Exception {
@@ -56,16 +98,11 @@ public class FileStreamRoute extends RouteBuilder {
     }
 
     @Override
-    public void configure() throws Exception {
-        fromF(LOG_FILE_ENDPOINT, LOG_DIRECTORY, LOG_FILE, DELAY).autoStartup(false)
-                .convertBodyTo(String.class) // Converts input to String
-                .choice().when(body().isGreaterThan("")) // Ignores empty lines
-                .to(EntityParserRoute.INPUT_ENDPOINT)
-                .routeId(FILE_STREAM_ROUTE_ID);
+    public String toString() {
+        return FILE_STREAM_ROUTE_ID;
     }
 
-    @Override
-    public String toString() {
+    public static String routeId() {
         return FILE_STREAM_ROUTE_ID;
     }
 }
