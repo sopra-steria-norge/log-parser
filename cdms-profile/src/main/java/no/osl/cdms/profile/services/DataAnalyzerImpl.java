@@ -130,7 +130,12 @@ public class DataAnalyzerImpl implements DataAnalyzer {
 
             aa.anchorFromDate = aa.midnightAnchor.plusMinutes(aa.numberOfBucketsInDiff * aa.bucketSizeInMinutes);
             logger.debug("AnchorDate: " + aa.anchorFromDate + " ms: " + aa.anchorFromDate.getMillis());
+             
             aa.numberOfBucketsInDateRange = (int) Math.ceil((aa.dateRange * 1.0) / aa.bucketSizeInMinutes);
+            while (aa.anchorFromDate.plusMinutes(aa.numberOfBucketsInDateRange * aa.bucketSizeInMinutes).isBefore(toDate)) {
+                aa.numberOfBucketsInDateRange++;
+            }
+            
             logger.debug("BucketsInRange: " + aa.numberOfBucketsInDateRange);
             
             return aa;
