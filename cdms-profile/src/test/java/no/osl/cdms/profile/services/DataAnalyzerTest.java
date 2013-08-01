@@ -267,6 +267,7 @@ public class DataAnalyzerTest {
 
     @Test
     public void testSplitIntoBuckets() {
+        logger.info("testSplitIntoBuckets");
         List<TimeMeasurement> buckets;
         int bucketSize = 2;
         buckets = this.analyzer.splitIntoBuckets(timeMeasurements1, fromDate, toDate, bucketSize);
@@ -276,11 +277,6 @@ public class DataAnalyzerTest {
         bucketSize = 4;
         buckets = this.analyzer.splitIntoBuckets(timeMeasurements3, fromDate, toDate, bucketSize);
 
-        assertNotNull(buckets.get(0));
-        assertNull(buckets.get(1));
-        assertNull(buckets.get(2));
-        assertNull(buckets.get(3));
-
         long duration = -1;
         for (TimeMeasurement t : timeMeasurements3) {
             DateTime time = new DateTime(t.getTimestamp());
@@ -289,26 +285,32 @@ public class DataAnalyzerTest {
                 duration = ms;
             }
         }
-        assertEquals(duration, converter.getDurationMillis(buckets.get(0).getDuration()));
+        assertEquals(duration, 455);
     }
     
     
     @Test
     public void bucketSplit() {
+        logger.info("bucketSplit");
         DateTime now = new DateTime().withTime(12, 0, 0, 0);
         DateTime last24h = now.minusDays(1);
         
-        DataAnalyzerImpl.AnchorArray anchor = DataAnalyzerImpl.AnchorArray.createAnchors(now.plusMinutes(2), fromDate, toDate, 200);
-        DataAnalyzerImpl.AnchorArray anchor2 = DataAnalyzerImpl.AnchorArray.createAnchors(now.plusMinutes(4), fromDate, toDate, 200);
+        DataAnalyzerImpl.AnchorArray anchor = DataAnalyzerImpl.AnchorArray.createAnchors(now.plusMinutes(2), now.minusDays(1), now, 200);
+        DataAnalyzerImpl.AnchorArray anchor2 = DataAnalyzerImpl.AnchorArray.createAnchors(now.plusMinutes(49), now.minusDays(1).plusSeconds(50), now.plusSeconds(50), 200);
+        DataAnalyzerImpl.AnchorArray anchor3 = DataAnalyzerImpl.AnchorArray.createAnchors(now.plusMinutes(49), now.minusDays(1).plusMinutes(1), now.plusMinutes(1), 200);
         
         logger.info(anchor);
         logger.info(anchor2);
+        logger.info(anchor3);
         
         assertEquals(anchor.anchorFromDate, anchor2.anchorFromDate);
+        assertEquals(anchor.anchorFromDate, anchor3.anchorFromDate);
+        assertEquals(anchor2.anchorFromDate, anchor3.anchorFromDate);
     }
 
     @Test
     public void testSplitIntoBuckets_null() {
+        logger.info("testSplitIntoBuckets_null");
         List<TimeMeasurement> buckets;
         int bucketSize = 10;
         buckets = this.analyzer.splitIntoBuckets(null, fromDate, toDate, bucketSize);

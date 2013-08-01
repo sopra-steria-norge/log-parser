@@ -19,7 +19,8 @@ import org.springframework.stereotype.Component;
 public class DataAnalyzerImpl implements DataAnalyzer {
 
     private static final DurationConverter converter = ConverterManager.getInstance().getDurationConverter("PT0.123S");
-    private static final Logger logger = Logger.getLogger(DataAnalyzerImpl.class);
+//    private static final Logger logger = Logger.getLogger(DataAnalyzerImpl.class);
+    private static final Logger logger = Logger.getRootLogger();
 
     public DataAnalyzerImpl() {
     }
@@ -108,7 +109,7 @@ public class DataAnalyzerImpl implements DataAnalyzer {
     }
 
     public static class AnchorArray {
-        DateTime midnightAnchor;
+        DateTime epochAnchor;
         long dateRange;
         int bucketSizeInMinutes;
         int firstAnchorDiff;
@@ -118,32 +119,34 @@ public class DataAnalyzerImpl implements DataAnalyzer {
 
         public static AnchorArray createAnchors(DateTime first, DateTime fromDate, DateTime toDate, int nBuckets) {
             AnchorArray aa = new AnchorArray();
-            aa.midnightAnchor = fromDate.withTime(0, 0, 0, 0);
-
-            aa.dateRange = Minutes.minutesBetween(fromDate, toDate).getMinutes();
+          
+            aa.epochAnchor = new DateTime(0); //1970 epoch
+            aa.dateRange = Minutes.minutesBetween(fromDate, toDate).getMinutes(); //Eg 24*60
+            
             aa.bucketSizeInMinutes = (int) Math.max(1, aa.dateRange / nBuckets);
-            logger.debug("minutesRange: " + aa.dateRange + " BucketSize: " + aa.bucketSizeInMinutes);
+            logger.error("minutesRange: " + aa.dateRange + " BucketSize: " + aa.bucketSizeInMinutes);
 
-            aa.firstAnchorDiff = Minutes.minutesBetween(aa.midnightAnchor, first).getMinutes();
-            aa.numberOfBucketsInDiff = (int) (aa.firstAnchorDiff / aa.bucketSizeInMinutes);
-            logger.debug("AnchorDiff: " + aa.firstAnchorDiff + " BucketsInDiff: " + aa.numberOfBucketsInDiff);
+            aa.firstAnchorDiff = Minutes.minutesBetween(aa.epochAnchor, fromDate).getMinutes(); //Minutes passed since 1970 to fromDate
+            aa.numberOfBucketsInDiff = (int) (aa.firstAnchorDiff / aa.bucketSizeInMinutes); //The number of buckets needed to get close to fromDate
+            
+            logger.error("AnchorDiff: " + aa.firstAnchorDiff + " BucketsInDiff: " + aa.numberOfBucketsInDiff);
 
-            aa.anchorFromDate = aa.midnightAnchor.plusMinutes(aa.numberOfBucketsInDiff * aa.bucketSizeInMinutes);
-            logger.debug("AnchorDate: " + aa.anchorFromDate + " ms: " + aa.anchorFromDate.getMillis());
+            aa.anchorFromDate = aa.epochAnchor.plusMinutes(aa.numberOfBucketsInDiff * aa.bucketSizeInMinutes); //Anchored new fromDate
+            logger.error("AnchorDate: " + aa.anchorFromDate + " ms: " + aa.anchorFromDate.getMillis());
              
             aa.numberOfBucketsInDateRange = (int) Math.ceil((aa.dateRange * 1.0) / aa.bucketSizeInMinutes);
             while (aa.anchorFromDate.plusMinutes(aa.numberOfBucketsInDateRange * aa.bucketSizeInMinutes).isBefore(toDate)) {
                 aa.numberOfBucketsInDateRange++;
             }
             
-            logger.debug("BucketsInRange: " + aa.numberOfBucketsInDateRange);
+            logger.error("BucketsInRange: " + aa.numberOfBucketsInDateRange);
             
             return aa;
         }
 
         @Override
         public String toString() {
-            return "AnchorArray{" + "midnightAnchor=" + midnightAnchor + ", dateRange=" + dateRange + ", bucketSizeInMinutes=" + bucketSizeInMinutes + ", firstAnchorDiff=" + firstAnchorDiff + ", numberOfBucketsInDiff=" + numberOfBucketsInDiff + ", anchorFromDate=" + anchorFromDate + ", numberOfBucketsInDateRange=" + numberOfBucketsInDateRange + '}';
+            return "AnchorArray{" + "midnightAnchor=" + epochAnchor + ", dateRange=" + dateRange + ", bucketSizeInMinutes=" + bucketSizeInMinutes + ", firstAnchorDiff=" + firstAnchorDiff + ", numberOfBucketsInDiff=" + numberOfBucketsInDiff + ", anchorFromDate=" + anchorFromDate + ", numberOfBucketsInDateRange=" + numberOfBucketsInDateRange + '}';
         }
         
     }
