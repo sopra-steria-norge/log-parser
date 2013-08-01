@@ -2,10 +2,8 @@ package no.osl.cdms.profile.persistence;
 
 import com.google.common.collect.Lists;
 import java.util.*;
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
+
 import no.osl.cdms.profile.interfaces.db.MultiContext;
 import no.osl.cdms.profile.interfaces.db.Procedure;
 import no.osl.cdms.profile.interfaces.db.TimeMeasurement;
@@ -128,6 +126,67 @@ public class LogRepository {
             return query.getSingleResult();
         } catch (NoResultException e) {
             return null;
+        }
+    }
+
+    public void deleteOldLogEntries() {
+        Date deleteTime = new DateTime().minusDays(15).toDate();
+
+        // Get old TimeMeasurements
+        TypedQuery<TimeMeasurement> multiContextQuery = entityManager.createQuery(
+                "SELECT a FROM TimeMeasurementEntity a WHERE a.timestamp < :deleteTime",
+                TimeMeasurement.class);
+        multiContextQuery.setParameter("deleteTime", deleteTime);
+        List<TimeMeasurement> timeMeasurements = multiContextQuery.getResultList();
+
+
+        for (TimeMeasurement timeMeasurement: timeMeasurements) {
+            Query deleteQuery;
+
+            // Delete multi context if exists
+            if (timeMeasurement.getMultiContext() != null) {
+                deleteQuery = entityManager.createQuery("DELETE FROM MultiContextEntity WHERE id = :id");
+                deleteQuery.setParameter("id", timeMeasurement.getMultiContext().getId());
+                deleteQuery.executeUpdate();
+            }
+
+            // Delete time measurement
+            deleteQuery = entityManager.createQuery("DELETE FROM TimeMeasurementEntity a WHERE a.id = :id");
+            deleteQuery.setParameter("id", timeMeasurement.getId());
+            deleteQuery.executeUpdate();
+        }
+
+    }
+
+    public void deleteUnusedProcedures() {
+        TypedQuery<ProcedureEntity> query = entityManager.createQuery("SELECT DISTINCT a.procedure FROM TimeMeasurementEntity a",
+                ProcedureEntity.class);
+        List<ProcedureEntity> allProcedures = getAllProcedures();
+        List<ProcedureEntity> unusedProcedures = new ArrayList<ProcedureEntity>();
+        List<ProcedureEntity> queryResult =  query.getResultList();
+
+        logger.info("ALL: \t" + allProcedures);
+        logger.info("RESULT: \t" + queryResult);
+
+        for (ProcedureEntity r : allProcedures) {
+            boolean found = false;
+            for (ProcedureEntity q : queryResult) {
+                if (q.equals(r)) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                logger.info(r.getName());
+                unusedProcedures.add(r);
+            }
+        }
+
+        logger.info(unusedProcedures);
+        for (ProcedureEntity procedure : unusedProcedures) {
+            Query deleteQuery = entityManager.createQuery("DELETE FROM ProcedureEntity a WHERE a.id = :id ");
+            deleteQuery.setParameter("id", procedure.getId());
+            deleteQuery.executeUpdate();
         }
     }
 
