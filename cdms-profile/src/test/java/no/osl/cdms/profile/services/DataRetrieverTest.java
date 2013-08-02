@@ -1,6 +1,7 @@
 package no.osl.cdms.profile.services;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -40,7 +41,7 @@ public class DataRetrieverTest {
         procedure = new ProcedureEntity("name", "classCname", "method");
         timeMeasurement = new TimeMeasurementEntity(procedure, null, new DateTime("2012-06-25T01:15:52.458Z")
                 .toDate(), "PT0.107S");
-        timeMeasurement2 = new TimeMeasurementEntity(procedure, null, new DateTime("2012-06-25T01:15:52.458Z")
+        timeMeasurement2 = new TimeMeasurementEntity(procedure, null, new DateTime("2012-06-25T01:15:52.459Z")
                 .toDate(), "PT0.207S");
         timeMeasurement3 = new TimeMeasurementEntity(procedure, null, new DateTime("2010-06-25T01:15:52.458Z")
                 .toDate(), "PT0.307S");
@@ -56,11 +57,13 @@ public class DataRetrieverTest {
 
 
         List<TimeMeasurement> expected = new ArrayList<TimeMeasurement>();
-        expected.add(timeMeasurement);
         expected.add(timeMeasurement2);
+        expected.add(timeMeasurement);
 
         List<TimeMeasurement> tm = dataRetriever.getTimeMeasurements(procedure.getId(),
-                new DateTime("2011-06-25T01:15:52.458Z"), new DateTime("2013-06-25T01:15:52.458Z"));
+                new DateTime("2011-06-25T01:15:52.458Z"), new DateTime("2013-06-25T01:15:52.460Z"));
+        logger.info(Arrays.toString(expected.toArray()));
+        logger.info(tm);
         assertEquals(expected, tm);
 
     }
